@@ -1,0 +1,125 @@
+'use client';
+
+import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import api from '../services/api';
+
+interface User {
+  _id: string;
+  user_id: string;
+  nom_complet: string;
+  email: string;
+  role: string;
+  is_active: boolean;
+  last_login?: string;
+  created_at: string;
+  phone?: string;
+  department?: string;
+  photo?: string;
+}
+
+interface AuthContextType {
+  user: User | null;
+  token: string | null;
+  login: (email: string, password: string) => Promise<string>;
+  register: (userData: Record<string, unknown>) => Promise<void>;
+  logout: () => void;
+  isLoading: boolean;
+  isAuthenticated: boolean;
+}
+
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+export function AuthProvider({ children }: { children: ReactNode }) {
+  const [user, setUser] = useState<User | null>(null);
+  const [token, setToken] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const router = useRouter();
+
+  // auth state initialized from localStorage synchronously
+  useEffect(() => {
+    try {
+      const storedUser = localStorage.getItem('user');
+      const storedToken = localStorage.getItem('token');
+
+      if (storedUser) {
+        setUser(JSON.parse(storedUser));
+      }
+
+      if (storedToken) {
+        setToken(storedToken);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+  const login = async (email: string, password: string) => {
+    try {
+      const response = await api.post('/auth/login', { email, password });
+
+      const data = response.data;
+      const authToken = data.access_token ?? data.token;
+
+      setToken(authToken);
+      setUser(data.user);
+      localStorage.setItem('token', authToken);
+      localStorage.setItem('user', JSON.stringify(data.user));
+
+      // Return user role for redirect logic
+      return data.user.role;
+    } catch (error: any) {
+      const message = error?.response?.data?.message || error?.message || 'Login failed';
+      throw new Error(Array.isArray(message) ? message.join(', ') : message);
+    }
+  };
+
+  const register = async (userData: Record<string, unknown>) => {
+    try {
+      await api.post('/auth/register', userData);
+      // Registration successful, but don't auto-login
+    } catch (error: unknown) {
+      const msg = (error as { response?: { data?: { message?: string } } })?.response?.data?.message;
+      throw new Error(msg || 'Registration failed');
+    }
+  };
+
+  const logout = () => {
+    setToken(null);
+    setUser(null);
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    // Redirect with locale-based routing (Next-intl expects /{locale}/...)
+    const path = typeof window !== 'undefined' ? window.location.pathname : '';
+    const locale = path.split('/')[1] || 'en';
+    window.location.href = `/${locale}/auth/login`;
+  };
+
+  const value = {
+    user,
+    token,
+    login,
+    register,
+    logout,
+    isLoading,
+    isAuthenticated: !!token && !!user,
+  };
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        Loading...
+      </div>
+    );
+  }
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+}
+
+export function useAuth() {
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
+}

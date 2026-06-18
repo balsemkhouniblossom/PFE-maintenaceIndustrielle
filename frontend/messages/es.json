@@ -1,0 +1,675 @@
+{
+  "language": {
+    "label": "Idioma",
+    "en": "English",
+    "fr": "Français",
+    "ar": "العربية",
+    "es": "Español",
+    "de": "Deutsch",
+    "it": "Italiano"
+  },
+  "auth": {
+    "signIn": "Iniciar sesión",
+    "signUp": "Registrarse",
+    "email": "Dirección de correo electrónico",
+    "password": "Contraseña",
+    "confirmPassword": "Confirmar Contraseña",
+    "fullName": "Nombre Completo",
+    "enterEmail": "Ingrese su correo electrónico",
+    "enterPassword": "Ingrese su contraseña",
+    "phone": "Número de Teléfono",
+    "role": "Rol",
+    "department": "Departamento",
+    "creatingAccount": "Creando Cuenta...",
+    "enterFullName": "Ingrese su nombre completo",
+    "enterPhone": "Ingrese su número de teléfono",
+    "enterDepartment": "Ingrese su departamento",
+    "admin": "Administrador",
+    "technician": "Técnico",
+    "operator": "Operador",
+    "createAccount": "Crear Cuenta",
+    "signInHere": "Inicia sesión aquí",
+    "signingIn": "Iniciando sesión...",
+    "signup": "¿No tienes cuenta? Regístrate aquí",
+    "login": "¿Ya tienes una cuenta? Inicia sesión aquí",
+    "accessSystem": "Acceda a su sistema de gestión de mantenimiento industrial",
+    "welcomeIprotex": "Bienvenido a IPROTEX",
+    "advancedMaintenance": "Gestión avanzada de mantenimiento",
+    "loginFailed": "El inicio de sesión falló. Verifique sus credenciales.",
+    "networkError": "Error de red. Inténtelo de nuevo.",
+    "registrationSuccess": "Registro exitoso. Por favor inicie sesión.",
+    "registrationFailed": "El registro falló. Inténtelo de nuevo.",
+    "passwordsDoNotMatch": "Las contraseñas no coinciden.",
+    "passwordMinLength": "La contraseña debe tener al menos 6 caracteres."
+  },
+  "dashboard": {
+    "status": {
+      "systemOnline": "Sistema en línea",
+      "maintenanceDue": "Mantenimientos pendientes",
+      "fromLastMonth": "desde el mes pasado",
+      "unknownRole": "Rol",
+      "loading": "Cargando...",
+      "pendingMaintenance": "mantenimientos pendientes",
+      "percentageChangeFromLastMonth": {
+        "positive": "+{value}% desde el mes pasado",
+        "negative": "{value}% desde el mes pasado"
+      },
+      "systemOnlineKey": "systemOnline",
+      "loadingKey": "loading",
+      "pendingMaintenanceKey": "pendingMaintenance"
+    },
+    "welcome": "Bienvenido",
+    "logout": "Cerrar sesión",
+    "machines": "Máquinas",
+    "users": "Usuarios",
+    "technicians": "Técnicos",
+    "operators": "Operadores",
+    "workOrders": "Órdenes de trabajo",
+    "reports": "Informes",
+    "settings": "Configuración",
+    "admin": {
+      "title": "Panel completo de base de datos",
+      "searchPlaceholder": "Buscar en todos los registros de la base de datos...",
+      "fromLastMonth": "desde el mes pasado",
+      "stats": {
+        "totalMachines": "Máquinas totales",
+        "activeUsers": "Usuarios activos",
+        "activeWorkOrders": "Órdenes de trabajo activas",
+        "completedThisMonth": "Completado este mes"
+      },
+      "databaseSummary": {
+        "title": "Resumen de la base de datos",
+        "machineTypes": "Tipos de máquinas",
+        "catalogueItems": "Elementos del catálogo",
+        "sensors": "Sensores"
+      },
+      "health": {
+        "title": "Estado del sistema",
+        "database": "Base de datos",
+        "apiServer": "Servidor API",
+        "backupSystem": "Sistema de respaldo",
+        "online": "EN LÍNEA",
+        "warning": "ADVERTENCIA"
+      },
+      "quickAccess": {
+        "title": "Acceso rápido",
+        "users": "Usuarios",
+        "machines": "Máquinas",
+        "workOrders": "Órdenes de trabajo",
+        "catalogues": "Catálogos",
+        "machineTypes": "Tipos",
+        "types": "Tipos"
+      }
+    },
+    "operator": {
+      "title": "Panel del operador",
+      "welcome": "Bienvenido de nuevo, {name}!",
+      "description": "Aquí tienes el resumen de tus tareas de mantenimiento de hoy.",
+      "reportProblem": "Reportar un problema",
+      "waitingValidation": "En espera de validación",
+      "assigned": "Asignado",
+      "inProgress": "En progreso",
+      "completed": "Completado",
+      "machineCategories": "Categorías de máquinas",
+      "viewMachines": "Ver máquinas",
+      "preventiveMaintenance": "Mantenimiento preventivo",
+      "correctiveMaintenance": "Mantenimiento correctivo",
+      "stats": {
+        "activeWorkOrders": "Órdenes de trabajo activas",
+        "assignedToYou": "Asignadas a ti",
+        "completedToday": "Completado hoy",
+        "tasksFinishedToday": "Tareas terminadas hoy",
+        "pendingTasks": "Tareas pendientes",
+        "awaitingAction": "En espera de acción",
+        "machinesAssigned": "Máquinas asignadas",
+        "underYourCare": "Bajo tu cuidado"
+      },
+      "quickActions": {
+        "title": "Acciones rápidas",
+        "workOrders": "Ver órdenes de trabajo",
+        "checkMachines": "Revisar máquinas",
+        "monitorSensors": "Monitorear sensores",
+        "browseCatalogues": "Explorar catálogos",
+        "reportIssue": "Reportar un problema",
+        "viewPreventive": "Ver mantenimiento preventivo",
+        "viewCorrective": "Ver mantenimiento correctivo",
+        "manuals": "Manuales",
+        "myReports": "Mis reportes"
+      },
+      "health": {
+        "title": "Estado del sistema",
+        "database": "Base de datos",
+        "apiServer": "Servidor API",
+        "sensorNetwork": "Red de sensores",
+        "online": "EN LÍNEA",
+        "monitoring": "MONITOREO"
+      },
+      "recentActivity": {
+        "title": "Actividad reciente",
+        "completedTask": "Tarea de mantenimiento completada en la máquina #001",
+        "sensorAlert": "Alerta de sensor en la máquina #003",
+        "scheduledMaintenance": "El mantenimiento programado vence mañana",
+        "twoHoursAgo": "hace 2 horas",
+        "fourHoursAgo": "hace 4 horas",
+        "sixHoursAgo": "hace 6 horas"
+      }
+    },
+    "technician": {
+      "title": "Panel del técnico",
+      "welcome": "Bienvenido de nuevo, {name}!",
+      "description": "Aquí tienes el resumen técnico de mantenimiento de hoy.",
+      "stats": {
+        "activeWorkOrders": "Órdenes de trabajo activas",
+        "currentlyAssigned": "Asignadas actualmente",
+        "completedToday": "Completado hoy",
+        "tasksFinishedToday": "Tareas terminadas hoy",
+        "pendingTasks": "Tareas pendientes",
+        "awaitingAction": "En espera de acción",
+        "machinesServiced": "Máquinas atendidas",
+        "underMaintenance": "En mantenimiento"
+      },
+      "monitoring": {
+        "title": "Monitoreo técnico",
+        "sensorsMonitored": "Sensores monitoreados",
+        "maintenanceScheduled": "Mantenimiento programado",
+        "systemDiagnostics": "Diagnóstico del sistema"
+      },
+      "health": {
+        "title": "Estado del sistema",
+        "database": "Base de datos",
+        "apiServer": "Servidor API",
+        "iotSensors": "Sensores IoT",
+        "maintenanceSystems": "Sistemas de mantenimiento",
+        "online": "EN LÍNEA",
+        "monitoring": "MONITOREO",
+        "operational": "OPERATIVO"
+      },
+      "quickActions": {
+        "title": "Acciones rápidas",
+        "workOrders": "Órdenes de trabajo",
+        "machines": "Máquinas",
+        "sensors": "Sensores",
+        "parts": "Piezas",
+        "safety": "Seguridad",
+        "diagnostics": "Diagnóstico"
+      },
+      "recentActivity": {
+        "title": "Actividad técnica reciente",
+        "calibrationCompleted": "Calibración completada en el conjunto de sensores #001",
+        "maintenanceAlert": "Alerta de mantenimiento: se detectó desgaste de rodamientos en la máquina #003",
+        "diagnosticsPassed": "Los diagnósticos del sistema se completaron con éxito para la línea de producción A",
+        "preventiveMaintenanceDue": "El mantenimiento preventivo programado vence mañana",
+        "twoHoursAgo": "hace 2 horas",
+        "fourHoursAgo": "hace 4 horas",
+        "sixHoursAgo": "hace 6 horas",
+        "eightHoursAgo": "hace 8 horas"
+      }
+    }
+  },
+  "common": {
+    "machineStatus": {
+      "operational": "Operativo",
+      "online": "En línea",
+      "offline": "Desconectado",
+      "warning": "Advertencia",
+      "error": "Error"
+    },
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Éxito",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "add": "Agregar",
+    "user": "User",
+    "role": "Role",
+    "back": "Atrás",
+    "next": "Siguiente",
+    "previous": "Anterior",
+    "close": "Cerrar",
+    "confirm": "Confirmar",
+    "table": {
+      "actions": "Acciones",
+      "noData": "No hay datos disponibles"
+    },
+    "systemOnline": "System online",
+    "percentageChangeFromLastMonth": {
+      "positive": "+{value}% desde el mes pasado",
+      "negative": "{value}% desde el mes pasado"
+    },
+    "logout": "Logout",
+    "notAvailable": "N/A",
+    "saving": "Guardando..."
+  },
+  "navigation": {
+    "menu": {
+      "dashboard": "Panel",
+      "users": "Usuarios",
+      "machines": "Máquinas",
+      "workOrders": "Órdenes de trabajo",
+      "catalogues": "Catálogos",
+      "machineTypes": "Tipos de máquina",
+      "sensors": "Sensores",
+      "moduleTypes": "Tipos de módulo"
+    },
+    "categories": {
+      "overview": "Resumen",
+      "userManagement": "Gestión de usuarios",
+      "equipment": "Equipos",
+      "maintenance": "Mantenimiento",
+      "partsInventory": "Piezas e inventario",
+      "catalogues": "Catálogos",
+      "equipmentTypes": "Tipos de equipos",
+      "machineTypes": "Tipos de máquinas",
+      "iotMonitoring": "Monitoreo IoT",
+      "sensors": "Sensores",
+      "workOrders": "Órdenes de trabajo",
+      "systemModules": "Módulos del sistema",
+      "moduleTypes": "Tipos de módulos",
+      "technicalReference": "Referencia técnica"
+    }
+  },
+  "capteurs": {
+    "pageTitle": "GESTIÓN DE SENSORES",
+    "heading": "Gestión de sensores",
+    "description": "Supervisar y gestionar sensores IoT y dispositivos de monitoreo",
+    "totalSensors": "Total de sensores",
+    "allSensors": "TODOS LOS SENSORES",
+    "active": "Activo",
+    "na": "N/D",
+    "table": {
+      "sensorId": "ID del sensor",
+      "name": "Nombre",
+      "type": "Tipo",
+      "machine": "Máquina",
+      "status": "Estado"
+    }
+  },
+  "dashboardHome": {
+    "title": "Panel completo de base de datos",
+    "searchPlaceholder": "Buscar en todos los registros de la base de datos...",
+    "fromLastMonth": "desde el mes pasado",
+    "stats": {
+      "totalMachines": "Máquinas totales",
+      "activeUsers": "Usuarios activos",
+      "activeWorkOrders": "Órdenes de trabajo activas",
+      "completedThisMonth": "Completado este mes"
+    },
+    "summary": {
+      "title": "Resumen de la base de datos",
+      "machineTypes": "Tipos de máquinas",
+      "catalogues": "Elementos del catálogo",
+      "sensors": "Sensores"
+    },
+    "health": {
+      "title": "Estado del sistema",
+      "database": "Base de datos",
+      "apiServer": "Servidor API",
+      "backupSystem": "Sistema de respaldo",
+      "online": "EN LÍNEA",
+      "warning": "ADVERTENCIA"
+    },
+    "quickAccess": {
+      "title": "Acceso rápido",
+      "users": "Usuarios",
+      "machines": "Máquinas",
+      "workOrders": "Órdenes de trabajo",
+      "catalogues": "Catálogos",
+      "machineTypes": "Tipos"
+    }
+  },
+  "operatorDashboard": {
+    "title": "Panel del operador",
+    "welcome": "Bienvenido de nuevo, {name}!",
+    "description": "Aquí tienes el resumen de tus tareas de mantenimiento de hoy.",
+    "stats": {
+      "activeWorkOrders": "Órdenes de trabajo activas",
+      "assignedToYou": "Asignadas a ti",
+      "completedToday": "Completado hoy",
+      "tasksFinishedToday": "Tareas terminadas hoy",
+      "pendingTasks": "Tareas pendientes",
+      "awaitingAction": "En espera de acción",
+      "machinesAssigned": "Máquinas asignadas",
+      "underYourCare": "Bajo tu cuidado"
+    },
+    "quickActions": {
+      "title": "Acciones rápidas",
+      "workOrders": "Ver órdenes de trabajo",
+      "checkMachines": "Revisar máquinas",
+      "monitorSensors": "Monitorear sensores",
+      "browseCatalogues": "Explorar catálogos"
+    },
+    "health": {
+      "title": "Estado del sistema",
+      "database": "Base de datos",
+      "apiServer": "Servidor API",
+      "sensorNetwork": "Red de sensores",
+      "online": "EN LÍNEA",
+      "monitoring": "MONITOREO"
+    },
+    "recentActivity": {
+      "title": "Actividad reciente",
+      "completedTask": "Tarea de mantenimiento completada en la máquina #001",
+      "sensorAlert": "Alerta de sensor en la máquina #003",
+      "scheduledMaintenance": "El mantenimiento programado vence mañana",
+      "twoHoursAgo": "hace 2 horas",
+      "fourHoursAgo": "hace 4 horas",
+      "sixHoursAgo": "hace 6 horas"
+    }
+  },
+  "technicianDashboard": {
+    "title": "Panel del técnico",
+    "welcome": "Bienvenido de nuevo, {name}!",
+    "description": "Aquí tienes el resumen técnico de mantenimiento de hoy.",
+    "stats": {
+      "activeWorkOrders": "Órdenes de trabajo activas",
+      "currentlyAssigned": "Asignadas actualmente",
+      "completedToday": "Completado hoy",
+      "tasksFinishedToday": "Tareas terminadas hoy",
+      "pendingTasks": "Tareas pendientes",
+      "awaitingAction": "En espera de acción",
+      "machinesServiced": "Máquinas atendidas",
+      "underMaintenance": "En mantenimiento"
+    },
+    "monitoring": {
+      "title": "Monitoreo técnico",
+      "sensorsMonitored": "Sensores monitoreados",
+      "maintenanceScheduled": "Mantenimiento programado",
+      "systemDiagnostics": "Diagnóstico del sistema"
+    },
+    "health": {
+      "title": "Estado del sistema",
+      "database": "Base de datos",
+      "apiServer": "Servidor API",
+      "iotSensors": "Sensores IoT",
+      "maintenanceSystems": "Sistemas de mantenimiento",
+      "online": "EN LÍNEA",
+      "monitoring": "MONITOREO",
+      "operational": "OPERATIVO"
+    },
+    "quickActions": {
+      "title": "Acciones rápidas",
+      "workOrders": "Órdenes de trabajo",
+      "machines": "Máquinas",
+      "sensors": "Sensores",
+      "parts": "Piezas",
+      "safety": "Seguridad",
+      "diagnostics": "Diagnóstico"
+    },
+    "recentActivity": {
+      "title": "Actividad técnica reciente",
+      "calibrationCompleted": "Calibración completada en el conjunto de sensores #001",
+      "maintenanceAlert": "Alerta de mantenimiento: se detectó desgaste de rodamientos en la máquina #003",
+      "diagnosticsPassed": "Los diagnósticos del sistema se completaron con éxito para la línea de producción A",
+      "preventiveMaintenanceDue": "El mantenimiento preventivo programado vence mañana",
+      "twoHoursAgo": "hace 2 horas",
+      "fourHoursAgo": "hace 4 horas",
+      "sixHoursAgo": "hace 6 horas",
+      "eightHoursAgo": "hace 8 horas"
+    }
+  },
+  "health": {
+    "title": "Estado del sistema",
+    "database": "Base de datos",
+    "apiServer": "Servidor API",
+    "backupSystem": "Sistema de respaldo",
+    "online": "EN LÍNEA",
+    "warning": "ADVERTENCIA"
+  },
+  "workOrders": {
+    "title": "Órdenes de trabajo",
+    "heading": "Gestión de órdenes de trabajo",
+    "subtitle": "Seguir, gestionar y asignar órdenes de trabajo de mantenimiento",
+    "totalWorkOrders": "Total de órdenes de trabajo",
+    "addWorkOrder": "Agregar orden de trabajo",
+    "allWorkOrders": "Todas las órdenes de trabajo",
+    "searchPlaceholder": "Buscar órdenes de trabajo...",
+    "unassigned": "Sin asignar",
+    "confirmDelete": "¿Está seguro de que desea eliminar esta orden de trabajo?",
+    "table": {
+      "otId": "N° OT",
+      "description": "Descripción",
+      "machine": "Máquina",
+      "technician": "Técnico",
+      "status": "Estado",
+      "priority": "Prioridad",
+      "created": "Creado el",
+      "startDate": "Fecha de inicio",
+      "endDate": "Fecha de fin"
+    },
+    "empty": {
+      "search": "Ninguna orden de trabajo coincide con su búsqueda",
+      "default": "No se encontraron órdenes de trabajo"
+    },
+    "modal": {
+      "editTitle": "Editar orden de trabajo",
+      "addTitle": "Agregar orden de trabajo"
+    },
+    "form": {
+      "otId": "Número OT",
+      "priority": "Prioridad",
+      "description": "Descripción",
+      "machine": "Máquina",
+      "technician": "Técnico asignado",
+      "status": "Estado",
+      "estimatedDuration": "Duración estimada (horas)",
+      "startDate": "Fecha de inicio",
+      "endDate": "Fecha de fin"
+    },
+    "priority": {
+      "low": "Baja",
+      "medium": "Media",
+      "high": "Alta"
+    },
+    "placeholders": {
+      "selectMachine": "Seleccionar una máquina...",
+      "selectTechnician": "Seleccionar un técnico..."
+    },
+    "status": {
+      "pending": "Pendiente",
+      "in_progress": "En curso",
+      "completed": "Completado",
+      "cancelled": "Cancelado"
+    },
+    "actions": {
+      "update": "Actualizar orden de trabajo",
+      "create": "Crear orden de trabajo"
+    },
+    "validation": {
+      "workOrderIdRequired": "El número OT es requerido",
+      "machineRequired": "La selección de máquina es requerida",
+      "technicianRequired": "La asignación de técnico es requerida"
+    },
+    "notifications": {
+      "deleted": "Orden de trabajo eliminada con éxito",
+      "deleteFailed": "Error al eliminar la orden de trabajo",
+      "updated": "Orden de trabajo actualizada con éxito",
+      "created": "Orden de trabajo creada con éxito",
+      "saveFailed": "Error al guardar la orden de trabajo"
+    }
+  },
+  "users": {
+    "pageTitle": "Gestión de usuarios",
+    "heading": "Gestión de usuarios",
+    "totalUsers": "Total de usuarios",
+    "addUser": "Agregar usuario",
+    "allUsers": "Todos los usuarios",
+    "searchPlaceholder": "Buscar usuarios...",
+    "table": {
+      "photo": "Foto",
+      "userId": "ID de usuario",
+      "fullName": "Nombre completo",
+      "email": "Correo electrónico",
+      "phone": "Teléfono",
+      "role": "Rol",
+      "status": "Estado",
+      "department": "Departamento",
+      "createdAt": "Creado el",
+      "lastLogin": "Último inicio de sesión",
+      "actions": "Acciones"
+    },
+    "empty": {
+      "search": "No se encontraron usuarios que coincidan con su búsqueda.",
+      "default": "No hay usuarios disponibles."
+    },
+    "modal": {
+      "edit": "Editar usuario",
+      "add": "Agregar nuevo usuario"
+    },
+    "form": {
+      "email": "Correo electrónico",
+      "password": "Contraseña",
+      "profilePhoto": "Foto de perfil",
+      "fullName": "Nombre completo",
+      "phone": "Teléfono",
+      "department": "Departamento",
+      "role": "Rol",
+      "status": "Estado"
+    },
+    "options": {
+      "admin": "Administrador",
+      "technician": "Técnico",
+      "operator": "Operador"
+    },
+    "placeholders": {
+      "password": "Ingrese la contraseña",
+      "editPassword": "Dejar vacío para mantener la contraseña actual"
+    },
+    "status": {
+      "active": "Activo",
+      "inactive": "Inactivo"
+    },
+    "notifications": {
+      "deleted": "Usuario eliminado con éxito",
+      "deleteFailed": "Error al eliminar el usuario",
+      "updated": "Usuario actualizado con éxito",
+      "created": "Usuario creado con éxito",
+      "saveFailed": "Error al guardar el usuario",
+      "emailRequired": "El correo electrónico es obligatorio",
+      "validEmail": "Por favor ingrese una dirección de correo válida",
+      "passwordRequired": "La contraseña es obligatoria",
+      "passwordMin": "La contraseña debe tener al menos 6 caracteres",
+      "fullNameRequired": "El nombre completo es obligatorio"
+    },
+    "button": {
+      "cancel": "Cancelar",
+      "update": "Actualizar",
+      "create": "Crear",
+      "saving": "Guardando..."
+    }
+  },
+  "sidebar": {
+    "systemStatus": {
+      "online": "Sistema en línea",
+      "loading": "Cargando...",
+      "maintenanceDue": "mantenimientos pendientes",
+      "percentageChange": {
+        "positive": "+{value}% del mes pasado",
+        "negative": "{value}% del mes pasado"
+      }
+    },
+    "userInfo": {
+      "user": "Usuario",
+      "role": "Rol",
+      "logout": "Cerrar sesión"
+    },
+    "navigation": {
+      "dashboard": "Panel",
+      "users": "Usuarios",
+      "machines": "Máquinas",
+      "workOrders": "Órdenes de trabajo",
+      "catalogues": "Catálogos",
+      "machineTypes": "Tipos de máquinas",
+      "sensors": "Sensores",
+      "moduleTypes": "Tipos de módulos",
+      "categories": {
+        "overview": "Resumen",
+        "userManagement": "Gestion de usuarios",
+        "equipment": "Equipos",
+        "maintenance": "Mantenimiento",
+        "partsInventory": "Piezas e inventario",
+        "equipmentTypes": "Tipos de equipos",
+        "iotMonitoring": "Monitoreo IoT",
+        "systemModules": "Modulos del sistema",
+        "technicalReference": "Referencia tecnica"
+      }
+    }
+  },
+  "machines": {
+    "pageTitle": "Machine Management",
+    "heading": "Machine Management",
+    "totalMachines": "Total Machines",
+    "addMachine": "Add Machine",
+    "allMachines": "All Machines",
+    "searchPlaceholder": "Search machines by ID, serial number, manufacturer, model, or location...",
+    "table": {
+      "machineId": "Machine ID",
+      "serialNumber": "Serial Number",
+      "type": "Type",
+      "status": "Status",
+      "installationDate": "Installation Date",
+      "weight": "Weight (kg)",
+      "actions": "Actions"
+    },
+    "empty": {
+      "search": "No machines found matching your search.",
+      "default": "No machines available."
+    },
+    "modal": {
+      "edit": "Edit Machine",
+      "add": "Add New Machine"
+    },
+    "form": {
+      "machineId": "Machine ID",
+      "serialNumber": "Serial Number",
+      "manufacturer": "Manufacturer",
+      "model": "Model",
+      "machineType": "Machine Type",
+      "status": "Status",
+      "installationDate": "Installation Date",
+      "weight": "Weight (kg)",
+      "location": "Location",
+      "selectType": "Select Type"
+    },
+    "options": {
+      "operational": "Operational",
+      "maintenance": "Under Maintenance",
+      "outOfService": "Out of Service",
+      "retired": "Retired"
+    },
+    "placeholders": {
+      "enterMachineId": "Enter machine ID",
+      "enterSerial": "Enter serial number",
+      "enterManufacturer": "Enter manufacturer",
+      "enterModel": "Enter model",
+      "enterLocation": "Enter location"
+    },
+    "status": {
+      "operational": "Operational",
+      "maintenance": "Under Maintenance",
+      "outOfService": "Out of Service",
+      "retired": "Retired"
+    },
+    "notifications": {
+      "deleted": "Machine deleted successfully",
+      "deleteFailed": "Failed to delete machine",
+      "updated": "Machine updated successfully",
+      "created": "Machine created successfully",
+      "saveFailed": "Failed to save machine",
+      "loadFailed": "Failed to load data",
+      "machineIdRequired": "Machine ID is required",
+      "serialRequired": "Serial number is required",
+      "manufacturerRequired": "Manufacturer is required",
+      "modelRequired": "Model is required",
+      "installationRequired": "Installation date is required",
+      "confirmDelete": "Are you sure you want to delete this machine? This action cannot be undone."
+    },
+    "button": {
+      "cancel": "Cancel",
+      "update": "Update",
+      "create": "Create",
+      "saving": "Saving..."
+    }
+  }
+}

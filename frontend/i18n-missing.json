@@ -1,0 +1,43 @@
+{
+  "capteurs": [
+    "T",
+    ",",
+    " "
+  ],
+  "dashboard.operator": [
+    "overview",
+    "quickActions.viewWorkOrders",
+    "recentActivity.empty"
+  ],
+  "health": [
+    "maintenanceSystems",
+    "operational"
+  ],
+  "common": [
+    "time.justNow",
+    "actions",
+    "notAvailable",
+    "saving"
+  ],
+  "dashboard.admin": [
+    "databaseSummary.title",
+    "databaseSummary.machineTypes",
+    "databaseSummary.catalogueItems",
+    "databaseSummary.sensors",
+    "quickAccess.types"
+  ],
+  "dashboard.technician": [
+    "overview",
+    "recentActivity.empty"
+  ],
+  "language": [
+    "/users",
+    "/machines",
+    "/machine-types",
+    "/module-types",
+    "/catalogues",
+    "/work-orders",
+    "/work-orders/statistics",
+    "/capteurs"
+  ]
+}

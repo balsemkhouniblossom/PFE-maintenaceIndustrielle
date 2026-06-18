@@ -1,0 +1,886 @@
+{
+  "language": {
+    "label": "Langue",
+    "en": "English",
+    "fr": "Français",
+    "ar": "العربية",
+    "es": "Español",
+    "de": "Deutsch",
+    "it": "Italiano"
+  },
+  "auth": {
+    "signIn": "Se connecter",
+    "signUp": "S'inscrire",
+    "email": "Adresse e-mail",
+    "password": "Mot de passe",
+    "confirmPassword": "Confirmer le mot de passe",
+    "fullName": "Nom complet",
+    "enterEmail": "Entrez votre e-mail",
+    "enterPassword": "Entrez votre mot de passe",
+    "phone": "Numéro de téléphone",
+    "role": "Rôle",
+    "department": "Département",
+    "creatingAccount": "Création du compte en cours...",
+    "enterFullName": "Entrez votre nom complet",
+    "enterPhone": "Entrez votre numéro de téléphone",
+    "enterDepartment": "Entrez votre département",
+    "admin": "Administrateur",
+    "technician": "Technicien",
+    "operator": "Opérateur",
+    "createAccount": "Créer un compte",
+    "signInHere": "Se connecter ici",
+    "signingIn": "Connexion en cours...",
+    "signup": "Vous n'avez pas de compte ? Inscrivez-vous ici",
+    "login": "Vous avez déjà un compte ? Connectez-vous ici",
+    "accessSystem": "Accédez à votre système de gestion industrielle",
+    "welcomeIprotex": "Bienvenue sur IPROTEX",
+    "advancedMaintenance": "Gestion avancée de la maintenance",
+    "loginFailed": "La connexion a échoué. Veuillez vérifier vos identifiants.",
+    "networkError": "Erreur réseau. Veuillez réessayer.",
+    "registrationSuccess": "Inscription réussie. Veuillez vous connecter.",
+    "registrationFailed": "L'inscription a échoué. Veuillez réessayer.",
+    "passwordsDoNotMatch": "Les mots de passe ne correspondent pas.",
+    "passwordMinLength": "Le mot de passe doit contenir au moins 6 caractères."
+  },
+  "common": {
+    "loading": "Chargement...",
+    "error": "Erreur",
+    "success": "Succès",
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "add": "Ajouter",
+    "user": "Utilisateur",
+    "role": "Rôle",
+    "back": "Retour",
+    "next": "Suivant",
+    "previous": "Précédent",
+    "close": "Fermer",
+    "confirm": "Confirmer",
+    "table": {
+      "actions": "Actions",
+      "noData": "Aucune donnée disponible"
+    },
+    "logout": "Déconnexion",
+    "notAvailable": "N/A",
+    "saving": "Enregistrement en cours..."
+  },
+  "dashboard": {
+    "status": {
+      "systemOnline": "Système en ligne",
+      "maintenanceDue": "Maintenances à prévoir",
+      "fromLastMonth": "depuis le mois dernier",
+      "unknownRole": "Rôle",
+      "loading": "Chargement...",
+      "pendingMaintenance": "maintenances à prévoir",
+      "percentageChangeFromLastMonth": {
+        "positive": "+{value}% depuis le mois dernier",
+        "negative": "{value}% depuis le mois dernier"
+      },
+      "systemOnlineKey": "systemOnline",
+      "loadingKey": "loading",
+      "pendingMaintenanceKey": "pendingMaintenance"
+    },
+    "welcome": "Bienvenue",
+    "logout": "Déconnexion",
+    "machines": "Machines",
+    "users": "Utilisateurs",
+    "technicians": "Techniciens",
+    "operators": "Opérateurs",
+    "workOrders": "Ordres de travail",
+    "reports": "Rapports",
+    "settings": "Paramètres",
+    "admin": {
+      "title": "Tableau de bord complet de la base de données",
+      "searchPlaceholder": "Rechercher dans tous les enregistrements de la base de données...",
+      "fromLastMonth": "depuis le mois dernier",
+      "stats": {
+        "totalMachines": "Machines totales",
+        "activeUsers": "Utilisateurs actifs",
+        "activeWorkOrders": "Ordres de travail actifs",
+        "completedThisMonth": "Terminés ce mois-ci"
+      },
+      "databaseSummary": {
+        "title": "Résumé de la base de données",
+        "machineTypes": "Types de machines",
+        "catalogueItems": "Articles du catalogue",
+        "sensors": "Capteurs"
+      },
+      "health": {
+        "title": "État du système",
+        "database": "Base de données",
+        "apiServer": "Serveur API",
+        "backupSystem": "Système de sauvegarde",
+        "online": "EN LIGNE",
+        "warning": "AVERTISSEMENT"
+      },
+      "quickAccess": {
+        "title": "Accès rapide",
+        "users": "Utilisateurs",
+        "machines": "Machines",
+        "workOrders": "Ordres de travail",
+        "catalogues": "Catalogues",
+        "machineTypes": "Types",
+        "types": "Types"
+      }
+    },
+    "operator": {
+      "reportProblem": "🚨 Signaler un problème",
+      "waitingValidation": "En attente de validation",
+      "assigned": "Assigné",
+      "inProgress": "En cours",
+      "completed": "Terminé",
+      "machineCategories": "Catégories de machines",
+      "viewMachines": "Voir les machines",
+      "preventiveMaintenance": "Maintenance préventive",
+      "correctiveMaintenance": "Maintenance corrective",
+      "machineManuals": "Manuels des machines",
+      "myReports": "Mes rapports",
+      "validated": "Validées",
+      "viewAllReports": "Voir tous les rapports",
+      "machineInspection": "Inspection de la machine",
+      "manuals": {
+        "winding": "Manuel de bobinage",
+        "braiding": "Manuel de tressage",
+        "cutting": "Manuel de découpe",
+        "rolling": "Manuel de laminage"
+      },
+      "title": "Tableau de bord opérateur",
+      "welcome": "Bon retour, {name} !",
+      "description": "Voici votre aperçu des tâches de maintenance pour aujourd'hui.",
+      "stats": {
+        "activeWorkOrders": "Ordres de travail actifs",
+        "assignedToYou": "Attribués à vous",
+        "completedToday": "Terminés aujourd'hui",
+        "tasksFinishedToday": "Tâches terminées aujourd'hui",
+        "pendingTasks": "Tâches en attente",
+        "awaitingAction": "En attente d'action",
+        "machinesAssigned": "Machines attribuées",
+        "underYourCare": "Sous votre responsabilité"
+      },
+      "quickActions": {
+        "title": "Actions rapides",
+        "workOrders": "Voir les ordres de travail",
+        "checkMachines": "Vérifier les machines",
+        "monitorSensors": "Surveiller les capteurs",
+        "browseCatalogues": "Parcourir les catalogues",
+        "myReports": "Mes rapports",
+        "manuals": "Manuels"
+      },
+      "health": {
+        "title": "État du système",
+        "database": "Base de données",
+        "apiServer": "Serveur API",
+        "sensorNetwork": "Réseau de capteurs",
+        "online": "EN LIGNE",
+        "monitoring": "SURVEILLANCE"
+      },
+      "recentActivity": {
+        "title": "Activité récente",
+        "completedTask": "Tâche de maintenance terminée sur la machine #001",
+        "sensorAlert": "Alerte capteur sur la machine #003",
+        "scheduledMaintenance": "Maintenance programmée due demain",
+        "twoHoursAgo": "il y a 2 heures",
+        "fourHoursAgo": "il y a 4 heures",
+        "sixHoursAgo": "il y a 6 heures"
+      }
+    },
+    "technician": {
+      "title": "Tableau de bord technicien",
+      "welcome": "Bon retour, {name} !",
+      "description": "Voici votre aperçu de maintenance technique pour aujourd'hui.",
+      "stats": {
+        "activeWorkOrders": "Ordres de travail actifs",
+        "currentlyAssigned": "Actuellement attribués",
+        "completedToday": "Terminés aujourd'hui",
+        "tasksFinishedToday": "Tâches terminées aujourd'hui",
+        "pendingTasks": "Tâches en attente",
+        "awaitingAction": "En attente d'action",
+        "machinesServiced": "Machines entretenues",
+        "underMaintenance": "En maintenance"
+      },
+      "monitoring": {
+        "title": "Surveillance technique",
+        "sensorsMonitored": "Capteurs surveillés",
+        "maintenanceScheduled": "Maintenance planifiée",
+        "systemDiagnostics": "Diagnostics système"
+      },
+      "health": {
+        "title": "État du système",
+        "database": "Base de données",
+        "apiServer": "Serveur API",
+        "iotSensors": "Capteurs IoT",
+        "maintenanceSystems": "Systèmes de maintenance",
+        "online": "EN LIGNE",
+        "monitoring": "SURVEILLANCE",
+        "operational": "OPÉRATIONNEL"
+      },
+      "quickActions": {
+        "title": "Actions rapides",
+        "workOrders": "Ordres de travail",
+        "machines": "Machines",
+        "sensors": "Capteurs",
+        "parts": "Pièces",
+        "safety": "Sécurité",
+        "diagnostics": "Diagnostics"
+      },
+      "recentActivity": {
+        "title": "Activité technique récente",
+        "calibrationCompleted": "Étalonnage terminé sur le réseau de capteurs #001",
+        "maintenanceAlert": "Alerte de maintenance : usure des roulements détectée sur la machine #003",
+        "diagnosticsPassed": "Les diagnostics système ont réussi pour la ligne de production A",
+        "preventiveMaintenanceDue": "Maintenance préventive programmée due demain",
+        "twoHoursAgo": "il y a 2 heures",
+        "fourHoursAgo": "il y a 4 heures",
+        "sixHoursAgo": "il y a 6 heures",
+        "eightHoursAgo": "il y a 8 heures"
+      }
+    }
+  },
+  "navigation": {
+    "menu": {
+      "dashboard": "Tableau de bord",
+      "users": "Utilisateurs",
+      "machines": "Machines",
+      "workOrders": "Ordres de travail",
+      "catalogues": "Catalogues",
+      "machineTypes": "Types de machines",
+      "sensors": "Capteurs",
+      "moduleTypes": "Types de modules"
+    },
+    "categories": {
+      "overview": "Vue d'ensemble",
+      "userManagement": "Gestion des utilisateurs",
+      "equipment": "Équipements",
+      "maintenance": "Maintenance",
+      "partsInventory": "Pièces et stock",
+      "catalogues": "Catalogues",
+      "equipmentTypes": "Types d'équipements",
+      "machineTypes": "Types de machines",
+      "iotMonitoring": "Surveillance IoT",
+      "sensors": "Capteurs",
+      "workOrders": "Ordres de travail",
+      "systemModules": "Modules système",
+      "moduleTypes": "Types de modules",
+      "technicalReference": "Référence technique"
+    }
+  },
+  "capteurs": {
+    "pageTitle": "GESTION DES CAPTEURS",
+    "heading": "Gestion des capteurs",
+    "description": "Surveiller et gérer les capteurs IoT et les dispositifs de supervision",
+    "totalSensors": "Total capteurs",
+    "allSensors": "TOUS LES CAPTEURS",
+    "active": "Actif",
+    "na": "N/A",
+    "table": {
+      "sensorId": "ID capteur",
+      "name": "Nom",
+      "type": "Type",
+      "machine": "Machine",
+      "status": "Statut"
+    }
+  },
+  "dashboardHome": {
+    "title": "Tableau de bord complet de la base de données",
+    "searchPlaceholder": "Rechercher dans tous les enregistrements de la base de données...",
+    "fromLastMonth": "depuis le mois dernier",
+    "stats": {
+      "totalMachines": "Machines totales",
+      "activeUsers": "Utilisateurs actifs",
+      "activeWorkOrders": "Ordres de travail actifs",
+      "completedThisMonth": "Terminés ce mois-ci"
+    },
+    "summary": {
+      "title": "Résumé de la base de données",
+      "machineTypes": "Types de machines",
+      "catalogues": "Articles du catalogue",
+      "sensors": "Capteurs"
+    },
+    "health": {
+      "title": "État du système",
+      "database": "Base de données",
+      "apiServer": "Serveur API",
+      "backupSystem": "Système de sauvegarde",
+      "online": "EN LIGNE",
+      "warning": "AVERTISSEMENT"
+    },
+    "quickAccess": {
+      "title": "Accès rapide",
+      "users": "Utilisateurs",
+      "machines": "Machines",
+      "workOrders": "Ordres de travail",
+      "catalogues": "Catalogues",
+      "machineTypes": "Types",
+      "types": "Types"
+    }
+  },
+  "operatorDashboard": {
+    "title": "Tableau de bord opérateur",
+    "welcome": "Bon retour, {name} !",
+    "description": "Voici votre aperçu des tâches de maintenance pour aujourd'hui.",
+    "stats": {
+      "activeWorkOrders": "Ordres de travail actifs",
+      "assignedToYou": "Attribués à vous",
+      "completedToday": "Terminés aujourd'hui",
+      "tasksFinishedToday": "Tâches terminées aujourd'hui",
+      "pendingTasks": "Tâches en attente",
+      "awaitingAction": "En attente d'action",
+      "machinesAssigned": "Machines attribuées",
+      "underYourCare": "Sous votre responsabilité"
+    },
+    "quickActions": {
+      "title": "Actions rapides",
+      "workOrders": "Voir les ordres de travail",
+      "checkMachines": "Vérifier les machines",
+      "monitorSensors": "Surveiller les capteurs",
+      "browseCatalogues": "Parcourir les catalogues"
+    },
+    "health": {
+      "title": "État du système",
+      "database": "Base de données",
+      "apiServer": "Serveur API",
+      "sensorNetwork": "Réseau de capteurs",
+      "online": "EN LIGNE",
+      "monitoring": "SURVEILLANCE"
+    },
+    "recentActivity": {
+      "title": "Activité récente",
+      "completedTask": "Tâche de maintenance terminée sur la machine #001",
+      "sensorAlert": "Alerte capteur sur la machine #003",
+      "scheduledMaintenance": "Maintenance programmée due demain",
+      "twoHoursAgo": "il y a 2 heures",
+      "fourHoursAgo": "il y a 4 heures",
+      "sixHoursAgo": "il y a 6 heures"
+    }
+  },
+  "technicianDashboard": {
+    "title": "Tableau de bord technicien",
+    "welcome": "Bon retour, {name} !",
+    "description": "Voici votre aperçu de maintenance technique pour aujourd'hui.",
+    "stats": {
+      "activeWorkOrders": "Ordres de travail actifs",
+      "currentlyAssigned": "Actuellement attribués",
+      "completedToday": "Terminés aujourd'hui",
+      "tasksFinishedToday": "Tâches terminées aujourd'hui",
+      "pendingTasks": "Tâches en attente",
+      "awaitingAction": "En attente d'action",
+      "machinesServiced": "Machines entretenues",
+      "underMaintenance": "En maintenance"
+    },
+    "monitoring": {
+      "title": "Surveillance technique",
+      "sensorsMonitored": "Capteurs surveillés",
+      "maintenanceScheduled": "Maintenance planifiée",
+      "systemDiagnostics": "Diagnostics système"
+    },
+    "health": {
+      "title": "État du système",
+      "database": "Base de données",
+      "apiServer": "Serveur API",
+      "iotSensors": "Capteurs IoT",
+      "maintenanceSystems": "Systèmes de maintenance",
+      "online": "EN LIGNE",
+      "monitoring": "SURVEILLANCE",
+      "operational": "OPÉRATIONNEL"
+    },
+    "quickActions": {
+      "title": "Actions rapides",
+      "workOrders": "Ordres de travail",
+      "machines": "Machines",
+      "sensors": "Capteurs",
+      "parts": "Pièces",
+      "safety": "Sécurité",
+      "diagnostics": "Diagnostics"
+    },
+    "recentActivity": {
+      "title": "Activité technique récente",
+      "calibrationCompleted": "Étalonnage terminé sur le réseau de capteurs #001",
+      "maintenanceAlert": "Alerte de maintenance : usure des roulements détectée sur la machine #003",
+      "diagnosticsPassed": "Les diagnostics système ont réussi pour la ligne de production A",
+      "preventiveMaintenanceDue": "Maintenance préventive programmée due demain",
+      "twoHoursAgo": "il y a 2 heures",
+      "fourHoursAgo": "il y a 4 heures",
+      "sixHoursAgo": "il y a 6 heures",
+      "eightHoursAgo": "il y a 8 heures"
+    }
+  },
+  "health": {
+    "title": "État du système",
+    "database": "Base de données",
+    "apiServer": "Serveur API",
+    "backupSystem": "Système de sauvegarde",
+    "online": "EN LIGNE",
+    "warning": "AVERTISSEMENT"
+  },
+  "workOrders": {
+    "title": "Bons de travail",
+    "heading": "Gestion des bons de travail",
+    "subtitle": "Suivre, gérer et assigner les bons de travail de maintenance",
+    "totalWorkOrders": "Total des bons de travail",
+    "addWorkOrder": "Ajouter un bon de travail",
+    "allWorkOrders": "Tous les bons de travail",
+    "searchPlaceholder": "Rechercher des bons de travail...",
+    "unassigned": "Non assigné",
+    "confirmDelete": "Êtes-vous sûr de vouloir supprimer ce bon de travail ?",
+    "table": {
+      "otId": "N° OT",
+      "description": "Description",
+      "machine": "Machine",
+      "technician": "Technicien",
+      "status": "Statut",
+      "priority": "Priorité",
+      "created": "Créé le",
+      "startDate": "Date de début",
+      "endDate": "Date de fin"
+    },
+    "empty": {
+      "search": "Aucun bon de travail ne correspond à votre recherche",
+      "default": "Aucun bon de travail trouvé"
+    },
+    "modal": {
+      "editTitle": "Modifier le bon de travail",
+      "addTitle": "Ajouter un bon de travail"
+    },
+    "form": {
+      "otId": "Numéro OT",
+      "priority": "Priorité",
+      "description": "Description",
+      "machine": "Machine",
+      "technician": "Technicien assigné",
+      "status": "Statut",
+      "estimatedDuration": "Durée estimée (heures)",
+      "startDate": "Date de début",
+      "endDate": "Date de fin"
+    },
+    "priority": {
+      "low": "Faible",
+      "medium": "Moyenne",
+      "high": "Élevée"
+    },
+    "placeholders": {
+      "selectMachine": "Sélectionner une machine...",
+      "selectTechnician": "Sélectionner un technicien..."
+    },
+    "status": {
+      "pending": "En attente",
+      "in_progress": "En cours",
+      "completed": "Terminé",
+      "cancelled": "Annulé"
+    },
+    "actions": {
+      "update": "Mettre à jour le bon de travail",
+      "create": "Créer un bon de travail"
+    },
+    "validation": {
+      "workOrderIdRequired": "Le numéro OT est requis",
+      "machineRequired": "La sélection d'une machine est requise",
+      "technicianRequired": "L'assignation d'un technicien est requise"
+    },
+    "notifications": {
+      "deleted": "Bon de travail supprimé avec succès",
+      "deleteFailed": "Échec de la suppression du bon de travail",
+      "updated": "Bon de travail mis à jour avec succès",
+      "created": "Bon de travail créé avec succès",
+      "saveFailed": "Échec de l'enregistrement du bon de travail",
+      "confirmDelete": "Êtes-vous sûr de vouloir supprimer cet utilisateur ?"
+    }
+  },
+  "users": {
+    "pageTitle": "Gestion des utilisateurs",
+    "heading": "Gestion des utilisateurs",
+    "totalUsers": "Total des utilisateurs",
+    "addUser": "Ajouter un utilisateur",
+    "allUsers": "Tous les utilisateurs",
+    "subtitle": "Gérer les utilisateurs du système",
+    "searchPlaceholder": "Rechercher des utilisateurs...",
+    "table": {
+      "photo": "Photo",
+      "userId": "ID utilisateur",
+      "fullName": "Nom complet",
+      "email": "E-mail",
+      "phone": "Téléphone",
+      "role": "Rôle",
+      "status": "Statut",
+      "department": "Département",
+      "createdAt": "Créé le",
+      "lastLogin": "Dernière connexion",
+      "actions": "Actions"
+    },
+    "empty": {
+      "search": "Aucun utilisateur ne correspond à votre recherche.",
+      "default": "Aucun utilisateur disponible."
+    },
+    "modal": {
+      "edit": "Modifier l'utilisateur",
+      "add": "Ajouter un nouvel utilisateur"
+    },
+    "form": {
+      "email": "E-mail",
+      "password": "Mot de passe",
+      "profilePhoto": "Photo de profil",
+      "fullName": "Nom complet",
+      "phone": "Téléphone",
+      "department": "Département",
+      "role": "Rôle",
+      "status": "Statut"
+    },
+    "options": {
+      "admin": "Administrateur",
+      "technician": "Technicien",
+      "operator": "Opérateur"
+    },
+    "placeholders": {
+      "password": "Entrez le mot de passe",
+      "editPassword": "Laisser vide pour conserver le mot de passe actuel"
+    },
+    "status": {
+      "active": "Actif",
+      "inactive": "Inactif"
+    },
+    "notifications": {
+      "deleted": "Utilisateur supprimé avec succès",
+      "deleteFailed": "Échec de la suppression de l'utilisateur",
+      "updated": "Utilisateur mis à jour avec succès",
+      "created": "Utilisateur créé avec succès",
+      "saveFailed": "Échec de l'enregistrement de l'utilisateur",
+      "emailRequired": "L'e-mail est obligatoire",
+      "validEmail": "Veuillez entrer une adresse e-mail valide",
+      "passwordRequired": "Le mot de passe est obligatoire",
+      "passwordMin": "Le mot de passe doit contenir au moins 6 caractères",
+      "fullNameRequired": "Le nom complet est obligatoire"
+    },
+    "button": {
+      "cancel": "Annuler",
+      "update": "Mettre à jour",
+      "create": "Créer",
+      "saving": "Enregistrement en cours..."
+    }
+  },
+  "catalogues": {
+    "pageTitle": "Catalogue des pièces",
+    "heading": "Catalogue des pièces",
+    "totalParts": "Total des pièces",
+    "addPart": "Ajouter une pièce",
+    "allParts": "Toutes les pièces",
+    "searchPlaceholder": "Rechercher des pièces...",
+    "table": {
+      "partId": "ID pièce",
+      "partName": "Nom de la pièce",
+      "manufacturerRef": "Réf. fabricant",
+      "manufacturer": "Fabricant",
+      "category": "Catégorie",
+      "stock": "Stock",
+      "unitPrice": "Prix unitaire",
+      "actions": "Actions"
+    },
+    "empty": {
+      "search": "Aucune pièce ne correspond à votre recherche.",
+      "default": "Aucune pièce disponible."
+    },
+    "modal": {
+      "edit": "Modifier la pièce",
+      "add": "Ajouter une nouvelle pièce"
+    },
+    "form": {
+      "partId": "ID pièce",
+      "partName": "Nom de la pièce",
+      "manufacturerRef": "Référence fabricant",
+      "manufacturer": "Fabricant",
+      "category": "Catégorie",
+      "unitPrice": "Prix unitaire",
+      "stockQuantity": "Quantité en stock",
+      "minimumStock": "Stock minimum",
+      "location": "Emplacement"
+    },
+    "options": {
+      "inStock": "En stock",
+      "lowStock": "Stock bas",
+      "outOfStock": "Rupture de stock"
+    },
+    "placeholders": {
+      "enterPartId": "Entrez l'ID de la pièce",
+      "enterPartName": "Entrez le nom de la pièce",
+      "enterManufacturerRef": "Entrez la référence fabricant",
+      "enterManufacturer": "Entrez le fabricant",
+      "enterCategory": "Entrez la catégorie",
+      "enterLocation": "Entrez l'emplacement"
+    },
+    "status": {
+      "inStock": "En stock",
+      "lowStock": "Stock bas",
+      "outOfStock": "Rupture de stock"
+    },
+    "notifications": {
+      "deleted": "Pièce supprimée avec succès",
+      "deleteFailed": "Échec de la suppression de la pièce",
+      "updated": "Pièce mise à jour avec succès",
+      "created": "Pièce créée avec succès",
+      "saveFailed": "Échec de l'enregistrement de la pièce",
+      "partIdRequired": "L'ID pièce est obligatoire",
+      "partNameRequired": "Le nom de la pièce est obligatoire",
+      "manufacturerRefRequired": "La référence fabricant est obligatoire"
+    },
+    "button": {
+      "cancel": "Annuler",
+      "update": "Mettre à jour",
+      "create": "Créer",
+      "saving": "Enregistrement en cours..."
+    }
+  },
+  "machineTypes": {
+    "pageTitle": "Gestion des types de machines",
+    "heading": "Gestion des types de machines",
+    "totalTypes": "Total des types",
+    "addType": "Ajouter un type",
+    "allTypes": "Tous les types",
+    "searchPlaceholder": "Rechercher des types de machines...",
+    "table": {
+      "typeId": "ID type",
+      "modelName": "Nom modèle",
+      "manufacturer": "Fabricant",
+      "description": "Description",
+      "category": "Catégorie",
+      "maintenanceInterval": "Intervalle maintenance",
+      "expectedLifespan": "Durée de vie attendue",
+      "actions": "Actions"
+    },
+    "empty": {
+      "search": "Aucun type de machine ne correspond à votre recherche.",
+      "default": "Aucun type de machine disponible."
+    },
+    "modal": {
+      "edit": "Modifier le type de machine",
+      "add": "Ajouter un nouveau type de machine"
+    },
+    "form": {
+      "typeId": "ID type",
+      "modelName": "Nom modèle",
+      "manufacturer": "Fabricant",
+      "category": "Catégorie",
+      "description": "Description",
+      "maintenanceInterval": "Intervalle maintenance (jours)",
+      "expectedLifespan": "Durée de vie attendue (années)"
+    },
+    "options": {
+      "mechanical": "Mécanique",
+      "electrical": "Électrique",
+      "hydraulic": "Hydraulique",
+      "pneumatic": "Pneumatique",
+      "mixed": "Mixte"
+    },
+    "placeholders": {
+      "enterTypeId": "Entrez l'ID type",
+      "enterModelName": "Entrez le nom modèle",
+      "enterManufacturer": "Entrez le fabricant",
+      "enterCategory": "Entrez la catégorie",
+      "enterDescription": "Entrez la description"
+    },
+    "status": {
+      "active": "Actif",
+      "inactive": "Inactif"
+    },
+    "notifications": {
+      "deleted": "Type de machine supprimé avec succès",
+      "deleteFailed": "Échec de la suppression du type de machine",
+      "updated": "Type de machine mis à jour avec succès",
+      "created": "Type de machine créé avec succès",
+      "saveFailed": "Échec de l'enregistrement du type de machine",
+      "typeIdRequired": "L'ID type est obligatoire",
+      "modelNameRequired": "Le nom modèle est obligatoire",
+      "manufacturerRequired": "Le fabricant est obligatoire"
+    },
+    "button": {
+      "cancel": "Annuler",
+      "update": "Mettre à jour",
+      "create": "Créer",
+      "saving": "Enregistrement en cours..."
+    }
+  },
+  "moduleTypes": {
+    "pageTitle": "Gestion des types de modules",
+    "heading": "Gestion des types de modules",
+    "totalTypes": "Total des types de modules",
+    "addType": "Ajouter un type de module",
+    "allTypes": "Tous les types de modules",
+    "searchPlaceholder": "Rechercher des types de modules...",
+    "table": {
+      "moduleTypeId": "ID type module",
+      "name": "Nom",
+      "description": "Description",
+      "category": "Catégorie",
+      "compatibility": "Compatibilité",
+      "specifications": "Spécifications",
+      "actions": "Actions"
+    },
+    "empty": {
+      "search": "Aucun type de module ne correspond à votre recherche.",
+      "default": "Aucun type de module disponible."
+    },
+    "modal": {
+      "edit": "Modifier le type de module",
+      "add": "Ajouter un nouveau type de module"
+    },
+    "form": {
+      "moduleTypeId": "ID type module",
+      "name": "Nom",
+      "category": "Catégorie",
+      "compatibility": "Compatibilité (séparée par des virgules)",
+      "description": "Description",
+      "specifications": "Spécifications"
+    },
+    "options": {
+      "control": "Commande",
+      "sensing": "Capteur",
+      "actuation": "Actionnement",
+      "communication": "Communication",
+      "power": "Alimentation"
+    },
+    "placeholders": {
+      "enterModuleTypeId": "Entrez l'ID type module",
+      "enterName": "Entrez le nom",
+      "enterCategory": "Entrez la catégorie",
+      "enterCompatibility": "Entrez la compatibilité (ex: Machine A, Machine B)",
+      "enterDescription": "Entrez la description",
+      "enterSpecifications": "Entrez les spécifications techniques"
+    },
+    "status": {
+      "active": "Actif",
+      "inactive": "Inactif"
+    },
+    "notifications": {
+      "deleted": "Type de module supprimé avec succès",
+      "deleteFailed": "Échec de la suppression du type de module",
+      "updated": "Type de module mis à jour avec succès",
+      "created": "Type de module créé avec succès",
+      "saveFailed": "Échec de l'enregistrement du type de module",
+      "moduleTypeIdRequired": "L'ID type module est obligatoire",
+      "nameRequired": "Le nom est obligatoire"
+    },
+    "button": {
+      "cancel": "Annuler",
+      "update": "Mettre à jour",
+      "create": "Créer",
+      "saving": "Enregistrement en cours..."
+    }
+  },
+  "sidebar": {
+    "systemStatus": {
+      "online": "Système en ligne",
+      "loading": "Chargement...",
+      "maintenanceDue": "maintenances à prévoir",
+      "percentageChange": {
+        "positive": "+{value}% du mois dernier",
+        "negative": "{value}% du mois dernier"
+      }
+    },
+    "userInfo": {
+      "user": "Utilisateur",
+      "role": "Rôle",
+      "logout": "Déconnexion"
+    },
+    "navigation": {
+      "dashboard": "Tableau de bord",
+      "users": "Utilisateurs",
+      "machines": "Machines",
+      "workOrders": "Ordres de travail",
+      "catalogues": "Catalogues",
+      "machineTypes": "Types de machines",
+      "sensors": "Capteurs",
+      "moduleTypes": "Types de modules",
+      "categories": {
+        "overview": "Vue d'ensemble",
+        "userManagement": "Gestion des utilisateurs",
+        "equipment": "Équipements",
+        "maintenance": "Maintenance",
+        "partsInventory": "Pièces et stock",
+        "equipmentTypes": "Types d'équipements",
+        "iotMonitoring": "Surveillance IoT",
+        "systemModules": "Modules système",
+        "technicalReference": "Référence technique"
+      }
+    }
+  },
+  "machines": {
+    "description": "Gérez et surveillez toutes les machines",
+    "pageTitle": "Gestion des machines",
+    "heading": "Gestion des machines",
+    "totalMachines": "Total des machines",
+    "addMachine": "Ajouter une machine",
+    "allMachines": "Toutes les machines",
+    "searchPlaceholder": "Rechercher des machines par ID, numéro de série, fabricant, modèle ou emplacement...",
+    "table": {
+      "machineId": "ID machine",
+      "serialNumber": "Numéro de série",
+      "type": "Type",
+      "status": "Statut",
+      "installationDate": "Date d'installation",
+      "weight": "Poids (kg)",
+      "actions": "Actions",
+      "manufacturer": "Fabricant",
+      "model": "Modèle",
+      "location": "Emplacement"
+    },
+    "empty": {
+      "search": "Aucune machine ne correspond à votre recherche.",
+      "default": "Aucune machine disponible."
+    },
+    "modal": {
+      "edit": "Modifier la machine",
+      "add": "Ajouter une nouvelle machine"
+    },
+    "form": {
+      "machineId": "ID machine",
+      "serialNumber": "Numéro de série",
+      "manufacturer": "Fabricant",
+      "model": "Modèle",
+      "machineType": "Type de machine",
+      "status": "Statut",
+      "installationDate": "Date d'installation",
+      "weight": "Poids (kg)",
+      "location": "Emplacement",
+      "selectType": "Sélectionner un type"
+    },
+    "options": {
+      "operational": "Opérationnel",
+      "maintenance": "En maintenance",
+      "outOfService": "Hors service",
+      "retired": "Mis au retrait"
+    },
+    "placeholders": {
+      "enterMachineId": "Entrez l'ID de la machine",
+      "enterSerial": "Entrez le numéro de série",
+      "enterManufacturer": "Entrez le fabricant",
+      "enterModel": "Entrez le modèle",
+      "enterLocation": "Entrez l'emplacement",
+      "selectType": "Sélectionner un type"
+    },
+    "status": {
+      "operational": "Opérationnel",
+      "maintenance": "En maintenance",
+      "outOfService": "Hors service",
+      "retired": "Mis au retrait"
+    },
+    "notifications": {
+      "deleted": "Machine supprimée avec succès",
+      "deleteFailed": "Échec de la suppression de la machine",
+      "updated": "Machine mise à jour avec succès",
+      "created": "Machine créée avec succès",
+      "saveFailed": "Échec de l'enregistrement de la machine",
+      "loadFailed": "Échec du chargement des données",
+      "machineIdRequired": "L'ID machine est obligatoire",
+      "serialRequired": "Le numéro de série est obligatoire",
+      "manufacturerRequired": "Le fabricant est obligatoire",
+      "modelRequired": "Le modèle est obligatoire",
+      "installationRequired": "La date d'installation est obligatoire",
+      "confirmDelete": "Êtes-vous sûr de vouloir supprimer cette machine ? Cette action est irréversible."
+    },
+    "button": {
+      "cancel": "Annuler",
+      "update": "Mettre à jour",
+      "create": "Créer",
+      "saving": "Enregistrement en cours..."
+    }
+  }
+}

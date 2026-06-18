@@ -1,0 +1,1 @@
+export function useHealthStatus() { return { health: { database: { status: 'healthy', version: '1.0.0' }, api: { status: 'healthy', version: '1.0.0' }, backup: { status: 'healthy', version: '1.0.0' } }, loading: false, error: null }; }

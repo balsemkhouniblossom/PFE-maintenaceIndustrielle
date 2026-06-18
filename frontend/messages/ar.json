@@ -1,0 +1,826 @@
+{
+  "language": {
+    "label": "لغةالتي تفضلها",
+    "en": "الإنجليزية",
+    "fr": "الفرنسية",
+    "ar": "العربية",
+    "es": "الإسبانية",
+    "de": "الألمانية",
+    "it": "الإيطالية"
+  },
+  "auth": {
+    "signIn": "تسجيل الدخول",
+    "signUp": "إنشاء حساب",
+    "email": "البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "confirmPassword": "تأكيد كلمة المرور",
+    "fullName": "الاسم الكامل",
+    "enterEmail": "أدخل بريدك الإلكتروني",
+    "enterPassword": "أدخل كلمة المرور",
+    "phone": "رقم الهاتف",
+    "role": "الدور",
+    "department": "القسم",
+    "creatingAccount": "جارٍ إنشاء الحساب...",
+    "enterFullName": "أدخل الاسم الكامل",
+    "enterPhone": "أدخل رقم الهاتف",
+    "enterDepartment": "أدخل اسم القسم",
+    "admin": "مدير",
+    "technician": "تقني",
+    "operator": "مشغّل",
+    "createAccount": "إنشاء حساب",
+    "signInHere": "سجّل الدخول هنا",
+    "signingIn": "جارٍ تسجيل الدخول...",
+    "signup": "ليس لديك حساب؟ سجّل هنا",
+    "login": "لديك حساب بالفعل؟ سجّل الدخول هنا",
+    "accessSystem": "ادخل إلى نظام إدارة الصيانة الصناعية",
+    "welcomeIprotex": "مرحباً بك في IPROTEX",
+    "advancedMaintenance": "إدارة الصيانة المتقدمة",
+    "loginFailed": "فشل تسجيل الدخول. يرجى التحقق من بيانات اعتمادك.",
+    "networkError": "خطأ في الشبكة. يرجى المحاولة مجدداً.",
+    "registrationSuccess": "تم التسجيل بنجاح. يرجى تسجيل الدخول.",
+    "registrationFailed": "فشل التسجيل. يرجى المحاولة مجدداً.",
+    "passwordsDoNotMatch": "كلمتا المرور غير متطابقتين.",
+    "passwordMinLength": "يجب أن تتكون كلمة المرور من 6 أحرف على الأقل."
+  },
+  "common": {
+    "actions": {
+      "cancel": "إلغاء",
+      "saving": "جارٍ الحفظ...",
+      "save": "حفظ",
+      "create": "إنشاء",
+      "update": "تحديث",
+      "edit": "تعديل",
+      "delete": "حذف",
+      "add": "إضافة",
+      "search": "بحث",
+      "close": "إغلاق",
+      "back": "رجوع",
+      "next": "التالي",
+      "previous": "السابق",
+      "confirm": "تأكيد"
+    },
+    "machineStatus": {
+      "operational": "يعمل",
+      "online": "متصل",
+      "offline": "غير متصل",
+      "warning": "تحذير",
+      "error": "خطأ"
+    },
+    "status": {
+      "completed": "مكتمل",
+      "pending": "قيد الانتظار",
+      "inProgress": "قيد التنفيذ"
+    },
+    "app": {
+      "version": "الإصدار"
+    },
+    "auth": {
+      "logout": "تسجيل الخروج"
+    },
+    "loading": "Loading...",
+    "error": "خطأ",
+    "success": "نجاح",
+    "cancel": "إلغاء",
+    "save": "حفظ",
+    "delete": "حذف",
+    "edit": "تعديل",
+    "add": "إضافة",
+    "user": "User",
+    "role": "Role",
+    "back": "رجوع",
+    "next": "التالي",
+    "previous": "السابق",
+    "close": "إغلاق",
+    "confirm": "تأكيد",
+    "time": {
+      "justNow": "الآن",
+      "hoursAgo": "منذ {count} ساعة",
+      "daysAgo": "منذ {count} يوم"
+    },
+    "table": {
+      "actions": "الإجراءات",
+      "noData": "لا توجد بيانات"
+    },
+    "systemOnline": "System online",
+    "percentageChangeFromLastMonth": {
+      "positive": "+{value}% منذ الشهر الماضي",
+      "negative": "{value}% منذ الشهر الماضي"
+    },
+    "logout": "Logout",
+    "notAvailable": "غير متاح",
+    "saving": "جاري الحفظ...",
+     "na": "غير متوفر"
+  },
+  "dashboard": {
+    "status": {
+      "systemOnline": "النظام متصل",
+      "maintenanceDue": "صيانة مستحقة",
+      "fromLastMonth": "منذ الشهر الماضي",
+      "unknownRole": "الدور",
+      "loading": "جارٍ التحميل...",
+      "pendingMaintenance": "صيانة مستحقة",
+      "percentageChange": {
+        "positive": "+{{value}}% from last month",
+        "negative": "{{value}}% from last month"
+      },
+      "percentageChangeFromLastMonth": {
+        "positive": "+{value}% منذ الشهر الماضي",
+        "negative": "{value}% منذ الشهر الماضي"
+      },
+      "systemOnlineKey": "النظام متصل",
+      "loadingKey": "جارٍ التحميل",
+      "pendingMaintenanceKey": "صيانة قيد الانتظار"
+    },
+    "welcome": "مرحباً",
+    "logout": "تسجيل الخروج",
+    "machines": "الآلات",
+    "users": "المستخدمون",
+    "technicians": "الفنيون",
+    "operators": "المشغّلون",
+    "workOrders": "أوامر العمل",
+    "reports": "التقارير",
+    "settings": "الإعدادات",
+    "waitingValidation": "في انتظار التحقق",
+    "assigned": "مسندة",
+    "inProgress": "قيد التنفيذ",
+    "completed": "مكتملة",
+    "machineCategories": "فئات الآلات",
+    "quickActions": "الإجراءات السريعة",
+    "viewMachines": "عرض الآلات",
+    "reportProblem": "الإبلاغ عن مشكلة",
+    "preventiveMaintenance": "الصيانة الوقائية",
+    "correctiveMaintenance": "الصيانة التصحيحية",
+    "machineManuals": "أدلة الآلات",
+    "myReports": "تقارير الصيانة الخاصة بي",
+    "admin": {
+      "title": "لوحة قاعدة البيانات الشاملة",
+      "searchPlaceholder": "البحث في جميع سجلات قاعدة البيانات...",
+      "fromLastMonth": "منذ الشهر الماضي",
+      "stats": {
+        "totalMachines": "إجمالي الآلات",
+        "activeUsers": "المستخدمون النشطون",
+        "activeWorkOrders": "أوامر العمل النشطة",
+        "completedThisMonth": "المكتملة هذا الشهر"
+      },
+      "quickKpis": {
+        "title": "مؤشرات سريعة",
+        "machineAvailability": "توفر الآلات",
+        "workOrderCompletion": "إتمام أوامر العمل",
+        "userActivity": "نشاط المستخدمين",
+        "systemHealth": "حالة النظام",
+        "completionRate": "نسبة الإتمام",
+        "activeWorkOrders": "أوامر العمل النشطة",
+        "activeUsers": "المستخدمون النشطون"
+      },
+      "databaseSummary": {
+        "title": "ملخص قاعدة البيانات",
+        "machineTypes": "أنواع الآلات",
+        "catalogueItems": "عناصر الكتالوج",
+        "sensors": "المستشعرات"
+      },
+      "health": {
+        "title": "حالة النظام",
+        "database": "قاعدة البيانات",
+        "apiServer": "خادم API",
+        "backupSystem": "نظام النسخ الاحتياطي",
+        "online": "متصل",
+        "warning": "تحذير"
+      },
+      "quickAccess": {
+        "title": "الوصول السريع",
+        "users": "المستخدمون",
+        "machines": "الآلات",
+        "workOrders": "أوامر العمل",
+        "catalogues": "الكتالوجات",
+        "machineTypes": "الأنواع",
+        "types": "الأنواع"
+      },
+      "workOrders": {
+        "recent": "أوامر العمل الأخيرة",
+        "completionRate": "نسبة الإتمام",
+        "pending": "قيد الانتظار",
+        "inProgress": "قيد التنفيذ",
+        "completed": "مكتملة",
+        "outOf": "من",
+        "distribution": "التوزيع"
+      },
+      "machines": {
+        "overview": "نظرة عامة",
+        "availability": "توفر الآلات",
+        "online": "متصل"
+      }
+    },
+    "operator": {
+      "manuals": {
+        "winding": "دليل اللف",
+        "braiding": "دليل التضفير",
+        "cutting": "دليل القطع",
+        "rolling": "دليل الدرفلة"
+      },
+      "validated": "تم التحقق",
+      "machineInspection": "فحص الآلة",
+      "viewAllReports": "عرض جميع التقارير",
+      "title": "لوحة تحكم المشغّل",
+      "welcome": "مرحباً بعودتك، {name}!",
+      "waitingValidation": "في انتظار التحقق",
+      "assigned": "مسندة",
+      "inProgress": "قيد التنفيذ",
+      "completed": "مكتملة",
+      "machineCategories": "فئات الآلات",
+      "viewMachines": "عرض الآلات",
+      "reportProblem": "الإبلاغ عن مشكلة",
+      "preventiveMaintenance": "الصيانة الوقائية",
+      "correctiveMaintenance": "الصيانة التصحيحية",
+      "machineManuals": "أدلة الآلات",
+      "myReports": "تقارير الصيانة الخاصة بي",
+      "stats": {
+        "activeWorkOrders": "أوامر العمل النشطة",
+        "assignedToYou": "مسندة إليك",
+        "completedToday": "المكتملة اليوم",
+        "tasksFinishedToday": "المهام المنجزة اليوم",
+        "pendingTasks": "المهام المعلّقة",
+        "awaitingAction": "في انتظار الإجراء",
+        "machinesAssigned": "الآلات المسندة",
+        "underYourCare": "تحت إشرافك"
+      },
+      "quickActions": {
+        "title": "الإجراءات السريعة",
+        "workOrders": "عرض أوامر العمل",
+        "checkMachines": "فحص الآلات",
+        "monitorSensors": "مراقبة المستشعرات",
+        "browseCatalogues": "تصفح الكتالوجات",
+        "reportProblem": "الإبلاغ عن مشكلة",
+        "preventiveMaintenance": "الصيانة الوقائية",
+        "correctiveMaintenance": "الصيانة التصحيحية",
+        "manuals": "الأدلة",
+        "myReports": "تقاريري"
+      },
+      "health": {
+        "title": "حالة النظام",
+        "database": "قاعدة البيانات",
+        "apiServer": "خادم API",
+        "sensorNetwork": "شبكة المستشعرات",
+        "online": "متصل",
+        "monitoring": "مراقبة"
+      },
+      "recentActivity": {
+        "title": "النشاط الأخير",
+        "completedTask": "تم إتمام مهمة الصيانة على الآلة #001",
+        "sensorAlert": "تنبيه مستشعر على الآلة #003",
+        "scheduledMaintenance": "صيانة مجدولة غداً",
+        "twoHoursAgo": "منذ ساعتين",
+        "fourHoursAgo": "منذ 4 ساعات",
+        "sixHoursAgo": "منذ 6 ساعات"
+      }
+    },
+    "technician": {
+      "title": "لوحة تحكم الفني",
+      "welcome": "مرحباً بعودتك، {name}!",
+      "description": "إليك نظرة عامة على الصيانة الفنية لهذا اليوم.",
+      "stats": {
+        "activeWorkOrders": "أوامر العمل النشطة",
+        "currentlyAssigned": "المسندة حالياً",
+        "completedToday": "المكتملة اليوم",
+        "tasksFinishedToday": "المهام المنجزة اليوم",
+        "pendingTasks": "المهام المعلّقة",
+        "awaitingAction": "في انتظار الإجراء",
+        "machinesServiced": "الآلات التي تمت صيانتها",
+        "underMaintenance": "قيد الصيانة"
+      },
+      "monitoring": {
+        "title": "المراقبة الفنية",
+        "sensorsMonitored": "المستشعرات المراقَبة",
+        "maintenanceScheduled": "الصيانة المجدولة",
+        "systemDiagnostics": "تشخيص النظام"
+      },
+      "health": {
+        "title": "حالة النظام",
+        "database": "قاعدة البيانات",
+        "apiServer": "خادم API",
+        "iotSensors": "مستشعرات IoT",
+        "maintenanceSystems": "أنظمة الصيانة",
+        "online": "متصل",
+        "monitoring": "مراقبة",
+        "operational": "تشغيلي"
+      },
+      "quickActions": {
+        "title": "الإجراءات السريعة",
+        "workOrders": "أوامر العمل",
+        "machines": "الآلات",
+        "sensors": "المستشعرات",
+        "parts": "القطع",
+        "safety": "السلامة",
+        "diagnostics": "التشخيص"
+      },
+      "recentActivity": {
+        "title": "النشاط الفني الأخير",
+        "calibrationCompleted": "اكتمل معايرة مصفوفة المستشعرات #001",
+        "maintenanceAlert": "تنبيه صيانة: تآكل محامل مكتشف على الآلة #003",
+        "diagnosticsPassed": "اجتاز تشخيص النظام بنجاح لخط الإنتاج A",
+        "preventiveMaintenanceDue": "الصيانة الوقائية المجدولة غداً",
+        "twoHoursAgo": "منذ ساعتين",
+        "fourHoursAgo": "منذ 4 ساعات",
+        "sixHoursAgo": "منذ 6 ساعات",
+        "eightHoursAgo": "منذ 8 ساعات"
+      }
+    }
+  },
+  "navigation": {
+    "menu": {
+      "dashboard": "لوحة التحكم",
+      "users": "المستخدمون",
+      "machines": "الآلات",
+      "workOrders": "أوامر العمل",
+      "catalogues": "الكتالوجات",
+      "machineTypes": "أنواع الآلات",
+      "sensors": "المستشعرات",
+      "moduleTypes": "أنواع الوحدات"
+    },
+    "categories": {
+      "overview": "نظرة عامة",
+      "userManagement": "إدارة المستخدمين",
+      "equipment": "المعدات",
+      "maintenance": "الصيانة",
+      "partsInventory": "القطع والمخزون",
+      "catalogues": "الكتالوجات",
+      "equipmentTypes": "أنواع المعدات",
+      "machineTypes": "أنواع الآلات",
+      "iotMonitoring": "مراقبة IoT",
+      "sensors": "المستشعرات",
+      "workOrders": "أوامر العمل",
+      "systemModules": "وحدات النظام",
+      "moduleTypes": "أنواع الوحدات",
+      "technicalReference": "المرجع التقني"
+    }
+  },
+  "capteurs": {
+    "pageTitle": "إدارة المستشعرات",
+    "heading": "إدارة المستشعرات",
+    "description": "مراقبة وإدارة مستشعرات IoT وأجهزة الرصد",
+    "totalSensors": "إجمالي المستشعرات",
+    "allSensors": "جميع المستشعرات",
+    "active": "نشط",
+    "na": "غير متاح",
+    "table": {
+      "sensorId": "معرّف المستشعر",
+      "name": "الاسم",
+      "type": "النوع",
+      "machine": "الآلة",
+      "status": "الحالة"
+    }
+  },
+  "dashboardHome": {
+    "title": "لوحة قاعدة البيانات الشاملة",
+    "searchPlaceholder": "البحث في جميع سجلات قاعدة البيانات...",
+    "fromLastMonth": "منذ الشهر الماضي",
+    "stats": {
+      "totalMachines": "إجمالي الآلات",
+      "activeUsers": "المستخدمون النشطون",
+      "activeWorkOrders": "أوامر العمل النشطة",
+      "completedThisMonth": "المكتملة هذا الشهر"
+    },
+    "summary": {
+      "title": "ملخص قاعدة البيانات",
+      "machineTypes": "أنواع الآلات",
+      "catalogues": "عناصر الكتالوج",
+      "sensors": "المستشعرات"
+    },
+    "health": {
+      "title": "حالة النظام",
+      "database": "قاعدة البيانات",
+      "apiServer": "خادم API",
+      "backupSystem": "نظام النسخ الاحتياطي",
+      "online": "متصل",
+      "warning": "تحذير"
+    },
+    "quickAccess": {
+      "title": "الوصول السريع",
+      "users": "المستخدمون",
+      "machines": "الآلات",
+      "workOrders": "أوامر العمل",
+      "catalogues": "الكتالوجات",
+      "machineTypes": "الأنواع",
+      "types": "الأنواع"
+    }
+  },
+  "technicianDashboard": {
+    "title": "لوحة تحكم الفني",
+    "welcome": "مرحباً بعودتك، {name}!",
+    "description": "إليك نظرة عامة على الصيانة الفنية لهذا اليوم.",
+    "stats": {
+      "activeWorkOrders": "أوامر العمل النشطة",
+      "currentlyAssigned": "المسندة حالياً",
+      "completedToday": "المكتملة اليوم",
+      "tasksFinishedToday": "المهام المنجزة اليوم",
+      "pendingTasks": "المهام المعلّقة",
+      "awaitingAction": "في انتظار الإجراء",
+      "machinesServiced": "الآلات التي تمت صيانتها",
+      "underMaintenance": "قيد الصيانة"
+    },
+    "monitoring": {
+      "title": "المراقبة الفنية",
+      "sensorsMonitored": "المستشعرات المراقَبة",
+      "maintenanceScheduled": "الصيانة المجدولة",
+      "systemDiagnostics": "تشخيص النظام"
+    },
+    "health": {
+      "title": "حالة النظام",
+      "database": "قاعدة البيانات",
+      "apiServer": "خادم API",
+      "iotSensors": "مستشعرات IoT",
+      "maintenanceSystems": "أنظمة الصيانة",
+      "online": "متصل",
+      "monitoring": "مراقبة",
+      "operational": "تشغيلي"
+    },
+    "quickActions": {
+      "title": "الإجراءات السريعة",
+      "workOrders": "أوامر العمل",
+      "machines": "الآلات",
+      "sensors": "المستشعرات",
+      "parts": "القطع",
+      "safety": "السلامة",
+      "diagnostics": "التشخيص"
+    },
+    "recentActivity": {
+      "title": "النشاط الفني الأخير",
+      "calibrationCompleted": "اكتمل معايرة مصفوفة المستشعرات #001",
+      "maintenanceAlert": "تنبيه صيانة: تآكل محامل مكتشف على الآلة #003",
+      "diagnosticsPassed": "اجتاز تشخيص النظام بنجاح لخط الإنتاج A",
+      "preventiveMaintenanceDue": "الصيانة الوقائية المجدولة غداً",
+      "twoHoursAgo": "منذ ساعتين",
+      "fourHoursAgo": "منذ 4 ساعات",
+      "sixHoursAgo": "منذ 6 ساعات",
+      "eightHoursAgo": "منذ 8 ساعات"
+    }
+  },
+  "health": {
+    "title": "حالة النظام",
+    "database": "قاعدة البيانات",
+    "apiServer": "خادم API",
+    "backupSystem": "نظام النسخ الاحتياطي",
+    "online": "متصل",
+    "warning": "تحذير"
+  },
+  "workOrders": {
+    "title": "أوامر العمل",
+    "heading": "إدارة أوامر العمل",
+    "subtitle": "تتبع وإدارة وتعيين أوامر عمل الصيانة",
+    "totalWorkOrders": "إجمالي أوامر العمل",
+    "addWorkOrder": "إضافة أمر عمل",
+    "allWorkOrders": "جميع أوامر العمل",
+    "searchPlaceholder": "البحث في أوامر العمل...",
+    "unassigned": "غير مسند",
+    "confirmDelete": "هل أنت متأكد من حذف أمر العمل هذا؟",
+    "table": {
+      "otId": "رقم OT",
+      "description": "الوصف",
+      "machine": "الآلة",
+      "technician": "الفني",
+      "status": "الحالة",
+      "priority": "الأولوية",
+      "created": "تاريخ الإنشاء",
+      "startDate": "تاريخ البدء",
+      "endDate": "تاريخ الانتهاء"
+    },
+    "empty": {
+      "search": "لا توجد أوامر عمل تطابق بحثك",
+      "default": "لا توجد أوامر عمل"
+    },
+    "modal": {
+      "editTitle": "تعديل أمر العمل",
+      "addTitle": "إضافة أمر عمل"
+    },
+    "form": {
+      "otId": "رقم OT",
+      "priority": "الأولوية",
+      "description": "الوصف",
+      "machine": "الآلة",
+      "technician": "الفني المسؤول",
+      "status": "الحالة",
+      "estimatedDuration": "المدة المقدّرة (ساعات)",
+      "startDate": "تاريخ البدء",
+      "endDate": "تاريخ الانتهاء"
+    },
+    "priority": {
+      "low": "منخفضة",
+      "medium": "متوسطة",
+      "high": "عالية"
+    },
+    "placeholders": {
+      "selectMachine": "اختر آلة...",
+      "selectTechnician": "اختر فنياً..."
+    },
+    "status": {
+      "pending": "معلّق",
+      "in_progress": "قيد التنفيذ",
+      "completed": "مكتمل",
+      "cancelled": "ملغى"
+    },
+    "actions": {
+      "update": "تحديث أمر العمل",
+      "create": "إنشاء أمر عمل"
+    },
+    "validation": {
+      "workOrderIdRequired": "رقم OT مطلوب",
+      "machineRequired": "اختيار الآلة مطلوب",
+      "technicianRequired": "تعيين الفني مطلوب"
+    },
+    "notifications": {
+      "deleted": "تم حذف أمر العمل بنجاح",
+      "deleteFailed": "فشل حذف أمر العمل",
+      "updated": "تم تحديث أمر العمل بنجاح",
+      "created": "تم إنشاء أمر العمل بنجاح",
+      "saveFailed": "فشل حفظ أمر العمل"
+    }
+  },
+  "users": {
+    "pageTitle": "إدارة المستخدمين",
+    "heading": "إدارة المستخدمين",
+    "totalUsers": "إجمالي المستخدمين",
+    "addUser": "إضافة مستخدم",
+    "allUsers": "جميع المستخدمين",
+    "searchPlaceholder": "البحث عن مستخدمين...",
+    "subtitle": "إدارة مستخدمي النظام",
+    "actions": {
+      "edit": "تعديل",
+      "delete": "حذف",
+      "createUser": "إنشاء مستخدم",
+      "updateUser": "تحديث المستخدم"
+    },
+    "validation": {
+      "nameRequired": "الاسم مطلوب",
+      "emailRequired": "البريد الإلكتروني مطلوب"
+    },
+    "table": {
+      "photo": "الصورة",
+      "userId": "معرف المستخدم",
+      "fullName": "الاسم الكامل",
+      "name": "الاسم",
+      "email": "البريد الإلكتروني",
+      "phone": "الهاتف",
+      "role": "الدور",
+      "status": "الحالة",
+      "department": "القسم",
+      "createdAt": "تاريخ الإنشاء",
+      "lastLogin": "آخر تسجيل دخول",
+      "actions": "الإجراءات"
+    },
+    "empty": {
+      "search": "لا يوجد مستخدمون يطابقون بحثك.",
+      "default": "لا يوجد مستخدمون متاحون."
+    },
+    "modal": {
+      "edit": "تعديل المستخدم",
+      "add": "إضافة مستخدم جديد",
+      "addTitle": "إضافة مستخدم",
+      "editTitle": "تعديل المستخدم"
+    },
+    "form": {
+      "profilePhoto": "الصورة الشخصية",
+      "clickAvatar": "اضغط على الصورة لرفع صورة شخصية",
+      "userId": "معرف المستخدم",
+      "fullName": "الاسم الكامل",
+      "email": "البريد الإلكتروني",
+      "phone": "رقم الهاتف",
+      "department": "القسم",
+      "role": "الدور",
+      "status": "الحالة",
+      "password": "كلمة المرور"
+    },
+    "options": {
+      "admin": "مدير",
+      "technician": "تقني",
+      "operator": "مشغّل"
+    },
+    "placeholders": {
+      "password": "أدخل كلمة المرور",
+      "editPassword": "اترك فارغاً للحفاظ على كلمة المرور الحالية"
+    },
+    "roles": {
+      "admin": "مدير",
+      "technician": "تقني",
+      "operator": "عامل"
+    },
+    "status": {
+      "active": "نشط",
+      "inactive": "غير نشط"
+    },
+    "notifications": {
+      "created": "تم إنشاء المستخدم بنجاح",
+      "updated": "تم تحديث المستخدم بنجاح",
+      "deleted": "تم حذف المستخدم بنجاح",
+      "saveFailed": "فشل في الحفظ",
+      "loadFailed": "فشل في تحميل المستخدمين",
+      "photoUploaded": "تم رفع الصورة بنجاح",
+      "photoUploadFailed": "فشل في رفع الصورة",
+      "deleteFailed": "فشل في حذف المستخدم",
+      "confirmDelete": "هل أنت متأكد من حذف هذا المستخدم؟",
+      "emailRequired": "البريد الإلكتروني مطلوب",
+      "validEmail": "الرجاء إدخال بريد إلكتروني صالح",
+      "passwordRequired": "كلمة المرور مطلوبة",
+      "passwordMin": "يجب أن تتكون كلمة المرور من 6 أحرف على الأقل",
+      "fullNameRequired": "الاسم الكامل مطلوب"
+    },
+    "button": {
+      "cancel": "إلغاء",
+      "update": "تحديث",
+      "create": "إنشاء",
+      "saving": "جاري الحفظ..."
+    }
+  },
+  "catalogues": {
+    "title": "كتالوج قطع الغيار",
+    "header": {
+      "title": "كتالوج قطع الغيار",
+      "subtitle": "إدارة مخزون قطع الغيار والمكونات"
+    },
+    "stats": {
+      "totalParts": "إجمالي القطع"
+    },
+    "search": {
+      "placeholder": "البحث عن قطعة..."
+    },
+    "table": {
+      "title": "كتالوج قطع الغيار",
+      "partId": "معرف القطعة",
+      "partName": "اسم القطعة",
+      "manufacturerRef": "مرجع الشركة المصنعة",
+      "manufacturer": "الشركة المصنعة",
+      "category": "الفئة",
+      "stock": "المخزون",
+      "unitPrice": "سعر الوحدة",
+      "actions": "الإجراءات"
+    },
+    "form": {
+      "partId": "معرف القطعة",
+      "partName": "اسم القطعة",
+      "manufacturerReference": "مرجع الشركة المصنعة",
+      "manufacturer": "الشركة المصنعة",
+      "category": "الفئة",
+      "unitPrice": "سعر الوحدة",
+      "location": "الموقع",
+      "stockQuantity": "كمية المخزون",
+      "minimumStock": "الحد الأدنى للمخزون"
+    },
+    "actions": {
+      "addPart": "إضافة قطعة",
+      "edit": "تعديل",
+      "delete": "حذف",
+      "cancel": "إلغاء",
+      "saving": "جارٍ الحفظ...",
+      "updatePart": "تحديث القطعة",
+      "createPart": "إنشاء قطعة"
+    },
+    "modal": {
+      "editTitle": "تعديل قطعة",
+      "createTitle": "إضافة قطعة جديدة"
+    },
+    "validation": {
+      "partIdRequired": "معرف القطعة مطلوب",
+      "partNameRequired": "اسم القطعة مطلوب",
+      "manufacturerRefRequired": "مرجع الشركة المصنعة مطلوب"
+    },
+    "notifications": {
+      "createSuccess": "تم إنشاء القطعة بنجاح",
+      "updateSuccess": "تم تحديث القطعة بنجاح",
+      "deleteSuccess": "تم حذف القطعة بنجاح",
+      "deleteError": "فشل في حذف القطعة",
+      "saveError": "فشل في حفظ القطعة"
+    },
+    "messages": {
+      "noSearchResults": "لم يتم العثور على قطع مطابقة لعملية البحث.",
+      "noParts": "لا توجد قطع متاحة.",
+      "confirmDelete": "هل أنت متأكد من حذف هذه القطعة؟ لا يمكن التراجع عن هذا الإجراء."
+    }
+  },
+  "sidebar": {
+    "categories": {
+      "overview": "نظرة عامة",
+      "users": "المستخدمون",
+      "equipment": "الآلات",
+      "maintenance": "الصيانة",
+      "partsInventory": "مخزون القطع",
+      "equipmentTypes": "أنواع الآلات",
+      "iotMonitoring": "مراقبة إنترنت الأشياء",
+      "systemModules": "الوحدات النظامية"
+    },
+    "systemStatus": {
+      "online": "النظام متصل",
+      "loading": "جارٍ التحميل...",
+      "maintenanceDue": "صيانة مستحقة",
+      "percentageChange": {
+        "positive": "+{value}% من الشهر الماضي",
+        "negative": "{value}% من الشهر الماضي"
+      }
+    },
+    "userInfo": {
+      "user": "مستخدم",
+      "role": "الدور",
+      "logout": "تسجيل الخروج"
+    },
+    "navigation": {
+      "dashboard": "لوحة التحكم",
+      "users": "المستخدمين",
+      "machines": "الآلات",
+      "workOrders": "أوامر العمل",
+      "catalogues": "الكتالوجات",
+      "machineTypes": "أنواع الآلات",
+      "sensors": "المستشعرات",
+      "moduleTypes": "أنواع الوحدات",
+      "documents": "المستندات",
+      "categories": {
+        "overview": "نظرة عامة",
+        "userManagement": "إدارة المستخدمين",
+        "equipment": "المعدات",
+        "maintenance": "الصيانة",
+        "partsInventory": "القطع والمخزون",
+        "equipmentTypes": "أنواع المعدات",
+        "iotMonitoring": "مراقبة IoT",
+        "systemModules": "وحدات النظام",
+        "technicalReference": "المرجع التقني"
+      }
+    }
+  },
+  "machines": {
+    "description": "وصف",
+    "pageTitle": "إدارة الآلات",
+    "heading": "إدارة الآلات",
+    "totalMachines": "إجمالي الآلات",
+    "addMachine": "إضافة آلة",
+    "allMachines": "جميع الآلات",
+    "searchPlaceholder": "البحث في الآلات حسب المعرف، الرقم التسلسلي، الشركة المصنعة، الموديل، أو الموقع...",
+    "table": {
+      "manufacturer": "الشركة المصنعة",
+      "machineId": "معرف الآلة",
+      "model": "الموديل",
+      "serialNumber": "الرقم التسلسلي",
+      "type": "النوع",
+      "status": "الحالة",
+      "installationDate": "تاريخ التثبيت",
+      "weight": "الوزن (كجم)",
+      "location": "الموقع",
+      "actions": "الإجراءات"
+    },
+    "empty": {
+      "search": "لم يتم العثور على آلات تطابق بحثك.",
+      "default": "لا توجد آلات متاحة."
+    },
+    "modal": {
+      "edit": "تعديل الآلة",
+      "add": "إضافة آلة جديدة"
+    },
+    "form": {
+      "machineId": "معرف الآلة",
+      "serialNumber": "الرقم التسلسلي",
+      "manufacturer": "الشركة المصنعة",
+      "model": "الموديل",
+      "machineType": "نوع الآلة",
+      "status": "الحالة",
+      "installationDate": "تاريخ التثبيت",
+      "weight": "الوزن (كجم)",
+      "location": "الموقع",
+      "selectType": "اختر نوع الآلة"
+    },
+    "options": {
+      "operational": "قيد التشغيل",
+      "maintenance": "قيد الصيانة",
+      "outOfService": "خارج الخدمة",
+      "retired": "متقاعد"
+    },
+    "placeholders": {
+      "enterMachineId": "أدخل معرف الآلة",
+      "enterSerial": "أدخل الرقم التسلسلي",
+      "enterManufacturer": "أدخل الشركة المصنعة",
+      "enterModel": "أدخل الموديل",
+      "enterLocation": "أدخل الموقع",
+      "selectType": "اختر نوع الآلة"
+    },
+    "status": {
+      "operational": "قيد التشغيل",
+      "maintenance": "قيد الصيانة",
+      "outOfService": "خارج الخدمة",
+      "retired": "متقاعد"
+    },
+    "notifications": {
+      "deleted": "تم حذف الآلة بنجاح",
+      "deleteFailed": "فشل حذف الآلة",
+      "updated": "تم تحديث الآلة بنجاح",
+      "created": "تم إنشاء الآلة بنجاح",
+      "saveFailed": "فشل حفظ الآلة",
+      "loadFailed": "فشل تحميل البيانات",
+      "machineIdRequired": "معرف الآلة مطلوب",
+      "serialRequired": "الرقم التسلسلي مطلوب",
+      "manufacturerRequired": "الشركة المصنعة مطلوبة",
+      "modelRequired": "الموديل مطلوب",
+      "installationRequired": "تاريخ التثبيت مطلوب",
+      "confirmDelete": "هل أنت متأكد من حذف هذه الآلة؟ لا يمكن التراجع عن هذا الإجراء."
+    },
+    "button": {
+      "cancel": "إلغاء",
+      "update": "تحديث",
+      "create": "إنشاء",
+      "saving": "جارٍ الحفظ..."
+    }
+  }
+}

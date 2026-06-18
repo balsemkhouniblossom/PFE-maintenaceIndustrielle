@@ -1,0 +1,47 @@
+import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { MachineType, MachineTypeDocument } from '../schemas/machine-type.schema';
+import { CreateMachineTypeDto } from './dto/create-machine-type.dto';
+import { UpdateMachineTypeDto } from './dto/update-machine-type.dto';
+import { CounterService } from '../counters/counter.service';
+@Injectable()
+export class MachineTypesService {
+constructor(
+  @InjectModel(MachineType.name)
+  private machineTypeModel: Model<MachineTypeDocument>,
+  private counterService: CounterService, // 👈 ADD
+) {}
+async create(dto: CreateMachineTypeDto): Promise<MachineType> {
+  const nextId =
+    await this.counterService.getNextSequence('machine_type');
+
+  console.log('NEXT ID =', nextId);
+
+  const created = new this.machineTypeModel({
+    ...dto,
+    type_id: nextId,
+  });
+
+  console.log('DATA TO SAVE =', created);
+
+  return created.save();
+}
+
+
+  async findAll(): Promise<MachineType[]> {
+    return this.machineTypeModel.find().exec();
+  }
+
+  async findOne(id: string): Promise<any> {
+    return this.machineTypeModel.findById(id).exec();
+  }
+
+  async update(id: string, updateMachineTypeDto: UpdateMachineTypeDto): Promise<any> {
+    return this.machineTypeModel.findByIdAndUpdate(id, updateMachineTypeDto, { new: true }).exec();
+  }
+
+  async remove(id: string): Promise<any> {
+    return this.machineTypeModel.findByIdAndDelete(id).exec();
+  }
+}

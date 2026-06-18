@@ -1,0 +1,91 @@
+import './load-env';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
+import { Module } from '@nestjs/common';
+import { MongooseModule } from '@nestjs/mongoose';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
+import { User, UserSchema } from './schemas/user.schema';
+import { MachineType, MachineTypeSchema } from './schemas/machine-type.schema';
+import { Machine, MachineSchema } from './schemas/machine.schema';
+import { ModuleType, ModuleTypeSchema } from './schemas/module-type.schema';
+import { Module as ModuleEntity, ModuleSchema } from './schemas/module.schema';
+import { Capteur, CapteurSchema } from './schemas/capteur.schema';
+import { Mesure, MesureSchema } from './schemas/mesure.schema';
+import { Catalogue, CatalogueSchema } from './schemas/catalogue.schema';
+import { Stock, StockSchema } from './schemas/stock.schema';
+import { ModulePieces, ModulePiecesSchema } from './schemas/module-pieces.schema';
+import { MaintenancePlan, MaintenancePlanSchema } from './schemas/maintenance-plan.schema';
+import { WorkOrder, WorkOrderSchema } from './schemas/work-order.schema';
+import { InterventionReport, InterventionReportSchema } from './schemas/intervention-report.schema';
+import { OTPieces, OTPiecesSchema } from './schemas/ot-pieces.schema';
+import { Lubrifiant, LubrifiantSchema } from './schemas/lubrifiant.schema';
+import { LubrificationLog, LubrificationLogSchema } from './schemas/lubrification-log.schema';
+import { Panne, PanneSchema } from './schemas/panne.schema';
+import { PanneSolution, PanneSolutionSchema } from './schemas/panne-solution.schema';
+import { KPI, KPISchema } from './schemas/kpi.schema';
+import { DocumentEntity, DocumentSchema } from './schemas/document.schema';
+import { UsersModule } from './users/users.module';
+import { MachinesModule } from './machines/machines.module';
+import { WorkOrdersModule } from './work-orders/work-orders.module';
+import { MachineTypesModule } from './machine-types/machine-types.module';
+import { CataloguesModule } from './catalogues/catalogues.module';
+import { ModuleTypesModule } from './module-types/module-types.module';
+import { CapteursModule } from './capteurs/capteurs.module';
+import { AuthModule } from './auth/auth.module';
+
+import { CounterModule } from './counters/counter.module';
+import { DocumentsModule } from './documents/documents.module';
+
+@Module({
+  imports: [
+    CounterModule, 
+    ServeStaticModule.forRoot({
+      rootPath: join(process.cwd(), 'files'),
+      serveRoot: '/files',
+    }),
+
+    MongooseModule.forRoot(
+      process.env.MONGODB_URI ??
+      // Local fallback: if your local MongoDB requires auth, you MUST provide MONGODB_URI.
+      // Otherwise, connect with a no-auth local instance.
+      'mongodb://localhost:27017/GMAO_IPROTEX',
+      {},
+    ),
+
+    MongooseModule.forFeature([
+      { name: User.name, schema: UserSchema },
+      { name: MachineType.name, schema: MachineTypeSchema },
+      { name: Machine.name, schema: MachineSchema },
+      { name: ModuleType.name, schema: ModuleTypeSchema },
+      { name: ModuleEntity.name, schema: ModuleSchema },
+      { name: Capteur.name, schema: CapteurSchema },
+      { name: Mesure.name, schema: MesureSchema },
+      { name: Catalogue.name, schema: CatalogueSchema },
+      { name: Stock.name, schema: StockSchema },
+      { name: ModulePieces.name, schema: ModulePiecesSchema },
+      { name: MaintenancePlan.name, schema: MaintenancePlanSchema },
+      { name: WorkOrder.name, schema: WorkOrderSchema },
+      { name: InterventionReport.name, schema: InterventionReportSchema },
+      { name: OTPieces.name, schema: OTPiecesSchema },
+      { name: Lubrifiant.name, schema: LubrifiantSchema },
+      { name: LubrificationLog.name, schema: LubrificationLogSchema },
+      { name: Panne.name, schema: PanneSchema },
+      { name: PanneSolution.name, schema: PanneSolutionSchema },
+      { name: KPI.name, schema: KPISchema },
+    ]),
+    UsersModule,
+    MachinesModule,
+    WorkOrdersModule,
+    MachineTypesModule,
+    CataloguesModule,
+    ModuleTypesModule,
+    CapteursModule,
+    AuthModule,
+    DocumentsModule, // ✅ MUST be here
+
+  ],
+  controllers: [AppController],
+  providers: [AppService],
+})
+export class AppModule { }

@@ -1,0 +1,661 @@
+{
+  "language": {
+    "label": "Sprache",
+    "en": "English",
+    "fr": "Français",
+    "ar": "العربية",
+    "es": "Español",
+    "de": "Deutsch",
+    "it": "Italiano"
+  },
+  "auth": {
+    "signIn": "Anmelden",
+    "signUp": "Registrieren",
+    "email": "E-Mail-Adresse",
+    "password": "Passwort",
+    "confirmPassword": "Passwort Bestätigen",
+    "fullName": "Vollständiger Name",
+    "enterEmail": "Geben Sie Ihre E-Mail ein",
+    "enterPassword": "Geben Sie Ihr Passwort ein",
+    "phone": "Telefonnummer",
+    "role": "Rolle",
+    "department": "Abteilung",
+    "creatingAccount": "Konto wird erstellt...",
+    "enterFullName": "Geben Sie Ihren vollständigen Namen ein",
+    "enterPhone": "Geben Sie Ihre Telefonnummer ein",
+    "enterDepartment": "Geben Sie Ihre Abteilung ein",
+    "admin": "Administrator",
+    "technician": "Techniker",
+    "operator": "Bediener",
+    "createAccount": "Konto Erstellen",
+    "signInHere": "Hier anmelden",
+    "signingIn": "Wird angemeldet...",
+    "signup": "Haben Sie noch kein Konto? Registrieren Sie sich hier",
+    "login": "Sie haben bereits ein Konto? Melden Sie sich hier an",
+    "accessSystem": "Greifen Sie auf Ihr Verwaltungssystem für industrielle Wartung zu",
+    "welcomeIprotex": "Willkommen bei IPROTEX",
+    "advancedMaintenance": "Erweiterte Wartungsverwaltung",
+    "loginFailed": "Anmeldung fehlgeschlagen. Bitte überprüfen Sie Ihre Anmeldedaten.",
+    "networkError": "Netzwerkfehler. Bitte versuchen Sie es erneut.",
+    "registrationSuccess": "Registrierung erfolgreich. Bitte melden Sie sich an.",
+    "registrationFailed": "Registrierung fehlgeschlagen. Bitte versuchen Sie es erneut.",
+    "passwordsDoNotMatch": "Die Passwörter stimmen nicht überein.",
+    "passwordMinLength": "Das Passwort muss mindestens 6 Zeichen lang sein."
+  },
+  "dashboard": {
+    "status": {
+      "systemOnline": "System online",
+      "maintenanceDue": "Fällige Wartungen",
+      "fromLastMonth": "seit letztem Monat",
+      "unknownRole": "Rolle",
+      "loading": "Wird geladen...",
+      "pendingMaintenance": "fällige Wartungen",
+      "percentageChangeFromLastMonth": {
+        "positive": "+{value}% seit letztem Monat",
+        "negative": "{value}% seit letztem Monat"
+      },
+      "systemOnlineKey": "systemOnline",
+      "loadingKey": "loading",
+      "pendingMaintenanceKey": "pendingMaintenance"
+    },
+    "welcome": "Willkommen",
+    "logout": "Abmelden",
+    "machines": "Maschinen",
+    "users": "Benutzer",
+    "technicians": "Techniker",
+    "operators": "Bediener",
+    "workOrders": "Arbeitsaufträge",
+    "reports": "Berichte",
+    "settings": "Einstellungen",
+    "admin": {
+      "title": "Vollständiges Datenbank-Dashboard",
+      "searchPlaceholder": "In allen Datenbankeinträgen suchen...",
+      "fromLastMonth": "seit dem letzten Monat",
+      "stats": {
+        "totalMachines": "Maschinen gesamt",
+        "activeUsers": "Aktive Benutzer",
+        "activeWorkOrders": "Aktive Arbeitsaufträge",
+        "completedThisMonth": "Diesen Monat abgeschlossen"
+      },
+      "databaseSummary": {
+        "title": "Datenbankzusammenfassung",
+        "machineTypes": "Maschinentypen",
+        "catalogueItems": "Katalogeinträge",
+        "sensors": "Sensoren"
+      },
+      "health": {
+        "title": "Systemzustand",
+        "database": "Datenbank",
+        "apiServer": "API-Server",
+        "backupSystem": "Backup-System",
+        "online": "ONLINE",
+        "warning": "WARNUNG"
+      },
+      "quickAccess": {
+        "title": "Schnellzugriff",
+        "users": "Benutzer",
+        "machines": "Maschinen",
+        "workOrders": "Arbeitsaufträge",
+        "catalogues": "Kataloge",
+        "machineTypes": "Typen",
+        "types": "Typen"
+      }
+    },
+    "operator": {
+      "title": "Bediener-Dashboard",
+      "welcome": "Willkommen zurück, {name}!",
+      "description": "Hier ist Ihre heutige Übersicht der Wartungsaufgaben.",
+      "stats": {
+        "activeWorkOrders": "Aktive Arbeitsaufträge",
+        "assignedToYou": "Ihnen zugewiesen",
+        "completedToday": "Heute abgeschlossen",
+        "tasksFinishedToday": "Heute erledigte Aufgaben",
+        "pendingTasks": "Ausstehende Aufgaben",
+        "awaitingAction": "Wartet auf Aktion",
+        "machinesAssigned": "Zugewiesene Maschinen",
+        "underYourCare": "In Ihrer Obhut"
+      },
+      "quickActions": {
+        "title": "Schnellaktionen",
+        "workOrders": "Arbeitsaufträge anzeigen",
+        "checkMachines": "Maschinen prüfen",
+        "monitorSensors": "Sensoren überwachen",
+        "browseCatalogues": "Kataloge durchsuchen"
+      },
+      "health": {
+        "title": "Systemzustand",
+        "database": "Datenbank",
+        "apiServer": "API-Server",
+        "sensorNetwork": "Sensornetzwerk",
+        "online": "ONLINE",
+        "monitoring": "ÜBERWACHUNG"
+      },
+      "recentActivity": {
+        "title": "Letzte Aktivitäten",
+        "completedTask": "Wartungsaufgabe an Maschine #001 abgeschlossen",
+        "sensorAlert": "Sensoralarm an Maschine #003",
+        "scheduledMaintenance": "Geplante Wartung ist morgen fällig",
+        "twoHoursAgo": "vor 2 Stunden",
+        "fourHoursAgo": "vor 4 Stunden",
+        "sixHoursAgo": "vor 6 Stunden"
+      }
+    },
+    "technician": {
+      "title": "Techniker-Dashboard",
+      "welcome": "Willkommen zurück, {name}!",
+      "description": "Hier ist Ihre heutige technische Wartungsübersicht.",
+      "stats": {
+        "activeWorkOrders": "Aktive Arbeitsaufträge",
+        "currentlyAssigned": "Derzeit zugewiesen",
+        "completedToday": "Heute abgeschlossen",
+        "tasksFinishedToday": "Heute erledigte Aufgaben",
+        "pendingTasks": "Ausstehende Aufgaben",
+        "awaitingAction": "Wartet auf Aktion",
+        "machinesServiced": "Gewartete Maschinen",
+        "underMaintenance": "In Wartung"
+      },
+      "monitoring": {
+        "title": "Technische Überwachung",
+        "sensorsMonitored": "Überwachte Sensoren",
+        "maintenanceScheduled": "Wartung geplant",
+        "systemDiagnostics": "Systemdiagnose"
+      },
+      "health": {
+        "title": "Systemzustand",
+        "database": "Datenbank",
+        "apiServer": "API-Server",
+        "iotSensors": "IoT-Sensoren",
+        "maintenanceSystems": "Wartungssysteme",
+        "online": "ONLINE",
+        "monitoring": "ÜBERWACHUNG",
+        "operational": "BETRIEBSBEREIT"
+      },
+      "quickActions": {
+        "title": "Schnellaktionen",
+        "workOrders": "Arbeitsaufträge",
+        "machines": "Maschinen",
+        "sensors": "Sensoren",
+        "parts": "Teile",
+        "safety": "Sicherheit",
+        "diagnostics": "Diagnose"
+      },
+      "recentActivity": {
+        "title": "Aktuelle technische Aktivität",
+        "calibrationCompleted": "Kalibrierung an Sensor-Array #001 abgeschlossen",
+        "maintenanceAlert": "Wartungswarnung: Lagerverschleiß an Maschine #003 erkannt",
+        "diagnosticsPassed": "Systemdiagnosen für Produktionslinie A bestanden",
+        "preventiveMaintenanceDue": "Geplante vorbeugende Wartung ist morgen fällig",
+        "twoHoursAgo": "vor 2 Stunden",
+        "fourHoursAgo": "vor 4 Stunden",
+        "sixHoursAgo": "vor 6 Stunden",
+        "eightHoursAgo": "vor 8 Stunden"
+      }
+    }
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Fehler",
+    "success": "Erfolg",
+    "cancel": "Abbrechen",
+    "save": "Speichern",
+    "delete": "Löschen",
+    "edit": "Bearbeiten",
+    "add": "Hinzufügen",
+    "user": "User",
+    "role": "Role",
+    "back": "Zurück",
+    "next": "Weiter",
+    "previous": "Zurück",
+    "close": "Schließen",
+    "confirm": "Bestätigen",
+    "table": {
+      "actions": "Aktionen",
+      "noData": "Keine Daten verfügbar"
+    },
+    "systemOnline": "System online",
+    "percentageChangeFromLastMonth": {
+      "positive": "+{value}% seit letztem Monat",
+      "negative": "{value}% seit letztem Monat"
+    },
+    "logout": "Logout",
+    "notAvailable": "k.A.",
+    "saving": "Speichern..."
+  },
+  "navigation": {
+    "menu": {
+      "dashboard": "Dashboard",
+      "users": "Benutzer",
+      "machines": "Maschinen",
+      "workOrders": "Arbeitsaufträge",
+      "catalogues": "Kataloge",
+      "machineTypes": "Maschinentypen",
+      "sensors": "Sensoren",
+      "moduleTypes": "Modultypen"
+    },
+    "categories": {
+      "overview": "Übersicht",
+      "userManagement": "Benutzerverwaltung",
+      "equipment": "Ausrüstung",
+      "maintenance": "Wartung",
+      "partsInventory": "Teile und Bestand",
+      "catalogues": "Kataloge",
+      "equipmentTypes": "Ausrüstungstypen",
+      "machineTypes": "Maschinentypen",
+      "iotMonitoring": "IoT-Überwachung",
+      "sensors": "Sensoren",
+      "workOrders": "Arbeitsaufträge",
+      "systemModules": "Systemmodule",
+      "moduleTypes": "Modultypen",
+      "technicalReference": "Technische Referenz"
+    }
+  },
+  "capteurs": {
+    "pageTitle": "SENSORENVERWALTUNG",
+    "heading": "Sensorenverwaltung",
+    "description": "IoT-Sensoren und Überwachungsgeräte kontrollieren und verwalten",
+    "totalSensors": "Sensoren gesamt",
+    "allSensors": "ALLE SENSOREN",
+    "active": "Aktiv",
+    "na": "k.A.",
+    "table": {
+      "sensorId": "Sensor-ID",
+      "name": "Name",
+      "type": "Typ",
+      "machine": "Maschine",
+      "status": "Status"
+    }
+  },
+  "dashboardHome": {
+    "title": "Vollständiges Datenbank-Dashboard",
+    "searchPlaceholder": "In allen Datenbankeinträgen suchen...",
+    "fromLastMonth": "seit dem letzten Monat",
+    "stats": {
+      "totalMachines": "Maschinen gesamt",
+      "activeUsers": "Aktive Benutzer",
+      "activeWorkOrders": "Aktive Arbeitsaufträge",
+      "completedThisMonth": "Diesen Monat abgeschlossen"
+    },
+    "summary": {
+      "title": "Datenbankzusammenfassung",
+      "machineTypes": "Maschinentypen",
+      "catalogues": "Katalogeinträge",
+      "sensors": "Sensoren"
+    },
+    "health": {
+      "title": "Systemzustand",
+      "database": "Datenbank",
+      "apiServer": "API-Server",
+      "backupSystem": "Backup-System",
+      "online": "ONLINE",
+      "warning": "WARNUNG"
+    },
+    "quickAccess": {
+      "title": "Schnellzugriff",
+      "users": "Benutzer",
+      "machines": "Maschinen",
+      "workOrders": "Arbeitsaufträge",
+      "catalogues": "Kataloge",
+      "machineTypes": "Typen"
+    }
+  },
+  "operatorDashboard": {
+    "title": "Bediener-Dashboard",
+    "welcome": "Willkommen zurück, {name}!",
+    "description": "Hier ist Ihre heutige Übersicht der Wartungsaufgaben.",
+    "stats": {
+      "activeWorkOrders": "Aktive Arbeitsaufträge",
+      "assignedToYou": "Ihnen zugewiesen",
+      "completedToday": "Heute abgeschlossen",
+      "tasksFinishedToday": "Heute erledigte Aufgaben",
+      "pendingTasks": "Ausstehende Aufgaben",
+      "awaitingAction": "Wartet auf Aktion",
+      "machinesAssigned": "Zugewiesene Maschinen",
+      "underYourCare": "In Ihrer Obhut"
+    },
+    "quickActions": {
+      "title": "Schnellaktionen",
+      "workOrders": "Arbeitsaufträge anzeigen",
+      "checkMachines": "Maschinen prüfen",
+      "monitorSensors": "Sensoren überwachen",
+      "browseCatalogues": "Kataloge durchsuchen"
+    },
+    "health": {
+      "title": "Systemzustand",
+      "database": "Datenbank",
+      "apiServer": "API-Server",
+      "sensorNetwork": "Sensornetzwerk",
+      "online": "ONLINE",
+      "monitoring": "ÜBERWACHUNG"
+    },
+    "recentActivity": {
+      "title": "Letzte Aktivitäten",
+      "completedTask": "Wartungsaufgabe an Maschine #001 abgeschlossen",
+      "sensorAlert": "Sensoralarm an Maschine #003",
+      "scheduledMaintenance": "Geplante Wartung ist morgen fällig",
+      "twoHoursAgo": "vor 2 Stunden",
+      "fourHoursAgo": "vor 4 Stunden",
+      "sixHoursAgo": "vor 6 Stunden"
+    }
+  },
+  "technicianDashboard": {
+    "title": "Techniker-Dashboard",
+    "welcome": "Willkommen zurück, {name}!",
+    "description": "Hier ist Ihre heutige technische Wartungsübersicht.",
+    "stats": {
+      "activeWorkOrders": "Aktive Arbeitsaufträge",
+      "currentlyAssigned": "Derzeit zugewiesen",
+      "completedToday": "Heute abgeschlossen",
+      "tasksFinishedToday": "Heute erledigte Aufgaben",
+      "pendingTasks": "Ausstehende Aufgaben",
+      "awaitingAction": "Wartet auf Aktion",
+      "machinesServiced": "Gewartete Maschinen",
+      "underMaintenance": "In Wartung"
+    },
+    "monitoring": {
+      "title": "Technische Überwachung",
+      "sensorsMonitored": "Überwachte Sensoren",
+      "maintenanceScheduled": "Wartung geplant",
+      "systemDiagnostics": "Systemdiagnose"
+    },
+    "health": {
+      "title": "Systemzustand",
+      "database": "Datenbank",
+      "apiServer": "API-Server",
+      "iotSensors": "IoT-Sensoren",
+      "maintenanceSystems": "Wartungssysteme",
+      "online": "ONLINE",
+      "monitoring": "ÜBERWACHUNG",
+      "operational": "BETRIEBSBEREIT"
+    },
+    "quickActions": {
+      "title": "Schnellaktionen",
+      "workOrders": "Arbeitsaufträge",
+      "machines": "Maschinen",
+      "sensors": "Sensoren",
+      "parts": "Teile",
+      "safety": "Sicherheit",
+      "diagnostics": "Diagnose"
+    },
+    "recentActivity": {
+      "title": "Aktuelle technische Aktivität",
+      "calibrationCompleted": "Kalibrierung an Sensor-Array #001 abgeschlossen",
+      "maintenanceAlert": "Wartungswarnung: Lagerverschleiß an Maschine #003 erkannt",
+      "diagnosticsPassed": "Systemdiagnosen für Produktionslinie A bestanden",
+      "preventiveMaintenanceDue": "Geplante vorbeugende Wartung ist morgen fällig",
+      "twoHoursAgo": "vor 2 Stunden",
+      "fourHoursAgo": "vor 4 Stunden",
+      "sixHoursAgo": "vor 6 Stunden",
+      "eightHoursAgo": "vor 8 Stunden"
+    }
+  },
+  "health": {
+    "title": "Systemzustand",
+    "database": "Datenbank",
+    "apiServer": "API-Server",
+    "backupSystem": "Backup-System",
+    "online": "ONLINE",
+    "warning": "WARNUNG"
+  },
+  "workOrders": {
+    "title": "Arbeitsaufträge",
+    "heading": "Verwaltung der Arbeitsaufträge",
+    "subtitle": "Wartungsaufträge verfolgen, verwalten und zuweisen",
+    "totalWorkOrders": "Arbeitsaufträge gesamt",
+    "addWorkOrder": "Arbeitsauftrag hinzufügen",
+    "allWorkOrders": "Alle Arbeitsaufträge",
+    "searchPlaceholder": "Arbeitsaufträge suchen...",
+    "unassigned": "Nicht zugewiesen",
+    "confirmDelete": "Möchten Sie diesen Arbeitsauftrag wirklich löschen?",
+    "table": {
+      "otId": "OT-Nr.",
+      "description": "Beschreibung",
+      "machine": "Maschine",
+      "technician": "Techniker",
+      "status": "Status",
+      "priority": "Priorität",
+      "created": "Erstellt am",
+      "startDate": "Startdatum",
+      "endDate": "Enddatum"
+    },
+    "empty": {
+      "search": "Keine Arbeitsaufträge entsprechen Ihrer Suche",
+      "default": "Keine Arbeitsaufträge gefunden"
+    },
+    "modal": {
+      "editTitle": "Arbeitsauftrag bearbeiten",
+      "addTitle": "Arbeitsauftrag hinzufügen"
+    },
+    "form": {
+      "otId": "OT-Nummer",
+      "priority": "Priorität",
+      "description": "Beschreibung",
+      "machine": "Maschine",
+      "technician": "Zugewiesener Techniker",
+      "status": "Status",
+      "estimatedDuration": "Geschätzte Dauer (Stunden)",
+      "startDate": "Startdatum",
+      "endDate": "Enddatum"
+    },
+    "priority": {
+      "low": "Niedrig",
+      "medium": "Mittel",
+      "high": "Hoch"
+    },
+    "placeholders": {
+      "selectMachine": "Maschine auswählen...",
+      "selectTechnician": "Techniker auswählen..."
+    },
+    "status": {
+      "pending": "Ausstehend",
+      "in_progress": "In Bearbeitung",
+      "completed": "Abgeschlossen",
+      "cancelled": "Abgebrochen"
+    },
+    "actions": {
+      "update": "Arbeitsauftrag aktualisieren",
+      "create": "Arbeitsauftrag erstellen"
+    },
+    "validation": {
+      "workOrderIdRequired": "OT-Nummer ist erforderlich",
+      "machineRequired": "Maschinenauswahl ist erforderlich",
+      "technicianRequired": "Technikerzuweisung ist erforderlich"
+    },
+    "notifications": {
+      "deleted": "Arbeitsauftrag erfolgreich gelöscht",
+      "deleteFailed": "Fehler beim Löschen des Arbeitsauftrags",
+      "updated": "Arbeitsauftrag erfolgreich aktualisiert",
+      "created": "Arbeitsauftrag erfolgreich erstellt",
+      "saveFailed": "Fehler beim Speichern des Arbeitsauftrags"
+    }
+  },
+  "users": {
+    "pageTitle": "Benutzerverwaltung",
+    "heading": "Benutzerverwaltung",
+    "totalUsers": "Benutzer insgesamt",
+    "addUser": "Benutzer hinzufügen",
+    "allUsers": "Alle Benutzer",
+    "searchPlaceholder": "Benutzer suchen...",
+    "subtitle": "Systembenutzer verwalten",
+    "table": {
+      "photo": "Foto",
+      "userId": "Benutzer-ID",
+      "fullName": "Vollständiger Name",
+      "name": "Name",
+      "email": "E-Mail",
+      "phone": "Telefon",
+      "role": "Rolle",
+      "status": "Status",
+      "department": "Abteilung",
+      "createdAt": "Erstellt am",
+      "lastLogin": "Letzte Anmeldung",
+      "actions": "Aktionen"
+    },
+    "empty": {
+      "search": "Keine Benutzer gefunden, die Ihrer Suche entsprechen.",
+      "default": "Keine Benutzer verfügbar."
+    },
+    "modal": {
+      "edit": "Benutzer bearbeiten",
+      "add": "Neuen Benutzer hinzufügen"
+    },
+    "form": {
+      "email": "E-Mail",
+      "password": "Passwort",
+      "profilePhoto": "Profilfoto",
+      "fullName": "Vollständiger Name",
+      "phone": "Telefon",
+      "department": "Abteilung",
+      "role": "Rolle",
+      "status": "Status"
+    },
+    "options": {
+      "admin": "Administrator",
+      "technician": "Techniker",
+      "operator": "Bediener"
+    },
+    "placeholders": {
+      "password": "Passwort eingeben",
+      "editPassword": "Leer lassen, um das aktuelle Passwort zu behalten"
+    },
+    "status": {
+      "active": "Aktiv",
+      "inactive": "Inaktiv"
+    },
+    "notifications": {
+      "deleted": "Benutzer erfolgreich gelöscht",
+      "deleteFailed": "Fehler beim Löschen des Benutzers",
+      "updated": "Benutzer erfolgreich aktualisiert",
+      "created": "Benutzer erfolgreich erstellt",
+      "saveFailed": "Fehler beim Speichern des Benutzers",
+      "emailRequired": "E-Mail ist erforderlich",
+      "validEmail": "Bitte geben Sie eine gültige E-Mail-Adresse ein",
+      "passwordRequired": "Passwort ist erforderlich",
+      "passwordMin": "Das Passwort muss mindestens 6 Zeichen lang sein",
+      "fullNameRequired": "Der vollständige Name ist erforderlich"
+    },
+    "button": {
+      "cancel": "Abbrechen",
+      "update": "Aktualisieren",
+      "create": "Erstellen",
+      "saving": "Speichern..."
+    }
+  },
+  "sidebar": {
+    "systemStatus": {
+      "online": "System online",
+      "loading": "Wird geladen...",
+      "maintenanceDue": "fällige Wartungen",
+      "percentageChange": {
+        "positive": "+{value}% vom letzten Monat",
+        "negative": "{value}% vom letzten Monat"
+      }
+    },
+    "userInfo": {
+      "user": "Benutzer",
+      "role": "Rolle",
+      "logout": "Abmelden"
+    },
+    "navigation": {
+      "dashboard": "Dashboard",
+      "users": "Benutzer",
+      "machines": "Maschinen",
+      "workOrders": "Arbeitsaufträge",
+      "catalogues": "Kataloge",
+      "machineTypes": "Maschinentypen",
+      "sensors": "Sensoren",
+      "moduleTypes": "Modultypen",
+      "categories": {
+        "overview": "Uberblick",
+        "userManagement": "Benutzerverwaltung",
+        "equipment": "Ausrüstung",
+        "maintenance": "Wartung",
+        "partsInventory": "Teile und Bestand",
+        "equipmentTypes": "Ausrüstungstypen",
+        "iotMonitoring": "IoT Uberwachung",
+        "systemModules": "Systemmodule",
+        "technicalReference": "Technische Referenz"
+      }
+    }
+  },
+  "machines": {
+    "pageTitle": "Maschinenverwaltung",
+    "heading": "Maschinenverwaltung",
+    "totalMachines": "Maschinen gesamt",
+    "addMachine": "Maschine hinzufügen",
+    "allMachines": "Alle Maschinen",
+    "searchPlaceholder": "Maschinen nach ID, Seriennummer, Hersteller, Modell oder Standort suchen...",
+    "description": "Maschinen und Geräte verwalten",
+    "table": {
+      "machineId": "Maschinen-ID",
+      "serialNumber": "Seriennummer",
+      "type": "Typ",
+      "status": "Status",
+      "installationDate": "Installationsdatum",
+      "weight": "Gewicht (kg)",
+      "actions": "Aktionen",
+        "manufacturer": "Hersteller",
+        "model": "Modell",
+        "location": "Standort"
+    },
+    "empty": {
+      "search": "Keine Maschinen gefunden, die Ihrer Suche entsprechen.",
+      "default": "Keine Maschinen verfügbar."
+    },
+    "modal": {
+      "edit": "Maschine bearbeiten",
+      "add": "Neue Maschine hinzufügen"
+    },
+    "form": {
+      "machineId": "Maschinen-ID",
+      "serialNumber": "Seriennummer",
+      "manufacturer": "Hersteller",
+      "model": "Modell",
+      "machineType": "Maschinentyp",
+      "status": "Status",
+      "installationDate": "Installationsdatum",
+      "weight": "Gewicht (kg)",
+      "location": "Standort",
+      "selectType": "Typ auswählen"
+    },
+    "options": {
+      "operational": "Betriebsbereit",
+      "maintenance": "In Wartung",
+      "outOfService": "Außer Betrieb",
+      "retired": "Außer Betrieb genommen"
+    },
+    "placeholders": {
+      "enterMachineId": "Maschinen-ID eingeben",
+      "enterSerial": "Seriennummer eingeben",
+      "enterManufacturer": "Hersteller eingeben",
+      "enterModel": "Modell eingeben",
+      "enterLocation": "Standort eingeben",
+      "selectType": "Typ auswählen"
+    },
+    "status": {
+      "operational": "Betriebsbereit",
+      "maintenance": "In Wartung",
+      "outOfService": "Außer Betrieb",
+      "retired": "Außer Betrieb genommen"
+    },
+    "notifications": {
+      "deleted": "Maschine erfolgreich gelöscht",
+      "deleteFailed": "Maschine konnte nicht gelöscht werden",
+      "updated": "Maschine erfolgreich aktualisiert",
+      "created": "Maschine erfolgreich erstellt",
+      "saveFailed": "Maschine konnte nicht gespeichert werden",
+      "loadFailed": "Daten konnten nicht geladen werden",
+      "machineIdRequired": "Maschinen-ID ist erforderlich",
+      "serialRequired": "Seriennummer ist erforderlich",
+      "manufacturerRequired": "Hersteller ist erforderlich",
+      "modelRequired": "Modell ist erforderlich",
+      "installationRequired": "Installationsdatum ist erforderlich",
+      "confirmDelete": "Möchten Sie diese Maschine wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden."
+    },
+    "button": {
+      "cancel": "Abbrechen",
+      "update": "Aktualisieren",
+      "create": "Erstellen",
+      "saving": "Wird gespeichert..."
+    }
+  }
+}
