@@ -71,6 +71,19 @@
       "title": "Vollständiges Datenbank-Dashboard",
       "searchPlaceholder": "In allen Datenbankeinträgen suchen...",
       "fromLastMonth": "seit dem letzten Monat",
+      "workOrders": {
+        "recent": "Aktuelle Arbeitsaufträge",
+        "completionRate": "Abschlussrate",
+        "outOf": "von",
+        "distribution": "Auftragsverteilung"
+      },
+      "quickKpis": {
+        "title": "Schnell-KPIs",
+        "machineAvailability": "Verfügbarkeit der Maschinen",
+        "completionRate": "Abschlussrate",
+        "activeWorkOrders": "Aktive Arbeitsaufträge",
+        "activeUsers": "Aktive Benutzer"
+      },
       "stats": {
         "totalMachines": "Maschinen gesamt",
         "activeUsers": "Aktive Benutzer",
@@ -99,6 +112,11 @@
         "catalogues": "Kataloge",
         "machineTypes": "Typen",
         "types": "Typen"
+      },
+      "machines": {
+        "availability": "Verfügbarkeit",
+        "online": "Online",
+        "offline": "Offline"
       }
     },
     "operator": {
@@ -192,6 +210,76 @@
       }
     }
   },
+  "catalogues": {
+    "header": {
+      "title": "Kataloge",
+      "subtitle": "Verwalten Sie Ihre Kataloge"
+    },
+    "title": "Kataloge",
+    "actions": {
+      "addPart": "Teil hinzufügen",
+      "edit": "Bearbeiten",
+      "delete": "Löschen",
+      "cancel": "Abbrechen",
+      "saving": "Wird gespeichert...",
+      "updatePart": "Teil aktualisieren",
+      "createPart": "Teil erstellen"
+    },
+    "modal": {
+      "createTitle": "Katalog erstellen",
+      "editTitle": "Katalog bearbeiten"
+    },
+    "notifications": {
+      "createSuccess": "Teil erfolgreich erstellt",
+      "updateSuccess": "Teil erfolgreich aktualisiert",
+      "deleteSuccess": "Teil erfolgreich gelöscht",
+      "deleteError": "Fehler beim Löschen des Teils",
+      "saveError": "Fehler beim Speichern des Teils",
+      "deleted": "Teil erfolgreich gelöscht",
+      "deleteFailed": "Fehler beim Löschen des Teils",
+      "updated": "Teil erfolgreich aktualisiert",
+      "created": "Teil erfolgreich erstellt",
+      "saveFailed": "Fehler beim Speichern des Teils"
+    },
+    "messages": {
+      "noSearchResults": "Keine Teile gefunden, die Ihrer Suche entsprechen.",
+      "noParts": "Keine Teile verfügbar.",
+      "confirmDelete": "Sind Sie sicher, dass Sie dieses Teil löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden."
+    },
+    "button": {
+      "cancel": "Abbrechen",
+      "update": "Aktualisieren",
+      "create": "Erstellen",
+      "saving": "Wird gespeichert..."
+    },
+    "stats": {
+      "totalParts": "Gesamtanzahl der Teile"
+    },
+    "search": {
+      "placeholder": "Suchen..."
+    },
+    "table": {
+      "partId": "Teile-ID",
+      "partName": "Teilename",
+      "manufacturer": "Hersteller",
+      "manufacturerRef": "Hersteller-Referenz",
+      "category": "Kategorie",
+      "stock": "Bestand",
+      "unitPrice": "Stückpreis",
+      "actions": "Aktionen"
+    },
+    "form": {
+      "partId": "Teilenummer",
+      "partName": "Teilename",
+      "manufacturerReference": "Herstellerreferenz",
+      "manufacturer": "Hersteller",
+      "category": "Kategorie",
+      "unitPrice": "Einzelpreis",
+      "location": "Standort",
+      "stockQuantity": "Lagerbestand",
+      "minimumStock": "Mindestbestand"
+    }
+  },
   "common": {
     "loading": "Loading...",
     "error": "Fehler",
@@ -212,6 +300,24 @@
       "actions": "Aktionen",
       "noData": "Keine Daten verfügbar"
     },
+    "auth": {
+      "logout": "Abmelden"
+    },
+    "status": {
+      "pending": "Ausstehend",
+      "inProgress": "In Bearbeitung",
+      "completed": "Abgeschlossen"
+    },
+    "machineStatus": {
+      "online": "Online",
+      "offline": "Offline",
+      "operational": "Betriebsbereit",
+      "warning": "Warnung",
+      "error": "Fehler"
+    },
+    "time": {
+      "justNow": "Gerade eben"
+    },
     "systemOnline": "System online",
     "percentageChangeFromLastMonth": {
       "positive": "+{value}% seit letztem Monat",
@@ -219,7 +325,10 @@
     },
     "logout": "Logout",
     "notAvailable": "k.A.",
-    "saving": "Speichern..."
+    "saving": "Speichern...",
+    "actions": {
+      "cancel": "Abbrechen"
+    }
   },
   "navigation": {
     "menu": {
@@ -496,9 +605,12 @@
     },
     "modal": {
       "edit": "Benutzer bearbeiten",
-      "add": "Neuen Benutzer hinzufügen"
+      "add": "Neuen Benutzer hinzufügen",
+      "addTitle": "Benutzer hinzufügen",
+      "editTitle": "Benutzer bearbeiten"
     },
     "form": {
+      "userId": "Benutzer-ID",
       "email": "E-Mail",
       "password": "Passwort",
       "profilePhoto": "Profilfoto",
@@ -506,12 +618,20 @@
       "phone": "Telefon",
       "department": "Abteilung",
       "role": "Rolle",
-      "status": "Status"
+      "status": "Status",
+      "clickAvatar": "Klicken Sie auf den Avatar"
     },
     "options": {
       "admin": "Administrator",
       "technician": "Techniker",
       "operator": "Bediener"
+    },
+    "roles": {
+      "admin": "Administrator",
+      "user": "Benutzer",
+      "manager": "Manager",
+      "operator": "Operator",
+      "technician": "Techniker"
     },
     "placeholders": {
       "password": "Passwort eingeben",
@@ -538,9 +658,149 @@
       "update": "Aktualisieren",
       "create": "Erstellen",
       "saving": "Speichern..."
+    },
+    "actions": {
+      "edit": "Bearbeiten",
+      "delete": "Löschen",
+      "createUser": "Benutzer erstellen",
+      "updateUser": "Benutzer aktualisieren"
+    }
+  },
+  "machineTypes": {
+    "pageTitle": "Verwaltung der Maschinentypen",
+    "heading": "Verwaltung der Maschinentypen",
+    "totalTypes": "Anzahl Typen",
+    "addType": "Typ hinzufügen",
+    "allTypes": "Alle Typen",
+    "searchPlaceholder": "Maschinentypen suchen...",
+    "table": {
+      "typeId": "Typ-ID",
+      "modelName": "Modellname",
+      "manufacturer": "Hersteller",
+      "description": "Beschreibung",
+      "category": "Kategorie",
+      "maintenanceInterval": "Wartungsintervall",
+      "expectedLifespan": "Erwartete Lebensdauer",
+      "actions": "Aktionen"
+    },
+    "modal": {
+      "edit": "Typ bearbeiten",
+      "add": "Neuen Typ hinzufügen"
+    },
+    "form": {
+      "typeId": "Typ-ID",
+      "modelName": "Modellname",
+      "manufacturer": "Hersteller",
+      "category": "Kategorie",
+      "description": "Beschreibung",
+      "maintenanceInterval": "Wartungsintervall (Tage)",
+      "expectedLifespan": "Lebensdauer (Jahre)"
+    },
+    "options": {
+      "mechanical": "Mechanisch",
+      "electrical": "Elektrisch",
+      "hydraulic": "Hydraulisch",
+      "pneumatic": "Pneumatisch",
+      "mixed": "Gemischt"
+    },
+    "notifications": {
+      "deleted": "Maschinentyp erfolgreich gelöscht",
+      "deleteFailed": "Fehler beim Löschen des Maschinentyps",
+      "updated": "Maschinentyp erfolgreich aktualisiert",
+      "created": "Maschinentyp erfolgreich erstellt",
+      "saveFailed": "Fehler beim Speichern des Maschinentyps"
+    },
+    "button": {
+      "cancel": "Abbrechen",
+      "update": "Aktualisieren",
+      "create": "Erstellen",
+      "saving": "Wird gespeichert..."
+    }
+  },
+  "moduleTypes": {
+    "pageTitle": "Verwaltung der Modul-Typen",
+    "heading": "Verwaltung der Modul-Typen",
+    "totalTypes": "Anzahl Modul-Typen",
+    "addType": "Modul-Typ hinzufügen",
+    "allTypes": "Alle Modul-Typen",
+    "searchPlaceholder": "Modul-Typen suchen...",
+    "table": {
+      "moduleTypeId": "Modul-Typ-ID",
+      "name": "Name",
+      "description": "Beschreibung",
+      "category": "Kategorie",
+      "compatibility": "Kompatibilität",
+      "specifications": "Spezifikationen",
+      "actions": "Aktionen"
+    },
+    "modal": {
+      "edit": "Modul-Typ bearbeiten",
+      "add": "Neuen Modul-Typ hinzufügen"
+    },
+    "form": {
+      "moduleTypeId": "Modul-Typ-ID",
+      "name": "Name",
+      "category": "Kategorie",
+      "compatibility": "Kompatibilität",
+      "description": "Beschreibung",
+      "specifications": "Technische Spezifikationen"
+    },
+    "options": {
+      "control": "Steuerung",
+      "sensing": "Sensorik",
+      "actuation": "Aktuierung",
+      "communication": "Kommunikation",
+      "power": "Energie"
+    },
+    "notifications": {
+      "deleted": "Modul-Typ erfolgreich gelöscht",
+      "deleteFailed": "Fehler beim Löschen des Modul-Typs",
+      "updated": "Modul-Typ erfolgreich aktualisiert",
+      "created": "Modul-Typ erfolgreich erstellt",
+      "saveFailed": "Fehler beim Speichern des Modul-Typs"
+    },
+    "button": {
+      "cancel": "Abbrechen",
+      "update": "Aktualisieren",
+      "create": "Erstellen",
+      "saving": "Wird gespeichert..."
+    }
+  },
+  "operatorMachines": {
+    "pageTitle": "Maschinen",
+    "allMachines": "Alle Maschinen",
+    "allMachinesDescription": "Liste aller Maschinen im System",
+    "categoryDescription": "Maschinen in dieser Kategorie",
+    "machineCount": "{count} Maschinen gefunden",
+    "serialNumber": "Seriennummer",
+    "manufacturer": "Hersteller",
+    "reportIssue": "Problem melden",
+    "details": "Details",
+    "noMachinesFound": "Keine Maschinen gefunden",
+    "status": {
+      "operational": "Betriebsbereit",
+      "maintenance": "Wartung",
+      "inactive": "Inaktiv"
     }
   },
   "sidebar": {
+    "categories": {
+      "users": "Benutzer",
+      "overview": "Übersicht",
+      "userManagement": "Benutzerverwaltung",
+      "equipment": "Ausrüstung",
+      "maintenance": "Wartung",
+      "partsInventory": "Teilebestand",
+      "catalogues": "Kataloge",
+      "equipmentTypes": "Ausrüstungstypen",
+      "machineTypes": "Maschinentypen",
+      "iotMonitoring": "IoT-Überwachung",
+      "sensors": "Sensoren",
+      "workOrders": "Arbeitsaufträge",
+      "systemModules": "Systemmodule",
+      "moduleTypes": "Modultypen",
+      "technicalReference": "Technische Referenz"
+    },
     "systemStatus": {
       "online": "System online",
       "loading": "Wird geladen...",
@@ -593,9 +853,9 @@
       "installationDate": "Installationsdatum",
       "weight": "Gewicht (kg)",
       "actions": "Aktionen",
-        "manufacturer": "Hersteller",
-        "model": "Modell",
-        "location": "Standort"
+      "manufacturer": "Hersteller",
+      "model": "Modell",
+      "location": "Standort"
     },
     "empty": {
       "search": "Keine Maschinen gefunden, die Ihrer Suche entsprechen.",

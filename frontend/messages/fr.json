@@ -612,6 +612,12 @@
     "addPart": "Ajouter une pièce",
     "allParts": "Toutes les pièces",
     "searchPlaceholder": "Rechercher des pièces...",
+    "actions": {
+      "addPart": "Ajouter une pièce",
+      "cancel": "Annuler",
+      "updatePart": "Mettre à jour la pièce",
+      "createPart": "Créer une pièce"
+    },
     "table": {
       "partId": "ID pièce",
       "partName": "Nom de la pièce",
@@ -628,7 +634,9 @@
     },
     "modal": {
       "edit": "Modifier la pièce",
-      "add": "Ajouter une nouvelle pièce"
+      "add": "Ajouter une nouvelle pièce",
+      "createTitle": "Créer un catalogue",
+      "editTitle": "Modifier le catalogue"
     },
     "form": {
       "partId": "ID pièce",
@@ -639,7 +647,8 @@
       "unitPrice": "Prix unitaire",
       "stockQuantity": "Quantité en stock",
       "minimumStock": "Stock minimum",
-      "location": "Emplacement"
+      "location": "Emplacement",
+      "manufacturerReference": "Référence fabricant"
     },
     "options": {
       "inStock": "En stock",
@@ -679,8 +688,15 @@
       "title": "Catalogue",
       "subtitle": "Gérez vos catalogues"
     },
-     "stats": {
+    "stats": {
       "totalParts": "Nombre total de pièces"
+    },
+    "search": {
+      "placeholder": "Rechercher un catalogue..."
+    },
+    "messages": {
+      "noParts": "Aucune pièce disponible",
+      "noSearchResults": "Aucun résultat trouvé"
     }
   },
   "machineTypes": {
