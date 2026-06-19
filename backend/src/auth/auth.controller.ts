@@ -1,4 +1,13 @@
-import { Controller, Request, Post, Body, UseGuards, HttpCode, HttpStatus } from '@nestjs/common';
+import {
+  Controller,
+  Request,
+  Post,
+  Body,
+  UseGuards,
+  HttpCode,
+  HttpStatus,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './local-auth.guard';
 import { CreateUserDto } from '../users/dto/create-user.dto';
@@ -6,12 +15,16 @@ import { Role } from '../schemas/user.schema';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService) { }
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
   @HttpCode(HttpStatus.OK)
   async login(@Request() req) {
+      if (!req.user) {
+    throw new UnauthorizedException('Authentication failed');
+  }
+    console.log('LOGIN USER:', req.user); // 👈 ADD THIS
     return this.authService.login(req.user);
   }
 

@@ -58,9 +58,20 @@
     "previous": "Précédent",
     "close": "Fermer",
     "confirm": "Confirmer",
+    "status": {
+      "completed": "Completed",
+      "pending": "En attente",
+      "inProgress": "En cours"
+    },
+    "actions": {
+      "cancel": "Annuler"
+    },
     "table": {
       "actions": "Actions",
       "noData": "Aucune donnée disponible"
+    },
+    "auth": {
+      "logout": "Déconnexion"
     },
     "logout": "Déconnexion",
     "notAvailable": "N/A",
@@ -100,6 +111,24 @@
         "activeUsers": "Utilisateurs actifs",
         "activeWorkOrders": "Ordres de travail actifs",
         "completedThisMonth": "Terminés ce mois-ci"
+      },
+      "workOrders": {
+        "recent": "Ordres de travail récents",
+        "completionRate": "Taux d'achèvement des ordres de travail",
+        "distribution": "Répartition des ordres de travail",
+        "outOf": "sur"
+      },
+      "machines": {
+        "availability": "Disponibilité des machines",
+        "overview": "Aperçu des machines",
+        "online": "machines en ligne"
+      },
+      "quickKpis": {
+        "title": "Indicateurs clés",
+        "machineAvailability": "Disponibilité des machines",
+        "completionRate": "Taux d'achèvement",
+        "activeWorkOrders": "Ordres de travail actifs",
+        "activeUsers": "Utilisateurs actifs"
       },
       "databaseSummary": {
         "title": "Résumé de la base de données",
@@ -499,6 +528,7 @@
       "photo": "Photo",
       "userId": "ID utilisateur",
       "fullName": "Nom complet",
+      "name": "Nom",
       "email": "E-mail",
       "phone": "Téléphone",
       "role": "Rôle",
@@ -508,15 +538,24 @@
       "lastLogin": "Dernière connexion",
       "actions": "Actions"
     },
+    "actions": {
+      "createUser": "Créer un utilisateur",
+      "updateUser": "Mettre à jour l'utilisateur",
+      "edit": "Modifier",
+      "delete": "Supprimer"
+    },
     "empty": {
       "search": "Aucun utilisateur ne correspond à votre recherche.",
       "default": "Aucun utilisateur disponible."
     },
     "modal": {
       "edit": "Modifier l'utilisateur",
-      "add": "Ajouter un nouvel utilisateur"
+      "add": "Ajouter un nouvel utilisateur",
+      "addTitle": "Ajouter un utilisateur",
+      "editTitle": "Modifier l'utilisateur"
     },
     "form": {
+      "userId": "ID utilisateur",
       "email": "E-mail",
       "password": "Mot de passe",
       "profilePhoto": "Photo de profil",
@@ -524,10 +563,17 @@
       "phone": "Téléphone",
       "department": "Département",
       "role": "Rôle",
-      "status": "Statut"
+      "status": "Statut",
+      "clickAvatar": "Click to change avatar"
     },
     "options": {
       "admin": "Administrateur",
+      "technician": "Technicien",
+      "operator": "Opérateur"
+    },
+    "roles": {
+      "admin": "Administrateur",
+      "user": "Utilisateur",
       "technician": "Technicien",
       "operator": "Opérateur"
     },
@@ -559,6 +605,7 @@
     }
   },
   "catalogues": {
+    "title": "Catalogues",
     "pageTitle": "Catalogue des pièces",
     "heading": "Catalogue des pièces",
     "totalParts": "Total des pièces",
@@ -627,6 +674,13 @@
       "update": "Mettre à jour",
       "create": "Créer",
       "saving": "Enregistrement en cours..."
+    },
+    "header": {
+      "title": "Catalogue",
+      "subtitle": "Gérez vos catalogues"
+    },
+     "stats": {
+      "totalParts": "Nombre total de pièces"
     }
   },
   "machineTypes": {
@@ -766,6 +820,16 @@
     }
   },
   "sidebar": {
+    "categories": {
+      "overview": "Vue d'ensemble",
+      "users": "Utilisateurs",
+      "equipment": "Machines",
+      "maintenance": "Maintenance",
+      "partsInventory": "Catalogues",
+      "equipmentTypes": "Types de machines",
+      "iotMonitoring": "Surveillance IoT",
+      "systemModules": "Modules système"
+    },
     "systemStatus": {
       "online": "Système en ligne",
       "loading": "Chargement...",

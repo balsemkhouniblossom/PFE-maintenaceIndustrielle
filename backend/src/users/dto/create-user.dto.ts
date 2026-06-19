@@ -15,7 +15,6 @@ export class CreateUserDto {
 
   @IsString()
   @IsNotEmpty()
-  @Prop({ required: true })
   password: string;
 
   @IsString()
