@@ -12,5 +12,5 @@ export type AppLocale = (typeof locales)[number];
 export const defaultLocale: AppLocale = "en";
 
 export function isRtlLocale(locale: string) {
-  return locale === "ar";
+  return locale.toLowerCase().startsWith("ar");
 }

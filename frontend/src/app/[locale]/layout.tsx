@@ -53,8 +53,10 @@ export default async function LocaleLayout({
   const messages = await getMessages({ locale });
   const isRtl = isRtlLocale(locale);
   return (
-    <NextIntlClientProvider locale={locale} messages={messages}>
-      <AuthProvider>{children}</AuthProvider>
-    </NextIntlClientProvider>
+    <div dir={isRtl ? "rtl" : "ltr"} lang={locale}>
+      <NextIntlClientProvider locale={locale} messages={messages}>
+        <AuthProvider>{children}</AuthProvider>
+      </NextIntlClientProvider>
+    </div>
   );
 }

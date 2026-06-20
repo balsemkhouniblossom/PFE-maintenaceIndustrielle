@@ -51,7 +51,7 @@ export default function Dashboard({ locale: propLocale }: { locale?: string }) {
   const tAdmin = useTranslations("dashboard.admin");
   const tHealth = useTranslations("health");
   const tCommon = useTranslations("common");
-
+const tUsers = useTranslations('users');
 
   const { user, isLoading: authLoading } = useAuth();
   const locale = propLocale || 'en';

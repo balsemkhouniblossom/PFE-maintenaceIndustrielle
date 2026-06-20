@@ -99,6 +99,7 @@
     "logout": "Logout",
     "notAvailable": "N/A",
     "saving": "Saving..."
+    
   },
   "dashboard": {
     "status": {
@@ -588,6 +589,7 @@
       "technician": "Technician",
       "operator": "Operator"
     },
+    
     "empty": {
       "search": "No users found matching your search.",
       "default": "No users available."
