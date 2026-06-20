@@ -40,7 +40,15 @@
     "registrationSuccess": "Registrierung erfolgreich. Bitte melden Sie sich an.",
     "registrationFailed": "Registrierung fehlgeschlagen. Bitte versuchen Sie es erneut.",
     "passwordsDoNotMatch": "Die Passwörter stimmen nicht überein.",
-    "passwordMinLength": "Das Passwort muss mindestens 6 Zeichen lang sein."
+    "passwordMinLength": "Das Passwort muss mindestens 6 Zeichen lang sein.",
+    "forgotPasswordTitle": "Passwort vergessen",
+    "forgotPasswordDescription": "Geben Sie Ihre E-Mail ein, um Ihr Passwort zurückzusetzen.",
+    "sendResetLink": "Link senden",
+    "forgotPasswordLink": "Passwort vergessen?",
+    "resetPasswordTitle": "Passwort zurücksetzen",
+    "resetPasswordDescription": "Legen Sie ein neues Passwort fest, um fortzufahren.",
+    "resetPassword": "Passwort zurücksetzen",
+    "sending": "Senden..."
   },
   "dashboard": {
     "status": {

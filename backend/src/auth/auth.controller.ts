@@ -11,6 +11,8 @@ import {
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './local-auth.guard';
 import { CreateUserDto } from '../users/dto/create-user.dto';
+import { ForgotPasswordDto } from './dto/forgot-password.dto';
+import { ResetPasswordDto } from './dto/reset-password.dto';
 import { Role } from '../schemas/user.schema';
 
 @Controller('auth')
@@ -39,7 +41,7 @@ export class AuthController {
           user_id: user.user_id,
           nom_complet: user.nom_complet,
           email: user.email,
-          role: Role,
+          role: user.role,
         },
       };
     } catch (error) {
@@ -48,5 +50,15 @@ export class AuthController {
         error: error.message,
       };
     }
+  }
+
+  @Post('forgot-password')
+  async forgotPassword(@Body() forgotPasswordDto: ForgotPasswordDto) {
+    return this.authService.forgotPassword(forgotPasswordDto.email);
+  }
+
+  @Post('reset-password')
+  async resetPassword(@Body() resetPasswordDto: ResetPasswordDto) {
+    return this.authService.resetPassword(resetPasswordDto);
   }
 }

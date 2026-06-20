@@ -40,7 +40,15 @@
     "registrationSuccess": "Inscription réussie. Veuillez vous connecter.",
     "registrationFailed": "L'inscription a échoué. Veuillez réessayer.",
     "passwordsDoNotMatch": "Les mots de passe ne correspondent pas.",
-    "passwordMinLength": "Le mot de passe doit contenir au moins 6 caractères."
+    "passwordMinLength": "Le mot de passe doit contenir au moins 6 caractères.",
+    "forgotPasswordTitle": "Mot de passe oublié",
+    "forgotPasswordDescription": "Entrez votre e-mail pour réinitialiser votre mot de passe.",
+    "sendResetLink": "Envoyer le lien",
+    "forgotPasswordLink": "Mot de passe oublié ?",
+    "resetPasswordTitle": "Réinitialiser le mot de passe",
+    "resetPasswordDescription": "Définissez un nouveau mot de passe pour continuer.",
+    "resetPassword": "Réinitialiser le mot de passe",
+    "sending": "Envoi..."
   },
   "common": {
     "loading": "Chargement...",

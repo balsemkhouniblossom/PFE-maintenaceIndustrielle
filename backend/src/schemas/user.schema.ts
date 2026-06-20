@@ -23,6 +23,12 @@ export class User {
   @Prop({ required: true })
   password: string;
 
+  @Prop({ required: false })
+  reset_password_token?: string;
+
+  @Prop({ type: Date, required: false })
+  reset_password_expires?: Date;
+
   @Prop({
     enum: Role,
     default: Role.OPERATOR,

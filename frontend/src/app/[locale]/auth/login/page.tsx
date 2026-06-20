@@ -146,16 +146,18 @@ export default function LoginPage() {
                 </Link>
               </p>
             </div>
+            <div className="text-center mt-2">
+              <Link href={`/${locale}/auth/forgot-password`} className="text-sm font-semibold text-blue-600 hover:text-blue-700 transition-colors">
+                {t('forgotPasswordLink') || 'Forgot password?'}
+              </Link>
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="hidden lg:flex lg:w-3/5 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-blue-800 via-blue-900 to-[#0F172A] relative overflow-hidden">
-        <div
-          className="absolute inset-0 bg-cover bg-center opacity-80"
-          style={{ backgroundImage: 'url(/BGsign_in.png)' }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-white via-transparent to-transparent" />
+      <div className="hidden lg:flex lg:w-3/5 bg-[radial-gradient(circle_at_center,var(--tw-gradient-stops))] from-blue-800 via-blue-900 to-[#0F172A] relative overflow-hidden">
+        <div className="absolute inset-0 bg-[url('/BGsign_in.png')] bg-cover bg-center opacity-80" />
+        <div className="absolute inset-0 bg-linear-to-r from-white via-transparent to-transparent" />
       </div>
     </div>
   );

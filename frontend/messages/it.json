@@ -40,7 +40,15 @@
     "registrationSuccess": "Registrazione completata. Accedi adesso.",
     "registrationFailed": "Registrazione non riuscita. Riprova.",
     "passwordsDoNotMatch": "Le password non corrispondono.",
-    "passwordMinLength": "La password deve contenere almeno 6 caratteri."
+    "passwordMinLength": "La password deve contenere almeno 6 caratteri.",
+    "forgotPasswordTitle": "Password dimenticata",
+    "forgotPasswordDescription": "Inserisci la tua email per reimpostare la password.",
+    "sendResetLink": "Invia link",
+    "forgotPasswordLink": "Password dimenticata?",
+    "resetPasswordTitle": "Reimposta password",
+    "resetPasswordDescription": "Imposta una nuova password per continuare.",
+    "resetPassword": "Reimposta password",
+    "sending": "Invio..."
   },
   "dashboard": {
     "status": {

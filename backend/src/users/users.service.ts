@@ -60,6 +60,15 @@ export class UsersService {
     return this.userModel.findOne({ email }).exec();
   }
 
+  async findByResetToken(token: string): Promise<UserDocument | null> {
+    return this.userModel
+      .findOne({
+        reset_password_token: token,
+        reset_password_expires: { $gt: new Date() },
+      })
+      .exec();
+  }
+
   async update(id: string, updateUserDto: UpdateUserDto): Promise<any> {
     return this.userModel.findByIdAndUpdate(id, updateUserDto, { new: true }).exec();
   }

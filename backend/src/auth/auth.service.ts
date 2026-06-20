@@ -1,7 +1,9 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service';
 import * as bcrypt from 'bcrypt';
+import * as crypto from 'crypto';
+import { ResetPasswordDto } from './dto/reset-password.dto';
 
 @Injectable()
 export class AuthService {
@@ -41,12 +43,10 @@ export class AuthService {
       }
     );
 
-    const { password: _, ...result } = user.toObject();
-    console.log('EMAIL:', email);
-    console.log('USER:', user);
-    console.log('PASSWORD EXISTS:', !!user?.password);
+    const { password: _, reset_password_token, reset_password_expires, ...result } = user.toObject();
     return result;
   }
+
   async login(user: any) {
     const payload = {
       email: user.email,
@@ -64,13 +64,7 @@ export class AuthService {
   }
 
   async register(userData: any) {
-    // Hash password
-    const saltRounds = 10;
-    const hashedPassword = await bcrypt.hash(
-      userData.password,
-      10
-    );
-    // Create user
+    const hashedPassword = await bcrypt.hash(userData.password, 10);
     const newUser = await this.usersService.create({
       ...userData,
       password: hashedPassword,
@@ -78,5 +72,42 @@ export class AuthService {
     });
 
     return newUser;
+  }
+
+  async forgotPassword(email: string) {
+    const user = await this.usersService.findByEmail(email);
+    const resetToken = crypto.randomBytes(32).toString('hex');
+    const resetExpires = new Date(Date.now() + 60 * 60 * 1000);
+
+    if (user) {
+      await this.usersService.update(user._id.toString(), {
+        reset_password_token: resetToken,
+        reset_password_expires: resetExpires,
+      } as any);
+    }
+
+    return {
+      message:
+        'If an account exists with that email, a password reset link has been generated.',
+      resetToken: user ? resetToken : undefined,
+    };
+  }
+
+  async resetPassword(dto: ResetPasswordDto) {
+    const user = await this.usersService.findByResetToken(dto.token);
+    if (!user) {
+      throw new BadRequestException('Invalid or expired reset token');
+    }
+
+    const hashedPassword = await bcrypt.hash(dto.password, 10);
+    await this.usersService.update(user._id.toString(), {
+      password: hashedPassword,
+      reset_password_token: null,
+      reset_password_expires: null,
+    } as any);
+
+    return {
+      message: 'Password has been reset successfully',
+    };
   }
 }

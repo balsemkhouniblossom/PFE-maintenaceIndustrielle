@@ -40,7 +40,15 @@
     "registrationSuccess": "Registro exitoso. Por favor inicie sesión.",
     "registrationFailed": "El registro falló. Inténtelo de nuevo.",
     "passwordsDoNotMatch": "Las contraseñas no coinciden.",
-    "passwordMinLength": "La contraseña debe tener al menos 6 caracteres."
+    "passwordMinLength": "La contraseña debe tener al menos 6 caracteres.",
+    "forgotPasswordTitle": "Olvidé mi contraseña",
+    "forgotPasswordDescription": "Ingrese su correo para restablecer su contraseña.",
+    "sendResetLink": "Enviar enlace",
+    "forgotPasswordLink": "¿Olvidó su contraseña?",
+    "resetPasswordTitle": "Restablecer contraseña",
+    "resetPasswordDescription": "Establezca una nueva contraseña para continuar.",
+    "resetPassword": "Restablecer contraseña",
+    "sending": "Enviando..."
   },
   "dashboard": {
     "status": {

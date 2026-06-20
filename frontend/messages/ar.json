@@ -40,7 +40,15 @@
     "registrationSuccess": "تم التسجيل بنجاح. يرجى تسجيل الدخول.",
     "registrationFailed": "فشل التسجيل. يرجى المحاولة مجدداً.",
     "passwordsDoNotMatch": "كلمتا المرور غير متطابقتين.",
-    "passwordMinLength": "يجب أن تتكون كلمة المرور من 6 أحرف على الأقل."
+    "passwordMinLength": "يجب أن تتكون كلمة المرور من 6 أحرف على الأقل.",
+    "forgotPasswordTitle": "نسيت كلمة المرور",
+    "forgotPasswordDescription": "أدخل بريدك الإلكتروني لإعادة تعيين كلمة المرور.",
+    "sendResetLink": "إرسال الرابط",
+    "forgotPasswordLink": "نسيت كلمة المرور؟",
+    "resetPasswordTitle": "إعادة تعيين كلمة المرور",
+    "resetPasswordDescription": "قم بتعيين كلمة مرور جديدة للمتابعة.",
+    "resetPassword": "إعادة تعيين كلمة المرور",
+    "sending": "جارٍ الإرسال..."
   },
   "common": {
     "actions": {

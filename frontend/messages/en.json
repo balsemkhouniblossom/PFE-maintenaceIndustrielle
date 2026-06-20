@@ -40,7 +40,15 @@
     "registrationSuccess": "Registration successful. Please sign in.",
     "registrationFailed": "Registration failed. Please try again.",
     "passwordsDoNotMatch": "Passwords do not match.",
-    "passwordMinLength": "Password must be at least 6 characters long."
+    "passwordMinLength": "Password must be at least 6 characters long.",
+    "forgotPasswordTitle": "Forgot Password",
+    "forgotPasswordDescription": "Enter your email to reset your password.",
+    "sendResetLink": "Send reset link",
+    "forgotPasswordLink": "Forgot password?",
+    "resetPasswordTitle": "Reset Password",
+    "resetPasswordDescription": "Set a new password to continue.",
+    "resetPassword": "Reset Password",
+    "sending": "Sending..."
   },
   "common": {
     "actions": {
