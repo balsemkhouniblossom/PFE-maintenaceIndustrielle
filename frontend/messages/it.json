@@ -723,7 +723,9 @@
         "systemModules": "Moduli di sistema",
         "technicalReference": "Riferimento tecnico"
       },
-      "interventionReports": "Report di intervento"
+      "interventionReports": "Report di intervento",
+      "pannes": "Guasti",
+      "panneSolutions": "Soluzioni guasti"
     }
   },
   "machines": {
@@ -859,6 +861,94 @@
       "technicianRequired": "Tecnico obbligatorio",
       "startDateRequired": "Data inizio obbligatoria",
       "endDateRequired": "Data fine obbligatoria"
+    }
+  },
+  "pannes": {
+    "title": "Guasti",
+    "heading": "Gestione guasti",
+    "description": "Crea, aggiorna e monitora i record dei guasti.",
+    "totalPannes": "Totale guasti",
+    "allPannes": "Tutti i guasti",
+    "searchPlaceholder": "Cerca per ID guasto, codice, descrizione o gravita...",
+    "actions": {
+      "add": "Aggiungi guasto",
+      "edit": "Modifica",
+      "delete": "Elimina"
+    },
+    "table": {
+      "panneId": "ID guasto",
+      "code": "Codice",
+      "description": "Descrizione",
+      "severity": "Gravita"
+    },
+    "empty": {
+      "default": "Nessun guasto trovato",
+      "search": "Nessun guasto corrisponde alla ricerca"
+    },
+    "modal": {
+      "add": "Aggiungi guasto",
+      "edit": "Modifica guasto"
+    },
+    "form": {
+      "panneId": "ID guasto",
+      "code": "Codice guasto",
+      "description": "Descrizione",
+      "severity": "Gravita (opzionale)"
+    },
+    "notifications": {
+      "panneIdRequired": "ID guasto obbligatorio",
+      "codeRequired": "Codice guasto obbligatorio",
+      "descriptionRequired": "Descrizione obbligatoria",
+      "confirmDelete": "Sei sicuro di voler eliminare questo guasto?",
+      "created": "Guasto creato con successo",
+      "updated": "Guasto aggiornato con successo",
+      "deleted": "Guasto eliminato con successo",
+      "saveFailed": "Salvataggio del guasto non riuscito",
+      "deleteFailed": "Eliminazione del guasto non riuscita"
+    }
+  },
+  "panneSolutions": {
+    "title": "Soluzioni guasti",
+    "heading": "Gestione soluzioni guasti",
+    "description": "Gestisci le soluzioni raccomandate collegate ai guasti.",
+    "totalSolutions": "Totale soluzioni",
+    "allSolutions": "Tutte le soluzioni guasti",
+    "searchPlaceholder": "Cerca per ID soluzione, guasto, causa o soluzione...",
+    "actions": {
+      "add": "Aggiungi soluzione",
+      "edit": "Modifica",
+      "delete": "Elimina"
+    },
+    "table": {
+      "solutionId": "ID soluzione",
+      "panne": "Guasto",
+      "cause": "Causa probabile",
+      "solution": "Soluzione raccomandata"
+    },
+    "empty": {
+      "default": "Nessuna soluzione guasto trovata",
+      "search": "Nessuna soluzione guasto corrisponde alla ricerca"
+    },
+    "modal": {
+      "add": "Aggiungi soluzione guasto",
+      "edit": "Modifica soluzione guasto"
+    },
+    "form": {
+      "solutionId": "ID soluzione",
+      "panne": "Guasto",
+      "selectPanne": "Seleziona un guasto",
+      "cause": "Causa probabile (opzionale)",
+      "solution": "Soluzione raccomandata (opzionale)"
+    },
+    "notifications": {
+      "solutionIdRequired": "ID soluzione obbligatorio",
+      "panneRequired": "Guasto obbligatorio",
+      "confirmDelete": "Sei sicuro di voler eliminare questa soluzione guasto?",
+      "created": "Soluzione guasto creata con successo",
+      "updated": "Soluzione guasto aggiornata con successo",
+      "deleted": "Soluzione guasto eliminata con successo",
+      "saveFailed": "Salvataggio della soluzione guasto non riuscito",
+      "deleteFailed": "Eliminazione della soluzione guasto non riuscita"
     }
   }
 }

@@ -744,7 +744,9 @@
         "systemModules": "Modulos del sistema",
         "technicalReference": "Referencia tecnica"
       },
-      "interventionReports": "Informes de intervencion"
+      "interventionReports": "Informes de intervencion",
+      "pannes": "Averias",
+      "panneSolutions": "Soluciones de averias"
     }
   },
   "machines": {
@@ -880,6 +882,94 @@
       "technicianRequired": "El tecnico es obligatorio",
       "startDateRequired": "La fecha de inicio es obligatoria",
       "endDateRequired": "La fecha de fin es obligatoria"
+    }
+  },
+  "pannes": {
+    "title": "Averias",
+    "heading": "Gestion de averias",
+    "description": "Crear, actualizar y dar seguimiento a registros de averias.",
+    "totalPannes": "Total de averias",
+    "allPannes": "Todas las averias",
+    "searchPlaceholder": "Buscar por ID de averia, codigo, descripcion o gravedad...",
+    "actions": {
+      "add": "Agregar averia",
+      "edit": "Editar",
+      "delete": "Eliminar"
+    },
+    "table": {
+      "panneId": "ID de averia",
+      "code": "Codigo",
+      "description": "Descripcion",
+      "severity": "Gravedad"
+    },
+    "empty": {
+      "default": "No se encontraron averias",
+      "search": "No hay averias que coincidan con la busqueda"
+    },
+    "modal": {
+      "add": "Agregar averia",
+      "edit": "Editar averia"
+    },
+    "form": {
+      "panneId": "ID de averia",
+      "code": "Codigo de averia",
+      "description": "Descripcion",
+      "severity": "Gravedad (opcional)"
+    },
+    "notifications": {
+      "panneIdRequired": "El ID de averia es obligatorio",
+      "codeRequired": "El codigo de averia es obligatorio",
+      "descriptionRequired": "La descripcion es obligatoria",
+      "confirmDelete": "¿Seguro que deseas eliminar esta averia?",
+      "created": "Averia creada correctamente",
+      "updated": "Averia actualizada correctamente",
+      "deleted": "Averia eliminada correctamente",
+      "saveFailed": "Error al guardar la averia",
+      "deleteFailed": "Error al eliminar la averia"
+    }
+  },
+  "panneSolutions": {
+    "title": "Soluciones de averias",
+    "heading": "Gestion de soluciones de averias",
+    "description": "Gestionar soluciones recomendadas vinculadas a averias.",
+    "totalSolutions": "Total de soluciones",
+    "allSolutions": "Todas las soluciones de averias",
+    "searchPlaceholder": "Buscar por ID de solucion, averia, causa o solucion...",
+    "actions": {
+      "add": "Agregar solucion",
+      "edit": "Editar",
+      "delete": "Eliminar"
+    },
+    "table": {
+      "solutionId": "ID de solucion",
+      "panne": "Averia",
+      "cause": "Causa probable",
+      "solution": "Solucion recomendada"
+    },
+    "empty": {
+      "default": "No se encontraron soluciones de averias",
+      "search": "No hay soluciones de averias que coincidan con la busqueda"
+    },
+    "modal": {
+      "add": "Agregar solucion de averia",
+      "edit": "Editar solucion de averia"
+    },
+    "form": {
+      "solutionId": "ID de solucion",
+      "panne": "Averia",
+      "selectPanne": "Selecciona una averia",
+      "cause": "Causa probable (opcional)",
+      "solution": "Solucion recomendada (opcional)"
+    },
+    "notifications": {
+      "solutionIdRequired": "El ID de solucion es obligatorio",
+      "panneRequired": "La averia es obligatoria",
+      "confirmDelete": "¿Seguro que deseas eliminar esta solucion de averia?",
+      "created": "Solucion de averia creada correctamente",
+      "updated": "Solucion de averia actualizada correctamente",
+      "deleted": "Solucion de averia eliminada correctamente",
+      "saveFailed": "Error al guardar la solucion de averia",
+      "deleteFailed": "Error al eliminar la solucion de averia"
     }
   }
 }

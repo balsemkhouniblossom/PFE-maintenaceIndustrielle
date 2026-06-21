@@ -785,6 +785,7 @@
       "partsInventory": "مخزون القطع",
       "equipmentTypes": "أنواع الآلات",
       "iotMonitoring": "مراقبة إنترنت الأشياء",
+      "technicalReference": "المرجع التقني",
       "systemModules": "الوحدات النظامية"
     },
     "systemStatus": {
@@ -823,7 +824,9 @@
         "systemModules": "وحدات النظام",
         "technicalReference": "المرجع التقني"
       },
-      "interventionReports": "تقارير التدخل"
+      "interventionReports": "تقارير التدخل",
+      "pannes": "الاعطال",
+      "panneSolutions": "حلول الاعطال"
     }
   },
   "machines": {
@@ -964,6 +967,94 @@
       "technicianRequired": "الفني مطلوب",
       "startDateRequired": "تاريخ البدء مطلوب",
       "endDateRequired": "تاريخ الانتهاء مطلوب"
+    }
+  },
+  "pannes": {
+    "title": "الاعطال",
+    "heading": "إدارة الاعطال",
+    "description": "إنشاء وتعديل ومتابعة سجلات الاعطال.",
+    "totalPannes": "إجمالي الاعطال",
+    "allPannes": "جميع الاعطال",
+    "searchPlaceholder": "ابحث حسب معرف العطل أو الرمز أو الوصف أو الخطورة...",
+    "actions": {
+      "add": "إضافة عطل",
+      "edit": "تعديل",
+      "delete": "حذف"
+    },
+    "table": {
+      "panneId": "معرف العطل",
+      "code": "رمز العطل",
+      "description": "الوصف",
+      "severity": "الخطورة"
+    },
+    "empty": {
+      "default": "لا توجد أعطال",
+      "search": "لا توجد أعطال مطابقة للبحث"
+    },
+    "modal": {
+      "add": "إضافة عطل",
+      "edit": "تعديل عطل"
+    },
+    "form": {
+      "panneId": "معرف العطل",
+      "code": "رمز العطل",
+      "description": "الوصف",
+      "severity": "الخطورة (اختياري)"
+    },
+    "notifications": {
+      "panneIdRequired": "معرف العطل مطلوب",
+      "codeRequired": "رمز العطل مطلوب",
+      "descriptionRequired": "الوصف مطلوب",
+      "confirmDelete": "هل أنت متأكد من حذف هذا العطل؟",
+      "created": "تم إنشاء العطل بنجاح",
+      "updated": "تم تحديث العطل بنجاح",
+      "deleted": "تم حذف العطل بنجاح",
+      "saveFailed": "فشل حفظ العطل",
+      "deleteFailed": "فشل حذف العطل"
+    }
+  },
+  "panneSolutions": {
+    "title": "حلول الاعطال",
+    "heading": "إدارة حلول الاعطال",
+    "description": "إدارة الحلول المقترحة المرتبطة بالاعطال.",
+    "totalSolutions": "إجمالي الحلول",
+    "allSolutions": "جميع حلول الاعطال",
+    "searchPlaceholder": "ابحث حسب معرف الحل أو العطل أو السبب أو الحل...",
+    "actions": {
+      "add": "إضافة حل",
+      "edit": "تعديل",
+      "delete": "حذف"
+    },
+    "table": {
+      "solutionId": "معرف الحل",
+      "panne": "العطل",
+      "cause": "السبب المحتمل",
+      "solution": "الحل الموصى به"
+    },
+    "empty": {
+      "default": "لا توجد حلول أعطال",
+      "search": "لا توجد حلول أعطال مطابقة للبحث"
+    },
+    "modal": {
+      "add": "إضافة حل عطل",
+      "edit": "تعديل حل العطل"
+    },
+    "form": {
+      "solutionId": "معرف الحل",
+      "panne": "العطل",
+      "selectPanne": "اختر عطلًا",
+      "cause": "السبب المحتمل (اختياري)",
+      "solution": "الحل الموصى به (اختياري)"
+    },
+    "notifications": {
+      "solutionIdRequired": "معرف الحل مطلوب",
+      "panneRequired": "العطل مطلوب",
+      "confirmDelete": "هل أنت متأكد من حذف حل العطل هذا؟",
+      "created": "تم إنشاء حل العطل بنجاح",
+      "updated": "تم تحديث حل العطل بنجاح",
+      "deleted": "تم حذف حل العطل بنجاح",
+      "saveFailed": "فشل حفظ حل العطل",
+      "deleteFailed": "فشل حذف حل العطل"
     }
   }
 }

@@ -1,0 +1,424 @@
+'use client';
+
+import { useEffect, useMemo, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
+import {
+  CheckCircleIcon,
+  ExclamationTriangleIcon,
+  MagnifyingGlassIcon,
+  PencilIcon,
+  PlusIcon,
+  TrashIcon,
+} from '@heroicons/react/24/outline';
+import DashboardLayout from '@/components/DashboardLayout';
+import { Modal } from '@/components/Modal';
+import { apiService } from '@/services/api';
+
+interface PanneItem {
+  _id: string;
+  panne_id: string;
+  code_panne: string;
+  description: string;
+}
+
+interface PanneRef {
+  _id: string;
+  panne_id?: string;
+  code_panne?: string;
+  description?: string;
+}
+
+interface PanneSolution {
+  _id: string;
+  solution_id: string;
+  panne_id: string | PanneRef;
+  cause_probable?: string;
+  solution_recommandee?: string;
+}
+
+function getPanneLabel(panne: string | PanneRef): string {
+  if (typeof panne === 'string') return panne;
+  const code = panne?.code_panne ? ` (${panne.code_panne})` : '';
+  const label = panne?.panne_id || panne?._id || '';
+  return `${label}${code}`.trim();
+}
+
+function getPanneRefId(ref: string | PanneRef): string {
+  return typeof ref === 'string' ? ref : ref?._id || '';
+}
+
+export default function PanneSolutionsPage() {
+  const t = useTranslations('panneSolutions');
+  const tCommon = useTranslations('common');
+  const router = useRouter();
+
+  const [solutions, setSolutions] = useState<PanneSolution[]>([]);
+  const [pannes, setPannes] = useState<PanneItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [showModal, setShowModal] = useState(false);
+  const [editingSolution, setEditingSolution] = useState<PanneSolution | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+  const [notification, setNotification] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+  const [formData, setFormData] = useState({
+    solution_id: '',
+    panne_id: '',
+    cause_probable: '',
+    solution_recommandee: '',
+  });
+
+  async function loadData() {
+    try {
+      const [solutionsRes, pannesRes] = await Promise.all([
+        apiService.getPanneSolutions(),
+        apiService.getPannes(),
+      ]);
+
+      setSolutions(solutionsRes.data || []);
+      setPannes(pannesRes.data || []);
+    } catch (error) {
+      console.error('Error loading panne solutions:', error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function refreshData() {
+    await loadData();
+    router.refresh();
+    window.dispatchEvent(new Event('panne-solutions:changed'));
+  }
+
+  function showNotification(type: 'success' | 'error', message: string) {
+    setNotification({ type, message });
+    setTimeout(() => setNotification(null), 5000);
+  }
+
+  const filteredSolutions = useMemo(() => {
+    const term = searchTerm.trim().toLowerCase();
+    if (!term) return solutions;
+
+    return solutions.filter((solution) => {
+      const panneLabel = getPanneLabel(solution.panne_id).toLowerCase();
+      return (
+        (solution.solution_id ?? '').toLowerCase().includes(term) ||
+        panneLabel.includes(term) ||
+        (solution.cause_probable ?? '').toLowerCase().includes(term) ||
+        (solution.solution_recommandee ?? '').toLowerCase().includes(term)
+      );
+    });
+  }, [solutions, searchTerm]);
+
+  function resetForm() {
+    setFormData({
+      solution_id: '',
+      panne_id: '',
+      cause_probable: '',
+      solution_recommandee: '',
+    });
+    setEditingSolution(null);
+  }
+
+  function validateForm(): boolean {
+    if (!formData.solution_id.trim()) {
+      showNotification('error', t('notifications.solutionIdRequired'));
+      return false;
+    }
+    if (!formData.panne_id) {
+      showNotification('error', t('notifications.panneRequired'));
+      return false;
+    }
+    return true;
+  }
+
+  function openCreateModal() {
+    resetForm();
+    setShowModal(true);
+  }
+
+  function openEditModal(solution: PanneSolution) {
+    setEditingSolution(solution);
+    setFormData({
+      solution_id: solution.solution_id ?? '',
+      panne_id: getPanneRefId(solution.panne_id),
+      cause_probable: solution.cause_probable ?? '',
+      solution_recommandee: solution.solution_recommandee ?? '',
+    });
+    setShowModal(true);
+  }
+
+  async function handleDelete(id: string) {
+    if (!confirm(t('notifications.confirmDelete'))) return;
+
+    try {
+      await apiService.deletePanneSolution(id);
+      await refreshData();
+      showNotification('success', t('notifications.deleted'));
+    } catch (error) {
+      console.error('Error deleting panne solution:', error);
+      showNotification('error', t('notifications.deleteFailed'));
+    }
+  }
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!validateForm()) return;
+
+    setSubmitting(true);
+
+    try {
+      const payload: Record<string, unknown> = {
+        solution_id: formData.solution_id.trim(),
+        panne_id: formData.panne_id,
+      };
+
+      if (formData.cause_probable.trim()) payload.cause_probable = formData.cause_probable.trim();
+      if (formData.solution_recommandee.trim()) payload.solution_recommandee = formData.solution_recommandee.trim();
+
+      if (editingSolution) {
+        await apiService.updatePanneSolution(editingSolution._id, payload);
+        showNotification('success', t('notifications.updated'));
+      } else {
+        await apiService.createPanneSolution(payload);
+        showNotification('success', t('notifications.created'));
+      }
+
+      setShowModal(false);
+      resetForm();
+      await refreshData();
+    } catch (error) {
+      console.error('Error saving panne solution:', error);
+      showNotification('error', t('notifications.saveFailed'));
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  useEffect(() => {
+    const handleChanged = () => {
+      loadData();
+    };
+
+    window.addEventListener('panne-solutions:changed', handleChanged);
+    window.addEventListener('focus', handleChanged);
+
+    return () => {
+      window.removeEventListener('panne-solutions:changed', handleChanged);
+      window.removeEventListener('focus', handleChanged);
+    };
+  }, []);
+
+  if (loading) {
+    return (
+      <DashboardLayout title={t('title')}>
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
+        </div>
+      </DashboardLayout>
+    );
+  }
+
+  return (
+    <DashboardLayout title={t('title')}>
+      {notification && (
+        <div
+          className={`fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg flex items-center space-x-2 ${
+            notification.type === 'success'
+              ? 'bg-green-100 text-green-800 border border-green-200'
+              : 'bg-red-100 text-red-800 border border-red-200'
+          }`}
+        >
+          {notification.type === 'success' ? (
+            <CheckCircleIcon className="w-5 h-5" />
+          ) : (
+            <ExclamationTriangleIcon className="w-5 h-5" />
+          )}
+          <span>{notification.message}</span>
+          <button onClick={() => setNotification(null)} className="ml-2 text-gray-500 hover:text-gray-700" title={tCommon('close')}>
+            x
+          </button>
+        </div>
+      )}
+
+      <div className="bento-grid">
+        <div className="col-span-full mb-6 bento-item">
+          <div className="panel">
+            <div className="flex items-center justify-between">
+              <div>
+                <h1 className="text-2xl font-bold text-slate-800">{t('heading')}</h1>
+                <p className="text-slate-600 mt-1">{t('description')}</p>
+              </div>
+              <div className="flex items-center space-x-4">
+                <div className="text-end">
+                  <div className="text-3xl font-bold text-blue-600">{solutions.length}</div>
+                  <div className="text-sm text-slate-500">{t('totalSolutions')}</div>
+                </div>
+                <button onClick={openCreateModal} className="btn-primary flex items-center space-x-2">
+                  <PlusIcon className="w-4 h-4" />
+                  <span>{t('actions.add')}</span>
+                </button>
+              </div>
+            </div>
+
+            <div className="mt-4 relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <MagnifyingGlassIcon className="h-5 w-5 text-gray-400" />
+              </div>
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder={t('searchPlaceholder')}
+                title={t('searchPlaceholder')}
+                className="input-field pl-10 w-full"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="col-span-full bento-item panel">
+          <div className="card-title">{t('allSolutions')}</div>
+          <div className="overflow-x-auto">
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>{t('table.solutionId')}</th>
+                  <th>{t('table.panne')}</th>
+                  <th>{t('table.cause')}</th>
+                  <th>{t('table.solution')}</th>
+                  <th>{tCommon('table.actions')}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredSolutions.length === 0 ? (
+                  <tr>
+                    <td colSpan={5} className="text-center py-8 text-gray-500">
+                      {searchTerm ? t('empty.search') : t('empty.default')}
+                    </td>
+                  </tr>
+                ) : (
+                  filteredSolutions.map((solution) => (
+                    <tr key={solution._id}>
+                      <td className="font-medium">{solution.solution_id}</td>
+                      <td>{getPanneLabel(solution.panne_id) || tCommon('notAvailable')}</td>
+                      <td>{solution.cause_probable || tCommon('notAvailable')}</td>
+                      <td>{solution.solution_recommandee || tCommon('notAvailable')}</td>
+                      <td>
+                        <div className="flex space-x-2">
+                          <button
+                            onClick={() => openEditModal(solution)}
+                            className="btn-secondary p-2"
+                            title={t('actions.edit')}
+                          >
+                            <PencilIcon className="w-4 h-4" />
+                          </button>
+                          <button
+                            onClick={() => handleDelete(solution._id)}
+                            className="btn-danger p-2"
+                            title={t('actions.delete')}
+                          >
+                            <TrashIcon className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <Modal
+        isOpen={showModal}
+        onClose={() => {
+          setShowModal(false);
+          resetForm();
+        }}
+        title={editingSolution ? t('modal.edit') : t('modal.add')}
+        size="lg"
+      >
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-dark mb-1">{t('form.solutionId')}</label>
+              <input
+                type="text"
+                value={formData.solution_id}
+                onChange={(e) => setFormData({ ...formData, solution_id: e.target.value })}
+                className="input-field"
+                title={t('form.solutionId')}
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-dark mb-1">{t('form.panne')}</label>
+              <select
+                value={formData.panne_id}
+                onChange={(e) => setFormData({ ...formData, panne_id: e.target.value })}
+                className="input-field"
+                title={t('form.panne')}
+                required
+              >
+                <option value="">{t('form.selectPanne')}</option>
+                {pannes.map((panne) => (
+                  <option key={panne._id} value={panne._id}>
+                    {panne.panne_id} ({panne.code_panne})
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-dark mb-1">{t('form.cause')}</label>
+            <textarea
+              value={formData.cause_probable}
+              onChange={(e) => setFormData({ ...formData, cause_probable: e.target.value })}
+              className="input-field"
+              title={t('form.cause')}
+              rows={3}
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-dark mb-1">{t('form.solution')}</label>
+            <textarea
+              value={formData.solution_recommandee}
+              onChange={(e) => setFormData({ ...formData, solution_recommandee: e.target.value })}
+              className="input-field"
+              title={t('form.solution')}
+              rows={3}
+            />
+          </div>
+
+          <div className="flex justify-end space-x-3 pt-4 border-t border-gray-200">
+            <button
+              type="button"
+              onClick={() => {
+                setShowModal(false);
+                resetForm();
+              }}
+              className="btn-secondary"
+            >
+              {tCommon('cancel')}
+            </button>
+            <button type="submit" className="btn-primary" disabled={submitting}>
+              {submitting
+                ? tCommon('saving')
+                : editingSolution
+                ? tCommon('actions.update')
+                : tCommon('actions.create')}
+            </button>
+          </div>
+        </form>
+      </Modal>
+    </DashboardLayout>
+  );
+}

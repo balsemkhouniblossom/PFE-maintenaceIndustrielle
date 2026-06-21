@@ -957,7 +957,9 @@
         "systemModules": "Modules système",
         "technicalReference": "Référence technique"
       },
-      "interventionReports": "Rapports d'intervention"
+      "interventionReports": "Rapports d'intervention",
+      "pannes": "Pannes",
+      "panneSolutions": "Solutions de panne"
     }
   },
   "machines": {
@@ -1098,6 +1100,94 @@
       "technicianRequired": "Le technicien est obligatoire",
       "startDateRequired": "La date de début est obligatoire",
       "endDateRequired": "La date de fin est obligatoire"
+    }
+  },
+  "pannes": {
+    "title": "Pannes",
+    "heading": "Gestion des pannes",
+    "description": "Creer, modifier et suivre les enregistrements de pannes.",
+    "totalPannes": "Total des pannes",
+    "allPannes": "Toutes les pannes",
+    "searchPlaceholder": "Rechercher par identifiant, code, description ou gravite...",
+    "actions": {
+      "add": "Ajouter une panne",
+      "edit": "Modifier",
+      "delete": "Supprimer"
+    },
+    "table": {
+      "panneId": "ID panne",
+      "code": "Code",
+      "description": "Description",
+      "severity": "Gravite"
+    },
+    "empty": {
+      "default": "Aucune panne trouvee",
+      "search": "Aucune panne ne correspond a votre recherche"
+    },
+    "modal": {
+      "add": "Ajouter une panne",
+      "edit": "Modifier la panne"
+    },
+    "form": {
+      "panneId": "ID panne",
+      "code": "Code panne",
+      "description": "Description",
+      "severity": "Gravite (optionnel)"
+    },
+    "notifications": {
+      "panneIdRequired": "ID panne requis",
+      "codeRequired": "Code panne requis",
+      "descriptionRequired": "Description requise",
+      "confirmDelete": "Voulez-vous vraiment supprimer cette panne ?",
+      "created": "Panne creee avec succes",
+      "updated": "Panne mise a jour avec succes",
+      "deleted": "Panne supprimee avec succes",
+      "saveFailed": "Echec de l'enregistrement de la panne",
+      "deleteFailed": "Echec de la suppression de la panne"
+    }
+  },
+  "panneSolutions": {
+    "title": "Solutions de panne",
+    "heading": "Gestion des solutions de panne",
+    "description": "Gerer les solutions recommandees liees aux pannes.",
+    "totalSolutions": "Total des solutions",
+    "allSolutions": "Toutes les solutions de panne",
+    "searchPlaceholder": "Rechercher par ID solution, panne, cause ou solution...",
+    "actions": {
+      "add": "Ajouter une solution",
+      "edit": "Modifier",
+      "delete": "Supprimer"
+    },
+    "table": {
+      "solutionId": "ID solution",
+      "panne": "Panne",
+      "cause": "Cause probable",
+      "solution": "Solution recommandee"
+    },
+    "empty": {
+      "default": "Aucune solution de panne trouvee",
+      "search": "Aucune solution de panne ne correspond a votre recherche"
+    },
+    "modal": {
+      "add": "Ajouter une solution de panne",
+      "edit": "Modifier la solution de panne"
+    },
+    "form": {
+      "solutionId": "ID solution",
+      "panne": "Panne",
+      "selectPanne": "Selectionner une panne",
+      "cause": "Cause probable (optionnel)",
+      "solution": "Solution recommandee (optionnel)"
+    },
+    "notifications": {
+      "solutionIdRequired": "ID solution requis",
+      "panneRequired": "Panne requise",
+      "confirmDelete": "Voulez-vous vraiment supprimer cette solution de panne ?",
+      "created": "Solution de panne creee avec succes",
+      "updated": "Solution de panne mise a jour avec succes",
+      "deleted": "Solution de panne supprimee avec succes",
+      "saveFailed": "Echec de l'enregistrement de la solution de panne",
+      "deleteFailed": "Echec de la suppression de la solution de panne"
     }
   }
 }

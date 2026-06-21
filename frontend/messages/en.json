@@ -964,7 +964,7 @@
       "equipmentTypes": "Machine Types",
       "iotMonitoring": "IoT Monitoring",
       "systemModules": "System Modules",
-       "technicalReference": "Technical Reference"
+      "technicalReference": "Technical Reference"
     },
     "systemStatus": {
       "online": "System online",
@@ -1002,7 +1002,9 @@
         "systemModules": "System modules",
         "technicalReference": "Technical reference"
       },
-      "interventionReports": "Intervention Reports"
+      "interventionReports": "Intervention Reports",
+      "pannes": "Pannes",
+      "panneSolutions": "Panne Solutions"
     }
   },
   "machines": {
@@ -1161,6 +1163,94 @@
       "technicianRequired": "Technician is required",
       "startDateRequired": "Start date is required",
       "endDateRequired": "End date is required"
+    }
+  },
+  "pannes": {
+    "title": "Pannes",
+    "heading": "Pannes Management",
+    "description": "Create, update, and track panne records.",
+    "totalPannes": "Total Pannes",
+    "allPannes": "All Pannes",
+    "searchPlaceholder": "Search by panne ID, code, description, or severity...",
+    "actions": {
+      "add": "Add Panne",
+      "edit": "Edit",
+      "delete": "Delete"
+    },
+    "table": {
+      "panneId": "Panne ID",
+      "code": "Code",
+      "description": "Description",
+      "severity": "Severity"
+    },
+    "empty": {
+      "default": "No pannes found",
+      "search": "No pannes match your search"
+    },
+    "modal": {
+      "add": "Add Panne",
+      "edit": "Edit Panne"
+    },
+    "form": {
+      "panneId": "Panne ID",
+      "code": "Code Panne",
+      "description": "Description",
+      "severity": "Severity (optional)"
+    },
+    "notifications": {
+      "panneIdRequired": "Panne ID is required",
+      "codeRequired": "Code panne is required",
+      "descriptionRequired": "Description is required",
+      "confirmDelete": "Are you sure you want to delete this panne?",
+      "created": "Panne created successfully",
+      "updated": "Panne updated successfully",
+      "deleted": "Panne deleted successfully",
+      "saveFailed": "Failed to save panne",
+      "deleteFailed": "Failed to delete panne"
+    }
+  },
+  "panneSolutions": {
+    "title": "Panne Solutions",
+    "heading": "Panne Solutions Management",
+    "description": "Manage recommended solutions linked to pannes.",
+    "totalSolutions": "Total Solutions",
+    "allSolutions": "All Panne Solutions",
+    "searchPlaceholder": "Search by solution ID, panne, cause, or solution...",
+    "actions": {
+      "add": "Add Solution",
+      "edit": "Edit",
+      "delete": "Delete"
+    },
+    "table": {
+      "solutionId": "Solution ID",
+      "panne": "Panne",
+      "cause": "Probable Cause",
+      "solution": "Recommended Solution"
+    },
+    "empty": {
+      "default": "No panne solutions found",
+      "search": "No panne solutions match your search"
+    },
+    "modal": {
+      "add": "Add Panne Solution",
+      "edit": "Edit Panne Solution"
+    },
+    "form": {
+      "solutionId": "Solution ID",
+      "panne": "Panne",
+      "selectPanne": "Select a panne",
+      "cause": "Probable Cause (optional)",
+      "solution": "Recommended Solution (optional)"
+    },
+    "notifications": {
+      "solutionIdRequired": "Solution ID is required",
+      "panneRequired": "Panne is required",
+      "confirmDelete": "Are you sure you want to delete this panne solution?",
+      "created": "Panne solution created successfully",
+      "updated": "Panne solution updated successfully",
+      "deleted": "Panne solution deleted successfully",
+      "saveFailed": "Failed to save panne solution",
+      "deleteFailed": "Failed to delete panne solution"
     }
   }
 }

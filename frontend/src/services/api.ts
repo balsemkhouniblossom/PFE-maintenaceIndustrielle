@@ -121,6 +121,18 @@ export const apiService = {
   updateInterventionReport: (id: string, data: AnyObject) => api.patch(`/intervention-reports/${id}`, data),
   deleteInterventionReport: (id: string) => api.delete(`/intervention-reports/${id}`),
 
+  // Pannes
+  getPannes: () => api.get('/pannes'),
+  createPanne: (data: AnyObject) => api.post('/pannes', data),
+  updatePanne: (id: string, data: AnyObject) => api.patch(`/pannes/${id}`, data),
+  deletePanne: (id: string) => api.delete(`/pannes/${id}`),
+
+  // Panne Solutions
+  getPanneSolutions: () => api.get('/panne-solutions'),
+  createPanneSolution: (data: AnyObject) => api.post('/panne-solutions', data),
+  updatePanneSolution: (id: string, data: AnyObject) => api.patch(`/panne-solutions/${id}`, data),
+  deletePanneSolution: (id: string) => api.delete(`/panne-solutions/${id}`),
+
   getDocuments: () => api.get('/documents'),
 
   getDocument: (id: string) => api.get(`/documents/${id}`),

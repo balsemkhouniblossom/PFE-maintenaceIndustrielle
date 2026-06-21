@@ -920,7 +920,9 @@
         "systemModules": "Systemmodule",
         "technicalReference": "Technische Referenz"
       },
-      "interventionReports": "Interventionsberichte"
+      "interventionReports": "Interventionsberichte",
+      "pannes": "Stoerungen",
+      "panneSolutions": "Stoerungsloesungen"
     }
   },
   "machines": {
@@ -1061,6 +1063,94 @@
       "technicianRequired": "Techniker ist erforderlich",
       "startDateRequired": "Startdatum ist erforderlich",
       "endDateRequired": "Enddatum ist erforderlich"
+    }
+  },
+  "pannes": {
+    "title": "Stoerungen",
+    "heading": "Stoerungsverwaltung",
+    "description": "Stoerungseintraege erstellen, aktualisieren und verfolgen.",
+    "totalPannes": "Gesamtstoerungen",
+    "allPannes": "Alle Stoerungen",
+    "searchPlaceholder": "Nach Stoerungs-ID, Code, Beschreibung oder Schwere suchen...",
+    "actions": {
+      "add": "Stoerung hinzufuegen",
+      "edit": "Bearbeiten",
+      "delete": "Loeschen"
+    },
+    "table": {
+      "panneId": "Stoerungs-ID",
+      "code": "Code",
+      "description": "Beschreibung",
+      "severity": "Schweregrad"
+    },
+    "empty": {
+      "default": "Keine Stoerungen gefunden",
+      "search": "Keine Stoerungen entsprechen der Suche"
+    },
+    "modal": {
+      "add": "Stoerung hinzufuegen",
+      "edit": "Stoerung bearbeiten"
+    },
+    "form": {
+      "panneId": "Stoerungs-ID",
+      "code": "Stoerungscode",
+      "description": "Beschreibung",
+      "severity": "Schweregrad (optional)"
+    },
+    "notifications": {
+      "panneIdRequired": "Stoerungs-ID ist erforderlich",
+      "codeRequired": "Stoerungscode ist erforderlich",
+      "descriptionRequired": "Beschreibung ist erforderlich",
+      "confirmDelete": "Moechten Sie diese Stoerung wirklich loeschen?",
+      "created": "Stoerung erfolgreich erstellt",
+      "updated": "Stoerung erfolgreich aktualisiert",
+      "deleted": "Stoerung erfolgreich geloescht",
+      "saveFailed": "Speichern der Stoerung fehlgeschlagen",
+      "deleteFailed": "Loeschen der Stoerung fehlgeschlagen"
+    }
+  },
+  "panneSolutions": {
+    "title": "Stoerungsloesungen",
+    "heading": "Verwaltung der Stoerungsloesungen",
+    "description": "Empfohlene Loesungen fuer Stoerungen verwalten.",
+    "totalSolutions": "Gesamtloesungen",
+    "allSolutions": "Alle Stoerungsloesungen",
+    "searchPlaceholder": "Nach Loesungs-ID, Stoerung, Ursache oder Loesung suchen...",
+    "actions": {
+      "add": "Loesung hinzufuegen",
+      "edit": "Bearbeiten",
+      "delete": "Loeschen"
+    },
+    "table": {
+      "solutionId": "Loesungs-ID",
+      "panne": "Stoerung",
+      "cause": "Wahrscheinliche Ursache",
+      "solution": "Empfohlene Loesung"
+    },
+    "empty": {
+      "default": "Keine Stoerungsloesungen gefunden",
+      "search": "Keine Stoerungsloesungen entsprechen der Suche"
+    },
+    "modal": {
+      "add": "Stoerungsloesung hinzufuegen",
+      "edit": "Stoerungsloesung bearbeiten"
+    },
+    "form": {
+      "solutionId": "Loesungs-ID",
+      "panne": "Stoerung",
+      "selectPanne": "Stoerung auswaehlen",
+      "cause": "Wahrscheinliche Ursache (optional)",
+      "solution": "Empfohlene Loesung (optional)"
+    },
+    "notifications": {
+      "solutionIdRequired": "Loesungs-ID ist erforderlich",
+      "panneRequired": "Stoerung ist erforderlich",
+      "confirmDelete": "Moechten Sie diese Stoerungsloesung wirklich loeschen?",
+      "created": "Stoerungsloesung erfolgreich erstellt",
+      "updated": "Stoerungsloesung erfolgreich aktualisiert",
+      "deleted": "Stoerungsloesung erfolgreich geloescht",
+      "saveFailed": "Speichern der Stoerungsloesung fehlgeschlagen",
+      "deleteFailed": "Loeschen der Stoerungsloesung fehlgeschlagen"
     }
   }
 }
