@@ -342,15 +342,77 @@
     "heading": "Sensors Management",
     "description": "Monitor and manage IoT sensors and monitoring devices",
     "totalSensors": "Total Sensors",
+    "addCapteur": "Add Sensor",
+    "searchPlaceholder": "Search sensors by ID, code, type, or module...",
     "allSensors": "ALL SENSORS",
     "active": "Active",
+    "inactive": "Inactive",
     "na": "N/A",
     "table": {
+      "databaseId": "Database ID",
       "sensorId": "Sensor ID",
-      "name": "Name",
+      "code": "Code",
       "type": "Type",
-      "machine": "Machine",
+      "module": "Module",
+      "unit": "Unit",
+      "mqttTopic": "MQTT Topic",
+      "warningThreshold": "Warning Threshold",
+      "criticalThreshold": "Critical Threshold",
+      "samplingFrequency": "Sampling Frequency",
+      "firmwareVersion": "Firmware Version",
+      "lastSeen": "Last Seen",
       "status": "Status"
+    },
+    "empty": {
+      "search": "No sensors match your search.",
+      "default": "No sensors available."
+    },
+    "modal": {
+      "add": "Add New Sensor",
+      "edit": "Edit Sensor"
+    },
+    "form": {
+      "sensorId": "Sensor ID",
+      "moduleId": "Module ID",
+      "code": "Sensor Code",
+      "type": "Sensor Type",
+      "unit": "Unit",
+      "mqttTopic": "MQTT Topic",
+      "warningThreshold": "Warning Threshold",
+      "criticalThreshold": "Critical Threshold",
+      "samplingFrequency": "Sampling Frequency",
+      "lastSeen": "Last Seen",
+      "firmwareVersion": "Firmware Version",
+      "active": "Active"
+    },
+    "placeholders": {
+      "sensorId": "Enter sensor ID",
+      "moduleId": "Enter module ObjectId",
+      "code": "Enter sensor code",
+      "type": "Enter sensor type",
+      "unit": "e.g. C, %, bar",
+      "mqttTopic": "e.g. factory/line1/sensor/temp",
+      "warningThreshold": "Enter warning threshold",
+      "criticalThreshold": "Enter critical threshold",
+      "samplingFrequency": "Enter sampling frequency",
+      "firmwareVersion": "Enter firmware version"
+    },
+    "button": {
+      "create": "Create",
+      "update": "Update"
+    },
+    "notifications": {
+      "loadFailed": "Failed to load sensors",
+      "created": "Sensor created successfully",
+      "updated": "Sensor updated successfully",
+      "deleted": "Sensor deleted successfully",
+      "saveFailed": "Failed to save sensor",
+      "deleteFailed": "Failed to delete sensor",
+      "confirmDelete": "Are you sure you want to delete this sensor? This action cannot be undone.",
+      "capteurIdRequired": "Sensor ID is required",
+      "moduleIdRequired": "Module ID is required",
+      "codeRequired": "Sensor code is required",
+      "typeRequired": "Sensor type is required"
     }
   },
   "dashboardHome": {
@@ -925,6 +987,7 @@
       "catalogues": "Catalogues",
       "machineTypes": "Machine Types",
       "sensors": "Sensors",
+      "capteurs": "Capteurs",
       "documents": "Documents",
       "moduleTypes": "Module Types",
       "categories": {

@@ -283,15 +283,77 @@
     "heading": "Gestión de sensores",
     "description": "Supervisar y gestionar sensores IoT y dispositivos de monitoreo",
     "totalSensors": "Total de sensores",
+    "addCapteur": "Agregar sensor",
+    "searchPlaceholder": "Buscar sensores por ID, código, tipo o módulo...",
     "allSensors": "TODOS LOS SENSORES",
     "active": "Activo",
+    "inactive": "Inactivo",
     "na": "N/D",
     "table": {
+      "databaseId": "ID de base de datos",
       "sensorId": "ID del sensor",
-      "name": "Nombre",
+      "code": "Código",
       "type": "Tipo",
-      "machine": "Máquina",
+      "module": "Módulo",
+      "unit": "Unidad",
+      "mqttTopic": "Tema MQTT",
+      "warningThreshold": "Umbral de advertencia",
+      "criticalThreshold": "Umbral crítico",
+      "samplingFrequency": "Frecuencia de muestreo",
+      "firmwareVersion": "Versión de firmware",
+      "lastSeen": "Última vez visto",
       "status": "Estado"
+    },
+    "empty": {
+      "search": "No hay sensores que coincidan con tu búsqueda.",
+      "default": "No hay sensores disponibles."
+    },
+    "modal": {
+      "add": "Agregar nuevo sensor",
+      "edit": "Editar sensor"
+    },
+    "form": {
+      "sensorId": "ID del sensor",
+      "moduleId": "ID del módulo",
+      "code": "Código del sensor",
+      "type": "Tipo de sensor",
+      "unit": "Unidad",
+      "mqttTopic": "Tema MQTT",
+      "warningThreshold": "Umbral de advertencia",
+      "criticalThreshold": "Umbral crítico",
+      "samplingFrequency": "Frecuencia de muestreo",
+      "lastSeen": "Última vez visto",
+      "firmwareVersion": "Versión de firmware",
+      "active": "Activo"
+    },
+    "placeholders": {
+      "sensorId": "Ingrese ID del sensor",
+      "moduleId": "Ingrese ObjectId del módulo",
+      "code": "Ingrese código del sensor",
+      "type": "Ingrese tipo de sensor",
+      "unit": "ej. C, %, bar",
+      "mqttTopic": "ej. fabrica/linea1/sensor/temp",
+      "warningThreshold": "Ingrese umbral de advertencia",
+      "criticalThreshold": "Ingrese umbral crítico",
+      "samplingFrequency": "Ingrese frecuencia de muestreo",
+      "firmwareVersion": "Ingrese versión de firmware"
+    },
+    "button": {
+      "create": "Crear",
+      "update": "Actualizar"
+    },
+    "notifications": {
+      "loadFailed": "Error al cargar sensores",
+      "created": "Sensor creado correctamente",
+      "updated": "Sensor actualizado correctamente",
+      "deleted": "Sensor eliminado correctamente",
+      "saveFailed": "Error al guardar el sensor",
+      "deleteFailed": "Error al eliminar el sensor",
+      "confirmDelete": "¿Seguro que deseas eliminar este sensor? Esta acción no se puede deshacer.",
+      "capteurIdRequired": "El ID del sensor es obligatorio",
+      "moduleIdRequired": "El ID del módulo es obligatorio",
+      "codeRequired": "El código del sensor es obligatorio",
+      "typeRequired": "El tipo del sensor es obligatorio"
     }
   },
   "dashboardHome": {
@@ -590,6 +652,8 @@
       "catalogues": "Catálogos",
       "machineTypes": "Tipos de máquinas",
       "sensors": "Sensores",
+      "capteurs": "Sensores",
+      "documents": "Documentos",
       "moduleTypes": "Tipos de módulos",
       "categories": {
         "overview": "Resumen",

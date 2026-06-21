@@ -262,15 +262,77 @@
     "heading": "Gestione sensori",
     "description": "Monitorare e gestire sensori IoT e dispositivi di controllo",
     "totalSensors": "Sensori totali",
+    "addCapteur": "Aggiungi sensore",
+    "searchPlaceholder": "Cerca sensori per ID, codice, tipo o modulo...",
     "allSensors": "TUTTI I SENSORI",
     "active": "Attivo",
+    "inactive": "Inattivo",
     "na": "N/D",
     "table": {
+      "databaseId": "ID database",
       "sensorId": "ID sensore",
-      "name": "Nome",
+      "code": "Codice",
       "type": "Tipo",
-      "machine": "Macchina",
+      "module": "Modulo",
+      "unit": "Unità",
+      "mqttTopic": "Topic MQTT",
+      "warningThreshold": "Soglia di avviso",
+      "criticalThreshold": "Soglia critica",
+      "samplingFrequency": "Frequenza di campionamento",
+      "firmwareVersion": "Versione firmware",
+      "lastSeen": "Ultimo rilevamento",
       "status": "Stato"
+    },
+    "empty": {
+      "search": "Nessun sensore corrisponde alla ricerca.",
+      "default": "Nessun sensore disponibile."
+    },
+    "modal": {
+      "add": "Aggiungi nuovo sensore",
+      "edit": "Modifica sensore"
+    },
+    "form": {
+      "sensorId": "ID sensore",
+      "moduleId": "ID modulo",
+      "code": "Codice sensore",
+      "type": "Tipo sensore",
+      "unit": "Unità",
+      "mqttTopic": "Topic MQTT",
+      "warningThreshold": "Soglia di avviso",
+      "criticalThreshold": "Soglia critica",
+      "samplingFrequency": "Frequenza di campionamento",
+      "lastSeen": "Ultimo rilevamento",
+      "firmwareVersion": "Versione firmware",
+      "active": "Attivo"
+    },
+    "placeholders": {
+      "sensorId": "Inserisci ID sensore",
+      "moduleId": "Inserisci ObjectId modulo",
+      "code": "Inserisci codice sensore",
+      "type": "Inserisci tipo sensore",
+      "unit": "es. C, %, bar",
+      "mqttTopic": "es. fabbrica/linea1/sensore/temp",
+      "warningThreshold": "Inserisci soglia di avviso",
+      "criticalThreshold": "Inserisci soglia critica",
+      "samplingFrequency": "Inserisci frequenza di campionamento",
+      "firmwareVersion": "Inserisci versione firmware"
+    },
+    "button": {
+      "create": "Crea",
+      "update": "Aggiorna"
+    },
+    "notifications": {
+      "loadFailed": "Caricamento sensori non riuscito",
+      "created": "Sensore creato con successo",
+      "updated": "Sensore aggiornato con successo",
+      "deleted": "Sensore eliminato con successo",
+      "saveFailed": "Salvataggio sensore non riuscito",
+      "deleteFailed": "Eliminazione sensore non riuscita",
+      "confirmDelete": "Sei sicuro di voler eliminare questo sensore? Questa azione non può essere annullata.",
+      "capteurIdRequired": "L'ID sensore è obbligatorio",
+      "moduleIdRequired": "L'ID modulo è obbligatorio",
+      "codeRequired": "Il codice sensore è obbligatorio",
+      "typeRequired": "Il tipo sensore è obbligatorio"
     }
   },
   "dashboardHome": {
@@ -569,6 +631,8 @@
       "catalogues": "Cataloghi",
       "machineTypes": "Tipi di macchina",
       "sensors": "Sensori",
+      "capteurs": "Sensori",
+      "documents": "Documenti",
       "moduleTypes": "Tipi di modulo",
       "categories": {
         "overview": "Panoramica",

@@ -366,15 +366,77 @@
     "heading": "إدارة المستشعرات",
     "description": "مراقبة وإدارة مستشعرات IoT وأجهزة الرصد",
     "totalSensors": "إجمالي المستشعرات",
+    "addCapteur": "إضافة مستشعر",
+    "searchPlaceholder": "ابحث عن المستشعرات حسب المعرف أو الرمز أو النوع أو الوحدة...",
     "allSensors": "جميع المستشعرات",
     "active": "نشط",
+    "inactive": "غير نشط",
     "na": "غير متاح",
     "table": {
+      "databaseId": "معرّف قاعدة البيانات",
       "sensorId": "معرّف المستشعر",
-      "name": "الاسم",
+      "code": "الرمز",
       "type": "النوع",
-      "machine": "الآلة",
+      "module": "الوحدة",
+      "unit": "وحدة القياس",
+      "mqttTopic": "موضوع MQTT",
+      "warningThreshold": "حد التحذير",
+      "criticalThreshold": "الحد الحرج",
+      "samplingFrequency": "تردد أخذ العينات",
+      "firmwareVersion": "إصدار البرنامج الثابت",
+      "lastSeen": "آخر ظهور",
       "status": "الحالة"
+    },
+    "empty": {
+      "search": "لا توجد مستشعرات تطابق البحث.",
+      "default": "لا توجد مستشعرات متاحة."
+    },
+    "modal": {
+      "add": "إضافة مستشعر جديد",
+      "edit": "تعديل المستشعر"
+    },
+    "form": {
+      "sensorId": "معرّف المستشعر",
+      "moduleId": "معرّف الوحدة",
+      "code": "رمز المستشعر",
+      "type": "نوع المستشعر",
+      "unit": "وحدة القياس",
+      "mqttTopic": "موضوع MQTT",
+      "warningThreshold": "حد التحذير",
+      "criticalThreshold": "الحد الحرج",
+      "samplingFrequency": "تردد أخذ العينات",
+      "lastSeen": "آخر ظهور",
+      "firmwareVersion": "إصدار البرنامج الثابت",
+      "active": "نشط"
+    },
+    "placeholders": {
+      "sensorId": "أدخل معرف المستشعر",
+      "moduleId": "أدخل ObjectId للوحدة",
+      "code": "أدخل رمز المستشعر",
+      "type": "أدخل نوع المستشعر",
+      "unit": "مثال: C أو % أو bar",
+      "mqttTopic": "مثال: factory/line1/sensor/temp",
+      "warningThreshold": "أدخل حد التحذير",
+      "criticalThreshold": "أدخل الحد الحرج",
+      "samplingFrequency": "أدخل تردد أخذ العينات",
+      "firmwareVersion": "أدخل إصدار البرنامج الثابت"
+    },
+    "button": {
+      "create": "إنشاء",
+      "update": "تحديث"
+    },
+    "notifications": {
+      "loadFailed": "فشل تحميل المستشعرات",
+      "created": "تم إنشاء المستشعر بنجاح",
+      "updated": "تم تحديث المستشعر بنجاح",
+      "deleted": "تم حذف المستشعر بنجاح",
+      "saveFailed": "فشل حفظ المستشعر",
+      "deleteFailed": "فشل حذف المستشعر",
+      "confirmDelete": "هل أنت متأكد من حذف هذا المستشعر؟ لا يمكن التراجع عن هذا الإجراء.",
+      "capteurIdRequired": "معرّف المستشعر مطلوب",
+      "moduleIdRequired": "معرّف الوحدة مطلوب",
+      "codeRequired": "رمز المستشعر مطلوب",
+      "typeRequired": "نوع المستشعر مطلوب"
     }
   },
   "dashboardHome": {
@@ -735,6 +797,7 @@
       "catalogues": "الكتالوجات",
       "machineTypes": "أنواع الآلات",
       "sensors": "المستشعرات",
+      "capteurs": "المستشعرات",
       "moduleTypes": "أنواع الوحدات",
       "documents": "المستندات",
       "categories": {

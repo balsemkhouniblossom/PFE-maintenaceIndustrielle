@@ -308,15 +308,77 @@
     "heading": "Gestion des capteurs",
     "description": "Surveiller et gérer les capteurs IoT et les dispositifs de supervision",
     "totalSensors": "Total capteurs",
+    "addCapteur": "Ajouter un capteur",
+    "searchPlaceholder": "Rechercher des capteurs par ID, code, type ou module...",
     "allSensors": "TOUS LES CAPTEURS",
     "active": "Actif",
+    "inactive": "Inactif",
     "na": "N/A",
     "table": {
+      "databaseId": "ID base de données",
       "sensorId": "ID capteur",
-      "name": "Nom",
+      "code": "Code",
       "type": "Type",
-      "machine": "Machine",
+      "module": "Module",
+      "unit": "Unité",
+      "mqttTopic": "Sujet MQTT",
+      "warningThreshold": "Seuil d'alerte",
+      "criticalThreshold": "Seuil critique",
+      "samplingFrequency": "Fréquence d'échantillonnage",
+      "firmwareVersion": "Version du firmware",
+      "lastSeen": "Dernière activité",
       "status": "Statut"
+    },
+    "empty": {
+      "search": "Aucun capteur ne correspond à votre recherche.",
+      "default": "Aucun capteur disponible."
+    },
+    "modal": {
+      "add": "Ajouter un nouveau capteur",
+      "edit": "Modifier le capteur"
+    },
+    "form": {
+      "sensorId": "ID capteur",
+      "moduleId": "ID module",
+      "code": "Code capteur",
+      "type": "Type de capteur",
+      "unit": "Unité",
+      "mqttTopic": "Sujet MQTT",
+      "warningThreshold": "Seuil d'alerte",
+      "criticalThreshold": "Seuil critique",
+      "samplingFrequency": "Fréquence d'échantillonnage",
+      "lastSeen": "Dernière activité",
+      "firmwareVersion": "Version du firmware",
+      "active": "Actif"
+    },
+    "placeholders": {
+      "sensorId": "Entrez l'ID du capteur",
+      "moduleId": "Entrez l'ObjectId du module",
+      "code": "Entrez le code capteur",
+      "type": "Entrez le type de capteur",
+      "unit": "ex. C, %, bar",
+      "mqttTopic": "ex. usine/ligne1/capteur/temp",
+      "warningThreshold": "Entrez le seuil d'alerte",
+      "criticalThreshold": "Entrez le seuil critique",
+      "samplingFrequency": "Entrez la fréquence d'échantillonnage",
+      "firmwareVersion": "Entrez la version du firmware"
+    },
+    "button": {
+      "create": "Créer",
+      "update": "Mettre à jour"
+    },
+    "notifications": {
+      "loadFailed": "Échec du chargement des capteurs",
+      "created": "Capteur créé avec succès",
+      "updated": "Capteur mis à jour avec succès",
+      "deleted": "Capteur supprimé avec succès",
+      "saveFailed": "Échec de l'enregistrement du capteur",
+      "deleteFailed": "Échec de la suppression du capteur",
+      "confirmDelete": "Êtes-vous sûr de vouloir supprimer ce capteur ? Cette action est irréversible.",
+      "capteurIdRequired": "L'ID capteur est obligatoire",
+      "moduleIdRequired": "L'ID module est obligatoire",
+      "codeRequired": "Le code capteur est obligatoire",
+      "typeRequired": "Le type de capteur est obligatoire"
     }
   },
   "dashboardHome": {
@@ -876,6 +938,8 @@
       "catalogues": "Catalogues",
       "machineTypes": "Types de machines",
       "sensors": "Capteurs",
+      "capteurs": "Capteurs",
+      "documents": "Documents",
       "moduleTypes": "Types de modules",
       "categories": {
         "overview": "Vue d'ensemble",

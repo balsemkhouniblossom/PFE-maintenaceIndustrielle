@@ -76,7 +76,8 @@ function DashboardLayoutBody({ children, title }: DashboardLayoutProps) {
         { name: t('navigation.workOrders'), href: '/work-orders', icon: ClipboardDocumentListIcon, categoryKey: 'categories.maintenance' },
         { name: t('navigation.catalogues'), href: '/catalogues', icon: BuildingStorefrontIcon, categoryKey: 'categories.partsInventory' },
         { name: t('navigation.machineTypes'), href: '/machine-types', icon: CubeIcon, categoryKey: 'categories.equipmentTypes' },
-        { name: t('navigation.sensors'), href: '/capteurs', icon: CpuChipIcon, categoryKey: 'categories.iotMonitoring' },
+        { name: t('navigation.capteurs'), href: '/capteurs', icon: CpuChipIcon, categoryKey: 'categories.iotMonitoring' },
+        { name: t('navigation.documents'), href: '/documents', icon: DocumentTextIcon, categoryKey: 'categories.technicalReference' },
         { name: t('navigation.moduleTypes'), href: '/module-types', icon: DocumentTextIcon, categoryKey: 'categories.systemModules' }
       ];
     }
@@ -86,7 +87,8 @@ function DashboardLayoutBody({ children, title }: DashboardLayoutProps) {
         { name: t('navigation.dashboard'), href: '/technician', icon: HomeIcon, categoryKey: 'categories.overview' },
         { name: t('navigation.workOrders'), href: '/work-orders', icon: ClipboardDocumentListIcon, categoryKey: 'categories.maintenance' },
         { name: t('navigation.machines'), href: '/machines', icon: CogIcon, categoryKey: 'categories.equipment' },
-        { name: t('navigation.sensors'), href: '/capteurs', icon: CpuChipIcon, categoryKey: 'categories.iotMonitoring' },
+        { name: t('navigation.capteurs'), href: '/capteurs', icon: CpuChipIcon, categoryKey: 'categories.iotMonitoring' },
+        { name: t('navigation.documents'), href: '/documents', icon: DocumentTextIcon, categoryKey: 'categories.technicalReference' },
         { name: t('navigation.catalogues'), href: '/catalogues', icon: BuildingStorefrontIcon, categoryKey: 'categories.partsInventory' },
         { name: t('navigation.machineTypes'), href: '/machine-types', icon: CubeIcon, categoryKey: 'categories.equipmentTypes' }
       ];
@@ -97,7 +99,8 @@ function DashboardLayoutBody({ children, title }: DashboardLayoutProps) {
       { name: t('navigation.dashboard'), href: '/operator', icon: HomeIcon, categoryKey: 'categories.overview' },
       { name: t('navigation.workOrders'), href: '/work-orders', icon: ClipboardDocumentListIcon, categoryKey: 'categories.maintenance' },
       { name: t('navigation.machines'), href: '/machines', icon: CogIcon, categoryKey: 'categories.equipment' },
-      { name: t('navigation.sensors'), href: '/capteurs', icon: CpuChipIcon, categoryKey: 'categories.iotMonitoring' }
+      { name: t('navigation.capteurs'), href: '/capteurs', icon: CpuChipIcon, categoryKey: 'categories.iotMonitoring' },
+      { name: t('navigation.documents'), href: '/documents', icon: DocumentTextIcon, categoryKey: 'categories.technicalReference' }
     ];
   })();
 

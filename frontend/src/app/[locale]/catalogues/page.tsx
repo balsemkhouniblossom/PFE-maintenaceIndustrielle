@@ -13,10 +13,12 @@ interface Catalogue {
   ref_constructeur: string;
   fabricant?: string;
   categorie_piece?: string;
+import { useRouter } from 'next/navigation';
   unit_price?: number;
   stock_quantity?: number;
   minimum_stock?: number;
   location?: string;
+  const router = useRouter();
 }
 
 export default function CataloguesPage() {

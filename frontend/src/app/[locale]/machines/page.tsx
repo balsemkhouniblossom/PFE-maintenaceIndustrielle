@@ -6,6 +6,7 @@ import { Modal } from '@/components/Modal';
 import { apiService } from '@/services/api';
 import { PencilIcon, TrashIcon, PlusIcon, MagnifyingGlassIcon, ExclamationTriangleIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
 import { useTranslations } from 'next-intl';
+import { useRouter } from 'next/navigation';
 
 interface Machine {
   _id: string;
@@ -30,6 +31,7 @@ interface MachineType {
 export default function MachinesPage() {
   const tMachines = useTranslations('machines');
   const tCommon = useTranslations('common');
+  const router = useRouter();
   const [machines, setMachines] = useState<Machine[]>([]);
   const [machineTypes, setMachineTypes] = useState<MachineType[]>([]);
   const [loading, setLoading] = useState(true);
@@ -91,9 +93,29 @@ export default function MachinesPage() {
     setTimeout(() => setNotification(null), 5000);
   }
 
+  async function refreshMachines() {
+    await loadMachines();
+    router.refresh();
+    window.dispatchEvent(new Event('machines:changed'));
+  }
+
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     loadData();
+  }, []);
+
+  useEffect(() => {
+    const handleMachinesChanged = () => {
+      loadMachines();
+    };
+
+    window.addEventListener('machines:changed', handleMachinesChanged);
+    window.addEventListener('focus', handleMachinesChanged);
+
+    return () => {
+      window.removeEventListener('machines:changed', handleMachinesChanged);
+      window.removeEventListener('focus', handleMachinesChanged);
+    };
   }, []);
 
   const filtered = useMemo(() => {
@@ -201,7 +223,7 @@ export default function MachinesPage() {
     if (confirm(tMachines('notifications.confirmDelete'))) {
       try {
         await apiService.deleteMachine(machineId);
-        await loadMachines();
+        await refreshMachines();
         showNotification('success', tMachines('notifications.deleted'));
       } catch (error) {
         console.error('Error deleting machine:', error);
@@ -232,7 +254,7 @@ export default function MachinesPage() {
 
       setShowModal(false);
       resetForm();
-      await loadMachines();
+      await refreshMachines();
     } catch (error) {
       console.error('Error saving machine:', error);
       showNotification('error', tMachines('notifications.saveFailed'));
@@ -421,6 +443,7 @@ export default function MachinesPage() {
                 value={formData.machine_id}
                 onChange={(e) => setFormData({ ...formData, machine_id: e.target.value })}
                 className="input-field"
+                title={tMachines('form.machineId')}
                 required
               />
             </div>
@@ -433,6 +456,7 @@ export default function MachinesPage() {
                 value={formData.serial_no}
                 onChange={(e) => setFormData({ ...formData, serial_no: e.target.value })}
                 className="input-field"
+                title={tMachines('form.serialNumber')}
                 required
               />
             </div>
@@ -448,6 +472,7 @@ export default function MachinesPage() {
                 value={formData.fabricant}
                 onChange={(e) => setFormData({ ...formData, fabricant: e.target.value })}
                 className="input-field"
+                title={tMachines('form.manufacturer')}
                 required
               />
             </div>
@@ -460,6 +485,7 @@ export default function MachinesPage() {
                 value={formData.model}
                 onChange={(e) => setFormData({ ...formData, model: e.target.value })}
                 className="input-field"
+                title={tMachines('form.model')}
                 required
               />
             </div>
@@ -474,6 +500,7 @@ export default function MachinesPage() {
                 value={formData.type_id}
                 onChange={(e) => setFormData({ ...formData, type_id: e.target.value })}
                 className="input-field"
+                title={tMachines('form.machineType')}
                 required
               >
                 <option value="">{tMachines('placeholders.selectType')}</option>
@@ -493,6 +520,7 @@ export default function MachinesPage() {
                 value={formData.status}
                 onChange={(e) => setFormData({ ...formData, status: e.target.value })}
                 className="input-field"
+                title={tMachines('form.status')}
               >
                 <option value="operational">{tMachines('options.operational')}</option>
                 <option value="maintenance">{tMachines('options.maintenance')}</option>
@@ -512,6 +540,7 @@ export default function MachinesPage() {
                 value={formData.installation_date}
                 onChange={(e) => setFormData({ ...formData, installation_date: e.target.value })}
                 className="input-field"
+                title={tMachines('form.installationDate')}
               />
             </div>
             <div>
@@ -525,6 +554,7 @@ export default function MachinesPage() {
                 className="input-field"
                 min="0"
                 step="0.1"
+                title={tMachines('form.weight')}
               />
             </div>
           </div>
@@ -538,6 +568,7 @@ export default function MachinesPage() {
               value={formData.location}
               onChange={(e) => setFormData({ ...formData, location: e.target.value })}
               className="input-field"
+              title={tMachines('form.location')}
             />
           </div>
 

@@ -7,6 +7,7 @@ import ProfileAvatar from "@/components/ProfileAvatar";
 import { apiService } from "@/services/api";
 import { PencilIcon, TrashIcon, PlusIcon, MagnifyingGlassIcon, ExclamationTriangleIcon, CheckCircleIcon } from "@heroicons/react/24/outline";
 import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
 
 interface WorkOrder {
   _id: string;
@@ -36,6 +37,7 @@ interface User {
 export default function WorkOrdersPage() {
   const tWorkOrders = useTranslations("workOrders");
   const tCommon = useTranslations("common");
+  const router = useRouter();
   const [workOrders, setWorkOrders] = useState<WorkOrder[]>([]);
   const [filteredWorkOrders, setFilteredWorkOrders] = useState<WorkOrder[]>([]);
   const [machines, setMachines] = useState<Machine[]>([]);
@@ -81,6 +83,20 @@ export default function WorkOrdersPage() {
     loadData();
   }, []);
 
+  useEffect(() => {
+    const handleWorkOrdersChanged = () => {
+      loadData();
+    };
+
+    window.addEventListener('work-orders:changed', handleWorkOrdersChanged);
+    window.addEventListener('focus', handleWorkOrdersChanged);
+
+    return () => {
+      window.removeEventListener('work-orders:changed', handleWorkOrdersChanged);
+      window.removeEventListener('focus', handleWorkOrdersChanged);
+    };
+  }, []);
+
   const loadWorkOrders = async () => {
     try {
       const response = await apiService.getWorkOrders();
@@ -107,6 +123,12 @@ export default function WorkOrdersPage() {
     setNotification({ type, message });
     setTimeout(() => setNotification(null), 5000);
   };
+
+  async function refreshWorkOrders() {
+    await loadData();
+    router.refresh();
+    window.dispatchEvent(new Event('work-orders:changed'));
+  }
 
   const validateForm = () => {
     if (!formData.ot_id.trim()) {
@@ -164,7 +186,7 @@ export default function WorkOrdersPage() {
     if (confirm(tWorkOrders("confirmDelete"))) {
       try {
         await apiService.deleteWorkOrder(workOrderId);
-        await loadWorkOrders();
+        await refreshWorkOrders();
         showNotification('success', tWorkOrders("notifications.deleted"));
       } catch (error) {
         console.error('Error deleting work order:', error);
@@ -198,7 +220,7 @@ export default function WorkOrdersPage() {
 
       setShowModal(false);
       resetForm();
-      await loadWorkOrders();
+      await refreshWorkOrders();
     } catch (error) {
       console.error('Error saving work order:', error);
       showNotification('error', tWorkOrders("notifications.saveFailed"));
@@ -389,6 +411,8 @@ export default function WorkOrdersPage() {
                 value={formData.ot_id}
                 onChange={(e) => setFormData({ ...formData, ot_id: e.target.value })}
                 className="input-field"
+                title={tWorkOrders("form.otId")}
+                placeholder={tWorkOrders("form.otId")}
                 required
               />
             </div>
@@ -400,6 +424,7 @@ export default function WorkOrdersPage() {
                 value={formData.priorite}
                 onChange={(e) => setFormData({ ...formData, priorite: e.target.value })}
                 className="input-field"
+                title={tWorkOrders("form.priority")}
               >
                 <option value="low">{tWorkOrders("priority.low")}</option>
                 <option value="medium">{tWorkOrders("priority.medium")}</option>
@@ -417,6 +442,8 @@ export default function WorkOrdersPage() {
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               className="input-field"
               rows={3}
+              title={tWorkOrders("form.description")}
+              placeholder={tWorkOrders("form.description")}
             />
           </div>
 
@@ -429,6 +456,7 @@ export default function WorkOrdersPage() {
                 value={formData.machine_id}
                 onChange={(e) => setFormData({ ...formData, machine_id: e.target.value })}
                 className="input-field"
+                title={tWorkOrders("form.machine")}
               >
                 <option value="">{tWorkOrders("placeholders.selectMachine")}</option>
                 {machines.map((machine) => (
@@ -446,6 +474,7 @@ export default function WorkOrdersPage() {
                 value={formData.technician_id}
                 onChange={(e) => setFormData({ ...formData, technician_id: e.target.value })}
                 className="input-field"
+                title={tWorkOrders("form.technician")}
               >
                 <option value="">{tWorkOrders("placeholders.selectTechnician")}</option>
                 {users.map((user) => (
@@ -480,6 +509,7 @@ export default function WorkOrdersPage() {
                 value={formData.status}
                 onChange={(e) => setFormData({ ...formData, status: e.target.value })}
                 className="input-field"
+                title={tWorkOrders("form.status")}
               >
                 <option value="pending">{tWorkOrders("status.pending")}</option>
                 <option value="in_progress">{tWorkOrders("status.in_progress")}</option>
@@ -498,6 +528,8 @@ export default function WorkOrdersPage() {
                 className="input-field"
                 min="0"
                 step="0.5"
+                title={tWorkOrders("form.estimatedDuration")}
+                placeholder={tWorkOrders("form.estimatedDuration")}
               />
             </div>
             <div>
@@ -509,6 +541,7 @@ export default function WorkOrdersPage() {
                 value={formData.date_start}
                 onChange={(e) => setFormData({ ...formData, date_start: e.target.value })}
                 className="input-field"
+                title={tWorkOrders("form.startDate")}
               />
             </div>
           </div>
@@ -523,6 +556,7 @@ export default function WorkOrdersPage() {
                 value={formData.date_end}
                 onChange={(e) => setFormData({ ...formData, date_end: e.target.value })}
                 className="input-field"
+                title={tWorkOrders("form.endDate")}
               />
             </div>
           </div>

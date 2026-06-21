@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import DashboardLayout from '@/components/DashboardLayout';
 import { apiService } from '@/services/api';
+import { useRouter } from 'next/navigation';
 import {
   PencilIcon,
   TrashIcon,
@@ -30,6 +31,7 @@ interface User {
 export default function UsersPage() {
   const tUsers = useTranslations('users');
   const tCommon = useTranslations('common');
+  const router = useRouter();
 
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
@@ -77,6 +79,12 @@ export default function UsersPage() {
 
     return () => clearTimeout(timer);
 
+  }
+
+  async function refreshUsers() {
+    await loadUsers();
+    router.refresh();
+    window.dispatchEvent(new Event('users:changed'));
   }
 
   function handleAdd() {
@@ -174,7 +182,7 @@ export default function UsersPage() {
 
       setIsModalOpen(false);
       resetForm();
-      await loadUsers();
+      await refreshUsers();
     } catch (err) {
       console.error('Save error:', err);
       showNotification('error', tUsers('notifications.saveFailed'));
@@ -198,6 +206,20 @@ export default function UsersPage() {
   useEffect(() => {
     loadUsers();
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    const handleUsersChanged = () => {
+      loadUsers();
+    };
+
+    window.addEventListener('users:changed', handleUsersChanged);
+    window.addEventListener('focus', handleUsersChanged);
+
+    return () => {
+      window.removeEventListener('users:changed', handleUsersChanged);
+      window.removeEventListener('focus', handleUsersChanged);
+    };
   }, []);
 
   const filteredUsers = useMemo(() => {
@@ -230,7 +252,7 @@ export default function UsersPage() {
 
     try {
       await apiService.deleteUser(userId);
-      await loadUsers();
+      await refreshUsers();
       showNotification(
         'success',
         tUsers('notifications.deleted', { default: 'User deleted' })
