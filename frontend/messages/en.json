@@ -963,7 +963,8 @@
       "partsInventory": "Catalogues",
       "equipmentTypes": "Machine Types",
       "iotMonitoring": "IoT Monitoring",
-      "systemModules": "System Modules"
+      "systemModules": "System Modules",
+      "technicalReference": "Technical Reference"
     },
     "systemStatus": {
       "online": "System online",

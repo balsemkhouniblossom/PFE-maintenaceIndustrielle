@@ -273,7 +273,7 @@ export default function DocumentsPage() {
   if (loading) {
     return (
       <DashboardLayout title={t("title")}>
-        <div className="flex justify-center items-center h-[400px]">
+        <div className="flex justify-center items-center h-100">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600" />
         </div>
       </DashboardLayout>
