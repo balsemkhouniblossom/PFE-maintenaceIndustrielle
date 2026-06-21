@@ -74,6 +74,7 @@ function DashboardLayoutBody({ children, title }: DashboardLayoutProps) {
         { name: t('navigation.users'), href: '/users', icon: UsersIcon, categoryKey: 'categories.users' },
         { name: t('navigation.machines'), href: '/machines', icon: CogIcon, categoryKey: 'categories.equipment' },
         { name: t('navigation.workOrders'), href: '/work-orders', icon: ClipboardDocumentListIcon, categoryKey: 'categories.maintenance' },
+        { name: t('navigation.interventionReports'), href: '/intervention-reports', icon: ClipboardDocumentListIcon, categoryKey: 'categories.maintenance' },
         { name: t('navigation.catalogues'), href: '/catalogues', icon: BuildingStorefrontIcon, categoryKey: 'categories.partsInventory' },
         { name: t('navigation.machineTypes'), href: '/machine-types', icon: CubeIcon, categoryKey: 'categories.equipmentTypes' },
         { name: t('navigation.capteurs'), href: '/capteurs', icon: CpuChipIcon, categoryKey: 'categories.iotMonitoring' },
@@ -86,6 +87,7 @@ function DashboardLayoutBody({ children, title }: DashboardLayoutProps) {
       return [
         { name: t('navigation.dashboard'), href: '/technician', icon: HomeIcon, categoryKey: 'categories.overview' },
         { name: t('navigation.workOrders'), href: '/work-orders', icon: ClipboardDocumentListIcon, categoryKey: 'categories.maintenance' },
+        { name: t('navigation.interventionReports'), href: '/intervention-reports', icon: ClipboardDocumentListIcon, categoryKey: 'categories.maintenance' },
         { name: t('navigation.machines'), href: '/machines', icon: CogIcon, categoryKey: 'categories.equipment' },
         { name: t('navigation.capteurs'), href: '/capteurs', icon: CpuChipIcon, categoryKey: 'categories.iotMonitoring' },
         { name: t('navigation.documents'), href: '/documents', icon: DocumentTextIcon, categoryKey: 'categories.technicalReference' },
@@ -98,6 +100,7 @@ function DashboardLayoutBody({ children, title }: DashboardLayoutProps) {
     return [
       { name: t('navigation.dashboard'), href: '/operator', icon: HomeIcon, categoryKey: 'categories.overview' },
       { name: t('navigation.workOrders'), href: '/work-orders', icon: ClipboardDocumentListIcon, categoryKey: 'categories.maintenance' },
+      { name: t('navigation.interventionReports'), href: '/intervention-reports', icon: ClipboardDocumentListIcon, categoryKey: 'categories.maintenance' },
       { name: t('navigation.machines'), href: '/machines', icon: CogIcon, categoryKey: 'categories.equipment' },
       { name: t('navigation.capteurs'), href: '/capteurs', icon: CpuChipIcon, categoryKey: 'categories.iotMonitoring' },
       { name: t('navigation.documents'), href: '/documents', icon: DocumentTextIcon, categoryKey: 'categories.technicalReference' }
@@ -111,7 +114,7 @@ function DashboardLayoutBody({ children, title }: DashboardLayoutProps) {
       <img
         src="/Iprotex logo.png"
         alt="IPROTEX Logo Background"
-        className="fixed top-1/2 start-[58%] transform -translate-x-1/2 -translate-y-1/2 w-[1152px] h-[1152px] object-contain opacity-20 pointer-events-none z-0"
+        className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-6xl h-288 object-contain opacity-20 pointer-events-none z-0"
       />
 
       {/* Sidebar */}

@@ -964,7 +964,7 @@
       "equipmentTypes": "Machine Types",
       "iotMonitoring": "IoT Monitoring",
       "systemModules": "System Modules",
-      "technicalReference": "Technical Reference"
+       "technicalReference": "Technical Reference"
     },
     "systemStatus": {
       "online": "System online",
@@ -1001,7 +1001,8 @@
         "iotMonitoring": "IoT monitoring",
         "systemModules": "System modules",
         "technicalReference": "Technical reference"
-      }
+      },
+      "interventionReports": "Intervention Reports"
     }
   },
   "machines": {
@@ -1103,69 +1104,63 @@
       "inactive": "Inactive"
     }
   },
-  "documents": {
-    "title": "Documents",
-    "heading": "Documents & Manuals",
-    "description": "Manage machine documents with full upload, edit, and delete support",
-    "addDocument": "Add Document",
-    "searchPlaceholder": "Search by name, description, type, tag, uploader, or machine...",
-    "filterAllMachines": "All machines",
+  "interventionReports": {
+    "title": "Intervention Reports",
+    "heading": "Intervention Reports",
+    "description": "Track and manage intervention execution reports",
+    "totalReports": "Total Reports",
+    "allReports": "All Reports",
+    "searchPlaceholder": "Search reports by ID, work order, technician, state, cause, or action...",
     "table": {
-      "documentId": "Document ID",
-      "fileName": "File Name",
-      "type": "Type",
-      "machine": "Machine",
-      "uploadedBy": "Uploaded By",
-      "dateAdded": "Date Added",
-      "tags": "Tags",
-      "actions": "Actions"
+      "reportId": "Report ID",
+      "workOrder": "Work Order",
+      "technician": "Technician",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "finalState": "Final State"
     },
     "empty": {
-      "search": "No documents match your search.",
-      "default": "No documents available."
+      "search": "No reports match your search.",
+      "default": "No intervention reports available."
     },
     "modal": {
-      "uploadTitle": "Upload Document",
-      "editTitle": "Edit Document"
+      "add": "Add Intervention Report",
+      "edit": "Edit Intervention Report"
     },
     "form": {
-      "file": "PDF File",
-      "machine": "Machine",
-      "type": "Document Type",
-      "description": "Description",
-      "tags": "Tags",
-      "uploadedBy": "Uploaded By"
+      "reportId": "Report ID",
+      "workOrder": "Work Order",
+      "technician": "Technician",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "rootCause": "Root Cause",
+      "actionDescription": "Action Description",
+      "finalState": "Final State",
+      "responsibleValidation": "Responsible Validation"
     },
     "placeholders": {
-      "selectMachine": "Select machine",
-      "type": "e.g. manual, maintenance, instruction",
-      "description": "Enter description",
-      "tags": "Comma-separated tags",
-      "uploadedBy": "Enter uploader name"
+      "selectWorkOrder": "Select work order",
+      "selectTechnician": "Select technician"
     },
     "actions": {
-      "add": "Upload",
-      "view": "View",
+      "add": "Add Report",
       "edit": "Edit",
-      "delete": "Delete"
-    },
-    "buttons": {
-      "upload": "Upload",
+      "delete": "Delete",
+      "create": "Create",
       "update": "Update"
     },
     "notifications": {
-      "created": "Document uploaded successfully",
-      "updated": "Document updated successfully",
-      "deleted": "Document deleted successfully",
-      "saveFailed": "Failed to save document",
-      "deleteFailed": "Failed to delete document",
-      "confirmDelete": "Are you sure you want to delete this document? This action cannot be undone.",
-      "fileRequired": "PDF file is required",
-      "machineRequired": "Machine is required",
-      "typeRequired": "Document type is required"
-    },
-    "viewer": {
-      "title": "Document Viewer"
+      "created": "Intervention report created successfully",
+      "updated": "Intervention report updated successfully",
+      "deleted": "Intervention report deleted successfully",
+      "saveFailed": "Failed to save intervention report",
+      "deleteFailed": "Failed to delete intervention report",
+      "confirmDelete": "Are you sure you want to delete this intervention report? This action cannot be undone.",
+      "reportIdRequired": "Report ID is required",
+      "workOrderRequired": "Work order is required",
+      "technicianRequired": "Technician is required",
+      "startDateRequired": "Start date is required",
+      "endDateRequired": "End date is required"
     }
   }
 }

@@ -822,7 +822,8 @@
         "iotMonitoring": "مراقبة IoT",
         "systemModules": "وحدات النظام",
         "technicalReference": "المرجع التقني"
-      }
+      },
+      "interventionReports": "تقارير التدخل"
     }
   },
   "machines": {
@@ -906,69 +907,63 @@
       "saving": "جارٍ الحفظ..."
     }
   },
-  "documents": {
-    "title": "المستندات",
-    "heading": "المستندات والأدلة",
-    "description": "إدارة مستندات الآلات مع رفع وتعديل وحذف كامل",
-    "addDocument": "إضافة مستند",
-    "searchPlaceholder": "ابحث بالاسم أو الوصف أو النوع أو الوسم أو الرافع أو الآلة...",
-    "filterAllMachines": "كل الآلات",
+  "interventionReports": {
+    "title": "تقارير التدخل",
+    "heading": "تقارير التدخل",
+    "description": "تتبع وإدارة تقارير تنفيذ التدخلات",
+    "totalReports": "إجمالي التقارير",
+    "allReports": "جميع التقارير",
+    "searchPlaceholder": "ابحث حسب المعرّف أو أمر العمل أو الفني أو الحالة أو السبب أو الإجراء...",
     "table": {
-      "documentId": "معرف المستند",
-      "fileName": "اسم الملف",
-      "type": "النوع",
-      "machine": "الآلة",
-      "uploadedBy": "أضيف بواسطة",
-      "dateAdded": "تاريخ الإضافة",
-      "tags": "الوسوم",
-      "actions": "الإجراءات"
+      "reportId": "معرّف التقرير",
+      "workOrder": "أمر العمل",
+      "technician": "الفني",
+      "startDate": "تاريخ البدء",
+      "endDate": "تاريخ الانتهاء",
+      "finalState": "الحالة النهائية"
     },
     "empty": {
-      "search": "لا توجد مستندات تطابق البحث.",
-      "default": "لا توجد مستندات متاحة."
+      "search": "لا توجد تقارير مطابقة للبحث.",
+      "default": "لا توجد تقارير تدخل متاحة."
     },
     "modal": {
-      "uploadTitle": "رفع مستند",
-      "editTitle": "تعديل المستند"
+      "add": "إضافة تقرير تدخل",
+      "edit": "تعديل تقرير التدخل"
     },
     "form": {
-      "file": "ملف PDF",
-      "machine": "الآلة",
-      "type": "نوع المستند",
-      "description": "الوصف",
-      "tags": "الوسوم",
-      "uploadedBy": "أضيف بواسطة"
+      "reportId": "معرّف التقرير",
+      "workOrder": "أمر العمل",
+      "technician": "الفني",
+      "startDate": "تاريخ البدء",
+      "endDate": "تاريخ الانتهاء",
+      "rootCause": "السبب الجذري",
+      "actionDescription": "وصف الإجراء",
+      "finalState": "الحالة النهائية",
+      "responsibleValidation": "اعتماد المسؤول"
     },
     "placeholders": {
-      "selectMachine": "اختر آلة",
-      "type": "مثال: دليل، صيانة، تعليمات",
-      "description": "أدخل الوصف",
-      "tags": "وسوم مفصولة بفواصل",
-      "uploadedBy": "أدخل اسم الرافع"
+      "selectWorkOrder": "اختر أمر العمل",
+      "selectTechnician": "اختر الفني"
     },
     "actions": {
-      "add": "رفع",
-      "view": "عرض",
+      "add": "إضافة تقرير",
       "edit": "تعديل",
-      "delete": "حذف"
-    },
-    "buttons": {
-      "upload": "رفع",
+      "delete": "حذف",
+      "create": "إنشاء",
       "update": "تحديث"
     },
     "notifications": {
-      "created": "تم رفع المستند بنجاح",
-      "updated": "تم تحديث المستند بنجاح",
-      "deleted": "تم حذف المستند بنجاح",
-      "saveFailed": "فشل حفظ المستند",
-      "deleteFailed": "فشل حذف المستند",
-      "confirmDelete": "هل أنت متأكد من حذف هذا المستند؟ لا يمكن التراجع عن هذا الإجراء.",
-      "fileRequired": "ملف PDF مطلوب",
-      "machineRequired": "الآلة مطلوبة",
-      "typeRequired": "نوع المستند مطلوب"
-    },
-    "viewer": {
-      "title": "عارض المستند"
+      "created": "تم إنشاء تقرير التدخل بنجاح",
+      "updated": "تم تحديث تقرير التدخل بنجاح",
+      "deleted": "تم حذف تقرير التدخل بنجاح",
+      "saveFailed": "فشل حفظ تقرير التدخل",
+      "deleteFailed": "فشل حذف تقرير التدخل",
+      "confirmDelete": "هل أنت متأكد من حذف تقرير التدخل هذا؟ لا يمكن التراجع عن هذا الإجراء.",
+      "reportIdRequired": "معرّف التقرير مطلوب",
+      "workOrderRequired": "أمر العمل مطلوب",
+      "technicianRequired": "الفني مطلوب",
+      "startDateRequired": "تاريخ البدء مطلوب",
+      "endDateRequired": "تاريخ الانتهاء مطلوب"
     }
   }
 }

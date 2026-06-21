@@ -956,7 +956,8 @@
         "iotMonitoring": "Surveillance IoT",
         "systemModules": "Modules système",
         "technicalReference": "Référence technique"
-      }
+      },
+      "interventionReports": "Rapports d'intervention"
     }
   },
   "machines": {
@@ -1040,69 +1041,63 @@
       "saving": "Enregistrement en cours..."
     }
   },
-  "documents": {
-    "title": "Documents",
-    "heading": "Documents et manuels",
-    "description": "Gérer les documents machine avec téléversement, modification et suppression complets",
-    "addDocument": "Ajouter un document",
-    "searchPlaceholder": "Rechercher par nom, description, type, tag, auteur ou machine...",
-    "filterAllMachines": "Toutes les machines",
+  "interventionReports": {
+    "title": "Rapports d'intervention",
+    "heading": "Rapports d'intervention",
+    "description": "Suivre et gérer les rapports d'exécution des interventions",
+    "totalReports": "Total rapports",
+    "allReports": "Tous les rapports",
+    "searchPlaceholder": "Rechercher par ID, OT, technicien, état, cause ou action...",
     "table": {
-      "documentId": "ID document",
-      "fileName": "Nom du fichier",
-      "type": "Type",
-      "machine": "Machine",
-      "uploadedBy": "Ajouté par",
-      "dateAdded": "Date d'ajout",
-      "tags": "Tags",
-      "actions": "Actions"
+      "reportId": "ID rapport",
+      "workOrder": "Ordre de travail",
+      "technician": "Technicien",
+      "startDate": "Date début",
+      "endDate": "Date fin",
+      "finalState": "État final"
     },
     "empty": {
-      "search": "Aucun document ne correspond à votre recherche.",
-      "default": "Aucun document disponible."
+      "search": "Aucun rapport ne correspond à votre recherche.",
+      "default": "Aucun rapport d'intervention disponible."
     },
     "modal": {
-      "uploadTitle": "Téléverser un document",
-      "editTitle": "Modifier le document"
+      "add": "Ajouter un rapport d'intervention",
+      "edit": "Modifier le rapport d'intervention"
     },
     "form": {
-      "file": "Fichier PDF",
-      "machine": "Machine",
-      "type": "Type de document",
-      "description": "Description",
-      "tags": "Tags",
-      "uploadedBy": "Ajouté par"
+      "reportId": "ID rapport",
+      "workOrder": "Ordre de travail",
+      "technician": "Technicien",
+      "startDate": "Date début",
+      "endDate": "Date fin",
+      "rootCause": "Cause racine",
+      "actionDescription": "Description de l'action",
+      "finalState": "État final",
+      "responsibleValidation": "Validation responsable"
     },
     "placeholders": {
-      "selectMachine": "Sélectionner une machine",
-      "type": "ex. manuel, maintenance, instruction",
-      "description": "Entrez une description",
-      "tags": "Tags séparés par des virgules",
-      "uploadedBy": "Entrez le nom de l'auteur"
+      "selectWorkOrder": "Sélectionner un ordre de travail",
+      "selectTechnician": "Sélectionner un technicien"
     },
     "actions": {
-      "add": "Téléverser",
-      "view": "Voir",
+      "add": "Ajouter un rapport",
       "edit": "Modifier",
-      "delete": "Supprimer"
-    },
-    "buttons": {
-      "upload": "Téléverser",
+      "delete": "Supprimer",
+      "create": "Créer",
       "update": "Mettre à jour"
     },
     "notifications": {
-      "created": "Document téléversé avec succès",
-      "updated": "Document mis à jour avec succès",
-      "deleted": "Document supprimé avec succès",
-      "saveFailed": "Échec de l'enregistrement du document",
-      "deleteFailed": "Échec de la suppression du document",
-      "confirmDelete": "Êtes-vous sûr de vouloir supprimer ce document ? Cette action est irréversible.",
-      "fileRequired": "Le fichier PDF est obligatoire",
-      "machineRequired": "La machine est obligatoire",
-      "typeRequired": "Le type de document est obligatoire"
-    },
-    "viewer": {
-      "title": "Visualiseur de document"
+      "created": "Rapport d'intervention créé avec succès",
+      "updated": "Rapport d'intervention mis à jour avec succès",
+      "deleted": "Rapport d'intervention supprimé avec succès",
+      "saveFailed": "Échec de l'enregistrement du rapport d'intervention",
+      "deleteFailed": "Échec de la suppression du rapport d'intervention",
+      "confirmDelete": "Êtes-vous sûr de vouloir supprimer ce rapport d'intervention ? Cette action est irréversible.",
+      "reportIdRequired": "L'ID rapport est obligatoire",
+      "workOrderRequired": "L'ordre de travail est obligatoire",
+      "technicianRequired": "Le technicien est obligatoire",
+      "startDateRequired": "La date de début est obligatoire",
+      "endDateRequired": "La date de fin est obligatoire"
     }
   }
 }

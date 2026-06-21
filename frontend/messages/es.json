@@ -743,7 +743,8 @@
         "iotMonitoring": "Monitoreo IoT",
         "systemModules": "Modulos del sistema",
         "technicalReference": "Referencia tecnica"
-      }
+      },
+      "interventionReports": "Informes de intervencion"
     }
   },
   "machines": {
@@ -822,69 +823,63 @@
       "saving": "Saving..."
     }
   },
-  "documents": {
-    "title": "Documentos",
-    "heading": "Documentos y manuales",
-    "description": "Gestiona documentos de maquinas con carga, edicion y eliminacion completa",
-    "addDocument": "Agregar documento",
-    "searchPlaceholder": "Buscar por nombre, descripcion, tipo, etiqueta, cargado por o maquina...",
-    "filterAllMachines": "Todas las maquinas",
+  "interventionReports": {
+    "title": "Informes de intervencion",
+    "heading": "Informes de intervencion",
+    "description": "Supervisar y gestionar informes de ejecucion de intervenciones",
+    "totalReports": "Total de informes",
+    "allReports": "Todos los informes",
+    "searchPlaceholder": "Buscar por ID, orden de trabajo, tecnico, estado, causa o accion...",
     "table": {
-      "documentId": "ID de documento",
-      "fileName": "Nombre de archivo",
-      "type": "Tipo",
-      "machine": "Maquina",
-      "uploadedBy": "Subido por",
-      "dateAdded": "Fecha de carga",
-      "tags": "Etiquetas",
-      "actions": "Acciones"
+      "reportId": "ID informe",
+      "workOrder": "Orden de trabajo",
+      "technician": "Tecnico",
+      "startDate": "Fecha de inicio",
+      "endDate": "Fecha de fin",
+      "finalState": "Estado final"
     },
     "empty": {
-      "search": "Ningun documento coincide con la busqueda.",
-      "default": "No hay documentos disponibles."
+      "search": "Ningun informe coincide con su busqueda.",
+      "default": "No hay informes de intervencion disponibles."
     },
     "modal": {
-      "uploadTitle": "Subir documento",
-      "editTitle": "Editar documento"
+      "add": "Agregar informe de intervencion",
+      "edit": "Editar informe de intervencion"
     },
     "form": {
-      "file": "Archivo PDF",
-      "machine": "Maquina",
-      "type": "Tipo de documento",
-      "description": "Descripcion",
-      "tags": "Etiquetas",
-      "uploadedBy": "Subido por"
+      "reportId": "ID informe",
+      "workOrder": "Orden de trabajo",
+      "technician": "Tecnico",
+      "startDate": "Fecha de inicio",
+      "endDate": "Fecha de fin",
+      "rootCause": "Causa raiz",
+      "actionDescription": "Descripcion de la accion",
+      "finalState": "Estado final",
+      "responsibleValidation": "Validacion del responsable"
     },
     "placeholders": {
-      "selectMachine": "Seleccionar maquina",
-      "type": "ej. manual, mantenimiento, instruccion",
-      "description": "Ingrese descripcion",
-      "tags": "Etiquetas separadas por comas",
-      "uploadedBy": "Ingrese nombre del cargador"
+      "selectWorkOrder": "Seleccionar orden de trabajo",
+      "selectTechnician": "Seleccionar tecnico"
     },
     "actions": {
-      "add": "Subir",
-      "view": "Ver",
+      "add": "Agregar informe",
       "edit": "Editar",
-      "delete": "Eliminar"
-    },
-    "buttons": {
-      "upload": "Subir",
+      "delete": "Eliminar",
+      "create": "Crear",
       "update": "Actualizar"
     },
     "notifications": {
-      "created": "Documento subido correctamente",
-      "updated": "Documento actualizado correctamente",
-      "deleted": "Documento eliminado correctamente",
-      "saveFailed": "Error al guardar el documento",
-      "deleteFailed": "Error al eliminar el documento",
-      "confirmDelete": "Esta seguro de que desea eliminar este documento? Esta accion no se puede deshacer.",
-      "fileRequired": "El archivo PDF es obligatorio",
-      "machineRequired": "La maquina es obligatoria",
-      "typeRequired": "El tipo de documento es obligatorio"
-    },
-    "viewer": {
-      "title": "Visor de documentos"
+      "created": "Informe de intervencion creado correctamente",
+      "updated": "Informe de intervencion actualizado correctamente",
+      "deleted": "Informe de intervencion eliminado correctamente",
+      "saveFailed": "Error al guardar el informe de intervencion",
+      "deleteFailed": "Error al eliminar el informe de intervencion",
+      "confirmDelete": "Esta seguro de que desea eliminar este informe de intervencion? Esta accion no se puede deshacer.",
+      "reportIdRequired": "El ID del informe es obligatorio",
+      "workOrderRequired": "La orden de trabajo es obligatoria",
+      "technicianRequired": "El tecnico es obligatorio",
+      "startDateRequired": "La fecha de inicio es obligatoria",
+      "endDateRequired": "La fecha de fin es obligatoria"
     }
   }
 }

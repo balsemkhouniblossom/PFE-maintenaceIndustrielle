@@ -722,7 +722,8 @@
         "iotMonitoring": "Monitoraggio IoT",
         "systemModules": "Moduli di sistema",
         "technicalReference": "Riferimento tecnico"
-      }
+      },
+      "interventionReports": "Report di intervento"
     }
   },
   "machines": {
@@ -801,69 +802,63 @@
       "saving": "Saving..."
     }
   },
-  "documents": {
-    "title": "Documenti",
-    "heading": "Documenti e manuali",
-    "description": "Gestisci i documenti macchina con caricamento, modifica ed eliminazione completi",
-    "addDocument": "Aggiungi documento",
-    "searchPlaceholder": "Cerca per nome, descrizione, tipo, tag, autore o macchina...",
-    "filterAllMachines": "Tutte le macchine",
+  "interventionReports": {
+    "title": "Report di intervento",
+    "heading": "Report di intervento",
+    "description": "Monitorare e gestire i report di esecuzione degli interventi",
+    "totalReports": "Totale report",
+    "allReports": "Tutti i report",
+    "searchPlaceholder": "Cerca per ID, ordine di lavoro, tecnico, stato, causa o azione...",
     "table": {
-      "documentId": "ID documento",
-      "fileName": "Nome file",
-      "type": "Tipo",
-      "machine": "Macchina",
-      "uploadedBy": "Caricato da",
-      "dateAdded": "Data caricamento",
-      "tags": "Tag",
-      "actions": "Azioni"
+      "reportId": "ID report",
+      "workOrder": "Ordine di lavoro",
+      "technician": "Tecnico",
+      "startDate": "Data inizio",
+      "endDate": "Data fine",
+      "finalState": "Stato finale"
     },
     "empty": {
-      "search": "Nessun documento corrisponde alla ricerca.",
-      "default": "Nessun documento disponibile."
+      "search": "Nessun report corrisponde alla ricerca.",
+      "default": "Nessun report di intervento disponibile."
     },
     "modal": {
-      "uploadTitle": "Carica documento",
-      "editTitle": "Modifica documento"
+      "add": "Aggiungi report di intervento",
+      "edit": "Modifica report di intervento"
     },
     "form": {
-      "file": "File PDF",
-      "machine": "Macchina",
-      "type": "Tipo documento",
-      "description": "Descrizione",
-      "tags": "Tag",
-      "uploadedBy": "Caricato da"
+      "reportId": "ID report",
+      "workOrder": "Ordine di lavoro",
+      "technician": "Tecnico",
+      "startDate": "Data inizio",
+      "endDate": "Data fine",
+      "rootCause": "Causa radice",
+      "actionDescription": "Descrizione azione",
+      "finalState": "Stato finale",
+      "responsibleValidation": "Validazione responsabile"
     },
     "placeholders": {
-      "selectMachine": "Seleziona macchina",
-      "type": "es. manuale, manutenzione, istruzione",
-      "description": "Inserisci descrizione",
-      "tags": "Tag separati da virgola",
-      "uploadedBy": "Inserisci nome autore"
+      "selectWorkOrder": "Seleziona ordine di lavoro",
+      "selectTechnician": "Seleziona tecnico"
     },
     "actions": {
-      "add": "Carica",
-      "view": "Visualizza",
+      "add": "Aggiungi report",
       "edit": "Modifica",
-      "delete": "Elimina"
-    },
-    "buttons": {
-      "upload": "Carica",
+      "delete": "Elimina",
+      "create": "Crea",
       "update": "Aggiorna"
     },
     "notifications": {
-      "created": "Documento caricato con successo",
-      "updated": "Documento aggiornato con successo",
-      "deleted": "Documento eliminato con successo",
-      "saveFailed": "Errore durante il salvataggio del documento",
-      "deleteFailed": "Errore durante l'eliminazione del documento",
-      "confirmDelete": "Sei sicuro di voler eliminare questo documento? Questa azione non puo essere annullata.",
-      "fileRequired": "Il file PDF e obbligatorio",
-      "machineRequired": "La macchina e obbligatoria",
-      "typeRequired": "Il tipo documento e obbligatorio"
-    },
-    "viewer": {
-      "title": "Visualizzatore documenti"
+      "created": "Report di intervento creato con successo",
+      "updated": "Report di intervento aggiornato con successo",
+      "deleted": "Report di intervento eliminato con successo",
+      "saveFailed": "Errore durante il salvataggio del report di intervento",
+      "deleteFailed": "Errore durante l'eliminazione del report di intervento",
+      "confirmDelete": "Sei sicuro di voler eliminare questo report di intervento? Questa azione non puo essere annullata.",
+      "reportIdRequired": "ID report obbligatorio",
+      "workOrderRequired": "Ordine di lavoro obbligatorio",
+      "technicianRequired": "Tecnico obbligatorio",
+      "startDateRequired": "Data inizio obbligatoria",
+      "endDateRequired": "Data fine obbligatoria"
     }
   }
 }

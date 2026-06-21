@@ -36,6 +36,7 @@ import { AuthModule } from './auth/auth.module';
 
 import { CounterModule } from './counters/counter.module';
 import { DocumentsModule } from './documents/documents.module';
+import { InterventionReportsModule } from './intervention-reports/intervention-reports.module';
 
 @Module({
   imports: [
@@ -83,6 +84,7 @@ import { DocumentsModule } from './documents/documents.module';
     CapteursModule,
     AuthModule,
     DocumentsModule, // ✅ MUST be here
+    InterventionReportsModule,
 
   ],
   controllers: [AppController],

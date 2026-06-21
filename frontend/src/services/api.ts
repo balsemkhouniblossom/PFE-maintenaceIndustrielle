@@ -115,6 +115,12 @@ export const apiService = {
   updateCapteur: (id: string, data: AnyObject) => api.patch(`/capteurs/${id}`, data),
   deleteCapteur: (id: string) => api.delete(`/capteurs/${id}`),
 
+  // Intervention Reports
+  getInterventionReports: () => api.get('/intervention-reports'),
+  createInterventionReport: (data: AnyObject) => api.post('/intervention-reports', data),
+  updateInterventionReport: (id: string, data: AnyObject) => api.patch(`/intervention-reports/${id}`, data),
+  deleteInterventionReport: (id: string) => api.delete(`/intervention-reports/${id}`),
+
   getDocuments: () => api.get('/documents'),
 
   getDocument: (id: string) => api.get(`/documents/${id}`),

@@ -919,7 +919,8 @@
         "iotMonitoring": "IoT Uberwachung",
         "systemModules": "Systemmodule",
         "technicalReference": "Technische Referenz"
-      }
+      },
+      "interventionReports": "Interventionsberichte"
     }
   },
   "machines": {
@@ -1003,69 +1004,63 @@
       "saving": "Wird gespeichert..."
     }
   },
-  "documents": {
-    "title": "Dokumente",
-    "heading": "Dokumente und Handbuecher",
-    "description": "Maschinendokumente mit vollstaendigem Upload, Bearbeiten und Loeschen verwalten",
-    "addDocument": "Dokument hinzufuegen",
-    "searchPlaceholder": "Nach Name, Beschreibung, Typ, Tag, Uploader oder Maschine suchen...",
-    "filterAllMachines": "Alle Maschinen",
+  "interventionReports": {
+    "title": "Interventionsberichte",
+    "heading": "Interventionsberichte",
+    "description": "Ausfuehrungsberichte von Interventionen verfolgen und verwalten",
+    "totalReports": "Berichte gesamt",
+    "allReports": "Alle Berichte",
+    "searchPlaceholder": "Nach ID, Arbeitsauftrag, Techniker, Zustand, Ursache oder Aktion suchen...",
     "table": {
-      "documentId": "Dokument-ID",
-      "fileName": "Dateiname",
-      "type": "Typ",
-      "machine": "Maschine",
-      "uploadedBy": "Hochgeladen von",
-      "dateAdded": "Hinzugefuegt am",
-      "tags": "Tags",
-      "actions": "Aktionen"
+      "reportId": "Berichts-ID",
+      "workOrder": "Arbeitsauftrag",
+      "technician": "Techniker",
+      "startDate": "Startdatum",
+      "endDate": "Enddatum",
+      "finalState": "Endzustand"
     },
     "empty": {
-      "search": "Keine Dokumente entsprechen Ihrer Suche.",
-      "default": "Keine Dokumente verfuegbar."
+      "search": "Keine Berichte entsprechen Ihrer Suche.",
+      "default": "Keine Interventionsberichte verfuegbar."
     },
     "modal": {
-      "uploadTitle": "Dokument hochladen",
-      "editTitle": "Dokument bearbeiten"
+      "add": "Interventionsbericht hinzufuegen",
+      "edit": "Interventionsbericht bearbeiten"
     },
     "form": {
-      "file": "PDF-Datei",
-      "machine": "Maschine",
-      "type": "Dokumenttyp",
-      "description": "Beschreibung",
-      "tags": "Tags",
-      "uploadedBy": "Hochgeladen von"
+      "reportId": "Berichts-ID",
+      "workOrder": "Arbeitsauftrag",
+      "technician": "Techniker",
+      "startDate": "Startdatum",
+      "endDate": "Enddatum",
+      "rootCause": "Grundursache",
+      "actionDescription": "Aktionsbeschreibung",
+      "finalState": "Endzustand",
+      "responsibleValidation": "Verantwortliche Validierung"
     },
     "placeholders": {
-      "selectMachine": "Maschine waehlen",
-      "type": "z.B. Handbuch, Wartung, Anleitung",
-      "description": "Beschreibung eingeben",
-      "tags": "Kommagetrennte Tags",
-      "uploadedBy": "Uploader-Name eingeben"
+      "selectWorkOrder": "Arbeitsauftrag auswaehlen",
+      "selectTechnician": "Techniker auswaehlen"
     },
     "actions": {
-      "add": "Hochladen",
-      "view": "Ansehen",
+      "add": "Bericht hinzufuegen",
       "edit": "Bearbeiten",
-      "delete": "Loeschen"
-    },
-    "buttons": {
-      "upload": "Hochladen",
+      "delete": "Loeschen",
+      "create": "Erstellen",
       "update": "Aktualisieren"
     },
     "notifications": {
-      "created": "Dokument erfolgreich hochgeladen",
-      "updated": "Dokument erfolgreich aktualisiert",
-      "deleted": "Dokument erfolgreich geloescht",
-      "saveFailed": "Dokument konnte nicht gespeichert werden",
-      "deleteFailed": "Dokument konnte nicht geloescht werden",
-      "confirmDelete": "Sind Sie sicher, dass Sie dieses Dokument loeschen moechten? Diese Aktion kann nicht rueckgaengig gemacht werden.",
-      "fileRequired": "PDF-Datei ist erforderlich",
-      "machineRequired": "Maschine ist erforderlich",
-      "typeRequired": "Dokumenttyp ist erforderlich"
-    },
-    "viewer": {
-      "title": "Dokumentenanzeige"
+      "created": "Interventionsbericht erfolgreich erstellt",
+      "updated": "Interventionsbericht erfolgreich aktualisiert",
+      "deleted": "Interventionsbericht erfolgreich geloescht",
+      "saveFailed": "Interventionsbericht konnte nicht gespeichert werden",
+      "deleteFailed": "Interventionsbericht konnte nicht geloescht werden",
+      "confirmDelete": "Sind Sie sicher, dass Sie diesen Interventionsbericht loeschen moechten? Diese Aktion kann nicht rueckgaengig gemacht werden.",
+      "reportIdRequired": "Berichts-ID ist erforderlich",
+      "workOrderRequired": "Arbeitsauftrag ist erforderlich",
+      "technicianRequired": "Techniker ist erforderlich",
+      "startDateRequired": "Startdatum ist erforderlich",
+      "endDateRequired": "Enddatum ist erforderlich"
     }
   }
 }
