@@ -684,11 +684,15 @@
     "searchPlaceholder": "Rechercher des pièces...",
     "actions": {
       "addPart": "Ajouter une pièce",
+      "edit": "Modifier",
+      "delete": "Supprimer",
       "cancel": "Annuler",
+      "saving": "Enregistrement en cours...",
       "updatePart": "Mettre à jour la pièce",
       "createPart": "Créer une pièce"
     },
     "table": {
+      "title": "Catalogue des pièces",
       "partId": "ID pièce",
       "partName": "Nom de la pièce",
       "manufacturerRef": "Réf. fabricant",
@@ -766,7 +770,8 @@
     },
     "messages": {
       "noParts": "Aucune pièce disponible",
-      "noSearchResults": "Aucun résultat trouvé"
+      "noSearchResults": "Aucun résultat trouvé",
+      "confirmDelete": "Êtes-vous sûr de vouloir supprimer cette pièce ? Cette action est irréversible."
     }
   },
   "machineTypes": {
@@ -1033,6 +1038,71 @@
       "update": "Mettre à jour",
       "create": "Créer",
       "saving": "Enregistrement en cours..."
+    }
+  },
+  "documents": {
+    "title": "Documents",
+    "heading": "Documents et manuels",
+    "description": "Gérer les documents machine avec téléversement, modification et suppression complets",
+    "addDocument": "Ajouter un document",
+    "searchPlaceholder": "Rechercher par nom, description, type, tag, auteur ou machine...",
+    "filterAllMachines": "Toutes les machines",
+    "table": {
+      "documentId": "ID document",
+      "fileName": "Nom du fichier",
+      "type": "Type",
+      "machine": "Machine",
+      "uploadedBy": "Ajouté par",
+      "dateAdded": "Date d'ajout",
+      "tags": "Tags",
+      "actions": "Actions"
+    },
+    "empty": {
+      "search": "Aucun document ne correspond à votre recherche.",
+      "default": "Aucun document disponible."
+    },
+    "modal": {
+      "uploadTitle": "Téléverser un document",
+      "editTitle": "Modifier le document"
+    },
+    "form": {
+      "file": "Fichier PDF",
+      "machine": "Machine",
+      "type": "Type de document",
+      "description": "Description",
+      "tags": "Tags",
+      "uploadedBy": "Ajouté par"
+    },
+    "placeholders": {
+      "selectMachine": "Sélectionner une machine",
+      "type": "ex. manuel, maintenance, instruction",
+      "description": "Entrez une description",
+      "tags": "Tags séparés par des virgules",
+      "uploadedBy": "Entrez le nom de l'auteur"
+    },
+    "actions": {
+      "add": "Téléverser",
+      "view": "Voir",
+      "edit": "Modifier",
+      "delete": "Supprimer"
+    },
+    "buttons": {
+      "upload": "Téléverser",
+      "update": "Mettre à jour"
+    },
+    "notifications": {
+      "created": "Document téléversé avec succès",
+      "updated": "Document mis à jour avec succès",
+      "deleted": "Document supprimé avec succès",
+      "saveFailed": "Échec de l'enregistrement du document",
+      "deleteFailed": "Échec de la suppression du document",
+      "confirmDelete": "Êtes-vous sûr de vouloir supprimer ce document ? Cette action est irréversible.",
+      "fileRequired": "Le fichier PDF est obligatoire",
+      "machineRequired": "La machine est obligatoire",
+      "typeRequired": "Le type de document est obligatoire"
+    },
+    "viewer": {
+      "title": "Visualiseur de document"
     }
   }
 }

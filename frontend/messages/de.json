@@ -267,6 +267,7 @@
       "placeholder": "Suchen..."
     },
     "table": {
+      "title": "Teilekatalog",
       "partId": "Teile-ID",
       "partName": "Teilename",
       "manufacturer": "Hersteller",
@@ -286,6 +287,18 @@
       "location": "Standort",
       "stockQuantity": "Lagerbestand",
       "minimumStock": "Mindestbestand"
+    },
+    "validation": {
+      "partIdRequired": "Teile-ID ist erforderlich",
+      "partNameRequired": "Teilename ist erforderlich",
+      "manufacturerRefRequired": "Herstellerreferenz ist erforderlich"
+    },
+    "placeholders": {
+      "enterPartId": "Teile-ID eingeben",
+      "enterPartName": "Teilename eingeben",
+      "enterManufacturerRef": "Herstellerreferenz eingeben",
+      "enterManufacturer": "Hersteller eingeben",
+      "enterCategory": "Kategorie eingeben"
     }
   },
   "common": {
@@ -988,6 +1001,71 @@
       "update": "Aktualisieren",
       "create": "Erstellen",
       "saving": "Wird gespeichert..."
+    }
+  },
+  "documents": {
+    "title": "Dokumente",
+    "heading": "Dokumente und Handbuecher",
+    "description": "Maschinendokumente mit vollstaendigem Upload, Bearbeiten und Loeschen verwalten",
+    "addDocument": "Dokument hinzufuegen",
+    "searchPlaceholder": "Nach Name, Beschreibung, Typ, Tag, Uploader oder Maschine suchen...",
+    "filterAllMachines": "Alle Maschinen",
+    "table": {
+      "documentId": "Dokument-ID",
+      "fileName": "Dateiname",
+      "type": "Typ",
+      "machine": "Maschine",
+      "uploadedBy": "Hochgeladen von",
+      "dateAdded": "Hinzugefuegt am",
+      "tags": "Tags",
+      "actions": "Aktionen"
+    },
+    "empty": {
+      "search": "Keine Dokumente entsprechen Ihrer Suche.",
+      "default": "Keine Dokumente verfuegbar."
+    },
+    "modal": {
+      "uploadTitle": "Dokument hochladen",
+      "editTitle": "Dokument bearbeiten"
+    },
+    "form": {
+      "file": "PDF-Datei",
+      "machine": "Maschine",
+      "type": "Dokumenttyp",
+      "description": "Beschreibung",
+      "tags": "Tags",
+      "uploadedBy": "Hochgeladen von"
+    },
+    "placeholders": {
+      "selectMachine": "Maschine waehlen",
+      "type": "z.B. Handbuch, Wartung, Anleitung",
+      "description": "Beschreibung eingeben",
+      "tags": "Kommagetrennte Tags",
+      "uploadedBy": "Uploader-Name eingeben"
+    },
+    "actions": {
+      "add": "Hochladen",
+      "view": "Ansehen",
+      "edit": "Bearbeiten",
+      "delete": "Loeschen"
+    },
+    "buttons": {
+      "upload": "Hochladen",
+      "update": "Aktualisieren"
+    },
+    "notifications": {
+      "created": "Dokument erfolgreich hochgeladen",
+      "updated": "Dokument erfolgreich aktualisiert",
+      "deleted": "Dokument erfolgreich geloescht",
+      "saveFailed": "Dokument konnte nicht gespeichert werden",
+      "deleteFailed": "Dokument konnte nicht geloescht werden",
+      "confirmDelete": "Sind Sie sicher, dass Sie dieses Dokument loeschen moechten? Diese Aktion kann nicht rueckgaengig gemacht werden.",
+      "fileRequired": "PDF-Datei ist erforderlich",
+      "machineRequired": "Maschine ist erforderlich",
+      "typeRequired": "Dokumenttyp ist erforderlich"
+    },
+    "viewer": {
+      "title": "Dokumentenanzeige"
     }
   }
 }

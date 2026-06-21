@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { useSearchParams, useParams, useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import api from '@/services/api';

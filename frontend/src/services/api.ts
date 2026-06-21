@@ -121,6 +121,8 @@ export const apiService = {
 
   createDocument: (data: any) => api.post('/documents', data),
 
+  updateDocument: (id: string, data: AnyObject) => api.put(`/documents/${id}`, data),
+
   uploadDocument: (formData: FormData) =>
     api.post('/documents/upload', formData, {
       headers: {

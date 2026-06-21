@@ -559,6 +559,84 @@
       "saveFailed": "Error al guardar la orden de trabajo"
     }
   },
+  "catalogues": {
+    "title": "Catálogo de piezas",
+    "pageTitle": "Catálogo de piezas",
+    "heading": "Catálogo de piezas",
+    "totalParts": "Total de piezas",
+    "addPart": "Agregar pieza",
+    "allParts": "Todas las piezas",
+    "searchPlaceholder": "Buscar piezas...",
+    "header": {
+      "title": "Catálogo de piezas",
+      "subtitle": "Gestiona el inventario de piezas y componentes"
+    },
+    "stats": {
+      "totalParts": "Total de piezas"
+    },
+    "search": {
+      "placeholder": "Buscar piezas..."
+    },
+    "table": {
+      "title": "Catálogo de piezas",
+      "partId": "ID de pieza",
+      "partName": "Nombre de la pieza",
+      "manufacturerRef": "Ref. fabricante",
+      "manufacturer": "Fabricante",
+      "category": "Categoría",
+      "actions": "Acciones"
+    },
+    "empty": {
+      "search": "No se encontraron piezas que coincidan con la búsqueda.",
+      "default": "No hay piezas disponibles."
+    },
+    "modal": {
+      "edit": "Editar pieza",
+      "add": "Agregar nueva pieza",
+      "editTitle": "Editar pieza",
+      "createTitle": "Agregar nueva pieza"
+    },
+    "form": {
+      "partId": "ID de pieza",
+      "partName": "Nombre de la pieza",
+      "manufacturerReference": "Referencia del fabricante",
+      "manufacturer": "Fabricante",
+      "category": "Categoría"
+    },
+    "validation": {
+      "partIdRequired": "El ID de pieza es obligatorio",
+      "partNameRequired": "El nombre de la pieza es obligatorio",
+      "manufacturerRefRequired": "La referencia del fabricante es obligatoria"
+    },
+    "placeholders": {
+      "enterPartId": "Ingrese el ID de pieza",
+      "enterPartName": "Ingrese el nombre de la pieza",
+      "enterManufacturerRef": "Ingrese la referencia del fabricante",
+      "enterManufacturer": "Ingrese el fabricante",
+      "enterCategory": "Ingrese la categoría"
+    },
+    "actions": {
+      "addPart": "Agregar pieza",
+      "edit": "Editar",
+      "delete": "Eliminar",
+      "cancel": "Cancelar",
+      "saving": "Guardando...",
+      "updatePart": "Actualizar pieza",
+      "createPart": "Crear pieza"
+    },
+    "notifications": {
+      "deleted": "Pieza eliminada correctamente",
+      "deleteFailed": "Error al eliminar la pieza",
+      "updated": "Pieza actualizada correctamente",
+      "created": "Pieza creada correctamente",
+      "saveFailed": "Error al guardar la pieza"
+    },
+    "messages": {
+      "noSearchResults": "No se encontraron piezas que coincidan con la búsqueda.",
+      "noParts": "No hay piezas disponibles.",
+      "confirmDelete": "¿Seguro que deseas eliminar esta pieza? Esta acción no se puede deshacer."
+    }
+  },
   "users": {
     "pageTitle": "Gestión de usuarios",
     "heading": "Gestión de usuarios",
@@ -742,6 +820,71 @@
       "update": "Update",
       "create": "Create",
       "saving": "Saving..."
+    }
+  },
+  "documents": {
+    "title": "Documentos",
+    "heading": "Documentos y manuales",
+    "description": "Gestiona documentos de maquinas con carga, edicion y eliminacion completa",
+    "addDocument": "Agregar documento",
+    "searchPlaceholder": "Buscar por nombre, descripcion, tipo, etiqueta, cargado por o maquina...",
+    "filterAllMachines": "Todas las maquinas",
+    "table": {
+      "documentId": "ID de documento",
+      "fileName": "Nombre de archivo",
+      "type": "Tipo",
+      "machine": "Maquina",
+      "uploadedBy": "Subido por",
+      "dateAdded": "Fecha de carga",
+      "tags": "Etiquetas",
+      "actions": "Acciones"
+    },
+    "empty": {
+      "search": "Ningun documento coincide con la busqueda.",
+      "default": "No hay documentos disponibles."
+    },
+    "modal": {
+      "uploadTitle": "Subir documento",
+      "editTitle": "Editar documento"
+    },
+    "form": {
+      "file": "Archivo PDF",
+      "machine": "Maquina",
+      "type": "Tipo de documento",
+      "description": "Descripcion",
+      "tags": "Etiquetas",
+      "uploadedBy": "Subido por"
+    },
+    "placeholders": {
+      "selectMachine": "Seleccionar maquina",
+      "type": "ej. manual, mantenimiento, instruccion",
+      "description": "Ingrese descripcion",
+      "tags": "Etiquetas separadas por comas",
+      "uploadedBy": "Ingrese nombre del cargador"
+    },
+    "actions": {
+      "add": "Subir",
+      "view": "Ver",
+      "edit": "Editar",
+      "delete": "Eliminar"
+    },
+    "buttons": {
+      "upload": "Subir",
+      "update": "Actualizar"
+    },
+    "notifications": {
+      "created": "Documento subido correctamente",
+      "updated": "Documento actualizado correctamente",
+      "deleted": "Documento eliminado correctamente",
+      "saveFailed": "Error al guardar el documento",
+      "deleteFailed": "Error al eliminar el documento",
+      "confirmDelete": "Esta seguro de que desea eliminar este documento? Esta accion no se puede deshacer.",
+      "fileRequired": "El archivo PDF es obligatorio",
+      "machineRequired": "La maquina es obligatoria",
+      "typeRequired": "El tipo de documento es obligatorio"
+    },
+    "viewer": {
+      "title": "Visor de documentos"
     }
   }
 }

@@ -1,4 +1,5 @@
 import {getRequestConfig} from 'next-intl/server';
+import {AbstractIntlMessages} from 'next-intl';
 import {locales, defaultLocale} from '@/i18n/config';
 
 import en from '../messages/en.json';
@@ -8,7 +9,7 @@ import es from '../messages/es.json';
 import de from '../messages/de.json';
 import it from '../messages/it.json';
 
-const messagesMap = {
+const messagesMap: Record<string, AbstractIntlMessages> = {
   en,
   fr,
   ar,
@@ -25,6 +26,6 @@ export default getRequestConfig(async ({locale}) => {
 
   return {
     locale: validLocale,
-    messages: messagesMap[validLocale]
+    messages: messagesMap[validLocale] ?? messagesMap[defaultLocale]
   };
 });

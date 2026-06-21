@@ -1,344 +1,633 @@
 "use client";
-import { useEffect, useMemo, useState } from 'react';
-import DashboardLayout from '@/components/DashboardLayout';
-import { apiService } from '@/services/api';
-import {
-    PlusIcon,
-    MagnifyingGlassIcon,
-    DocumentIcon,
-    EyeIcon,
-    CloudArrowUpIcon,
-    TagIcon,
-    XMarkIcon,
-} from '@heroicons/react/24/outline';
 
-import { Dialog } from '@headlessui/react';
+import { useEffect, useMemo, useState } from "react";
 import dynamic from "next/dynamic";
+import {
+  CheckCircleIcon,
+  CloudArrowUpIcon,
+  DocumentIcon,
+  ExclamationTriangleIcon,
+  EyeIcon,
+  MagnifyingGlassIcon,
+  PencilIcon,
+  PlusIcon,
+  TagIcon,
+  TrashIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
+import { useTranslations } from "next-intl";
+import DashboardLayout from "@/components/DashboardLayout";
+import { Modal } from "@/components/Modal";
+import { apiService } from "@/services/api";
 
+type MachineRef = string | { _id: string; machine_id?: string };
 
 interface DocumentType {
-    _id: string;
-    document_id: string;
-    machine_id: any;
-    type_document: string;
-    file_path: string;
-    file_name: string;
-    description?: string;
-    tags?: string[];
-    uploaded_by?: string;
-    date_ajout: string;
+  _id: string;
+  document_id: string;
+  machine_id: MachineRef;
+  type_document: string;
+  file_path: string;
+  file_name: string;
+  description?: string;
+  tags?: string[];
+  uploaded_by?: string;
+  date_ajout?: string;
 }
 
 interface Machine {
-    _id: string;
-    machine_id: string;
+  _id: string;
+  machine_id: string;
 }
+
 const PdfViewer = dynamic(() => import("@/app/[locale]/documents/PdfViewer"), {
-    ssr: false,
+  ssr: false,
 });
 
+function machineRefId(machine: MachineRef): string {
+  return typeof machine === "string" ? machine : machine?._id || "";
+}
+
+function machineRefLabel(machine: MachineRef): string {
+  if (typeof machine === "string") return machine;
+  return machine?.machine_id || machine?._id || "";
+}
+
 export default function DocumentsPage() {
-    const [documents, setDocuments] = useState<DocumentType[]>([]);
-    const [machines, setMachines] = useState<Machine[]>([]);
-    const [loading, setLoading] = useState(true);
+  const t = useTranslations("documents");
+  const tCommon = useTranslations("common");
 
-    const [search, setSearch] = useState('');
-    const [selectedMachine, setSelectedMachine] = useState('');
-    const [uploadMachine, setUploadMachine] = useState('');
-    const [selectedDoc, setSelectedDoc] = useState<DocumentType | null>(null);
+  const [documents, setDocuments] = useState<DocumentType[]>([]);
+  const [machines, setMachines] = useState<Machine[]>([]);
+  const [loading, setLoading] = useState(true);
 
-    const [uploadOpen, setUploadOpen] = useState(false);
-    const [viewerOpen, setViewerOpen] = useState(false);
+  const [search, setSearch] = useState("");
+  const [selectedMachine, setSelectedMachine] = useState("");
 
-    const [file, setFile] = useState<File | null>(null);
-    const [tags, setTags] = useState<string[]>([]);
-    const [tagInput, setTagInput] = useState('');
+  const [viewerOpen, setViewerOpen] = useState(false);
+  const [selectedDoc, setSelectedDoc] = useState<DocumentType | null>(null);
 
-    const [numPages, setNumPages] = useState<number | null>(null);
+  const [uploadOpen, setUploadOpen] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
+  const [notification, setNotification] = useState<{ type: "success" | "error"; message: string } | null>(null);
 
-    const getFileUrl = (path: string) =>
-        `http://localhost:3001${path}`;
+  const [file, setFile] = useState<File | null>(null);
+  const [uploadForm, setUploadForm] = useState({
+    machine_id: "",
+    type_document: "",
+    description: "",
+    tags_text: "",
+    uploaded_by: "",
+  });
 
+  const [editForm, setEditForm] = useState({
+    machine_id: "",
+    type_document: "",
+    description: "",
+    tags_text: "",
+    uploaded_by: "",
+  });
 
-    useEffect(() => {
-        loadData();
-        function handleKey(e: KeyboardEvent) {
-            if (e.key === "Escape") setViewerOpen(false);
-        }
+  function showNotification(type: "success" | "error", message: string) {
+    setNotification({ type, message });
+    setTimeout(() => setNotification(null), 5000);
+  }
 
-        window.addEventListener("keydown", handleKey);
-        return () => window.removeEventListener("keydown", handleKey);
+  function resetUploadForm() {
+    setFile(null);
+    setUploadForm({
+      machine_id: "",
+      type_document: "",
+      description: "",
+      tags_text: "",
+      uploaded_by: "",
+    });
+  }
 
-    }, []);
+  function parseTags(tagsText: string): string[] {
+    return tagsText
+      .split(",")
+      .map((item) => item.trim())
+      .filter(Boolean);
+  }
 
-    async function loadData() {
-        try {
-            setLoading(true);
+  function tagsToText(tags?: string[]): string {
+    if (!tags || tags.length === 0) return "";
+    return tags.join(", ");
+  }
 
-            const [docsRes, machinesRes] = await Promise.all([
-                apiService.getDocuments(),
-                apiService.getMachines(),
-            ]);
-
-            setDocuments(docsRes.data);
-            setMachines(machinesRes.data);
-        } finally {
-            setLoading(false);
-        }
+  async function loadData() {
+    try {
+      setLoading(true);
+      const [docsRes, machinesRes] = await Promise.all([
+        apiService.getDocuments(),
+        apiService.getMachines(),
+      ]);
+      setDocuments(docsRes.data || []);
+      setMachines(machinesRes.data || []);
+    } catch (error) {
+      console.error("Error loading documents:", error);
+      showNotification("error", t("notifications.saveFailed"));
+    } finally {
+      setLoading(false);
     }
+  }
 
-    const filtered = useMemo(() => {
-        return documents.filter((d) => {
-            const matchSearch =
-                d.file_name?.toLowerCase().includes(search.toLowerCase()) ||
-                d.description?.toLowerCase().includes(search.toLowerCase());
+  const filteredDocuments = useMemo(() => {
+    const term = search.trim().toLowerCase();
 
-            const matchMachine =
-                !selectedMachine || d.machine_id?._id === selectedMachine;
+    return documents.filter((doc) => {
+      const matchesSearch =
+        !term ||
+        (doc.document_id || "").toLowerCase().includes(term) ||
+        (doc.file_name || "").toLowerCase().includes(term) ||
+        (doc.type_document || "").toLowerCase().includes(term) ||
+        (doc.description || "").toLowerCase().includes(term) ||
+        (doc.uploaded_by || "").toLowerCase().includes(term) ||
+        machineRefLabel(doc.machine_id).toLowerCase().includes(term) ||
+        (doc.tags || []).some((tag) => tag.toLowerCase().includes(term));
 
-            return matchSearch && matchMachine;
-        });
-    }, [documents, search, selectedMachine]);
+      const matchesMachine = !selectedMachine || machineRefId(doc.machine_id) === selectedMachine;
 
-    function addTag() {
-        if (tagInput.trim() && !tags.includes(tagInput)) {
-            setTags([...tags, tagInput.trim()]);
-            setTagInput('');
-        }
+      return matchesSearch && matchesMachine;
+    });
+  }, [documents, search, selectedMachine]);
+
+  function getFileUrl(path: string): string {
+    return `http://localhost:3001${path}`;
+  }
+
+  function validateUploadForm(): boolean {
+    if (!file) {
+      showNotification("error", t("notifications.fileRequired"));
+      return false;
     }
-
-    function removeTag(tag: string) {
-        setTags(tags.filter(t => t !== tag));
+    if (!uploadForm.machine_id) {
+      showNotification("error", t("notifications.machineRequired"));
+      return false;
     }
-
-    async function handleUpload() {
-        if (!file) {
-            alert("Please select a PDF file");
-            return;
-        }
-
-        if (!uploadMachine) {
-            alert("Please select a machine");
-            return;
-        }
-
-        const formData = new FormData();
-
-        formData.append('file', file);
-        formData.append('document_id', crypto.randomUUID());
-        formData.append('machine_id', uploadMachine);
-        formData.append('type_document', 'pdf');
-        formData.append('file_name', file.name);
-        formData.append('tags', JSON.stringify(tags));
-
-        await apiService.uploadDocument(formData);
-        setUploadOpen(false);
-        setFile(null);
-        setTags([]);
-
-        await loadData();
+    if (!uploadForm.type_document.trim()) {
+      showNotification("error", t("notifications.typeRequired"));
+      return false;
     }
-    if (loading) {
-        return (
-            <DashboardLayout title="Documents">
-                <div className="flex justify-center items-center h-[400px]">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600" />
-                </div>
-            </DashboardLayout>
-        );
-    }
+    return true;
+  }
 
+  function validateEditForm(): boolean {
+    if (!editForm.machine_id) {
+      showNotification("error", t("notifications.machineRequired"));
+      return false;
+    }
+    if (!editForm.type_document.trim()) {
+      showNotification("error", t("notifications.typeRequired"));
+      return false;
+    }
+    return true;
+  }
+
+  async function handleUpload() {
+    if (!validateUploadForm()) return;
+
+    setSubmitting(true);
+    try {
+      const formData = new FormData();
+      formData.append("file", file as File);
+      formData.append("document_id", crypto.randomUUID());
+      formData.append("machine_id", uploadForm.machine_id);
+      formData.append("type_document", uploadForm.type_document.trim());
+      formData.append("description", uploadForm.description.trim());
+      formData.append("tags", JSON.stringify(parseTags(uploadForm.tags_text)));
+      formData.append("uploaded_by", uploadForm.uploaded_by.trim());
+
+      await apiService.uploadDocument(formData);
+      showNotification("success", t("notifications.created"));
+      setUploadOpen(false);
+      resetUploadForm();
+      await loadData();
+    } catch (error) {
+      console.error("Error uploading document:", error);
+      showNotification("error", t("notifications.saveFailed"));
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  function openEdit(doc: DocumentType) {
+    setSelectedDoc(doc);
+    setEditForm({
+      machine_id: machineRefId(doc.machine_id),
+      type_document: doc.type_document || "",
+      description: doc.description || "",
+      tags_text: tagsToText(doc.tags),
+      uploaded_by: doc.uploaded_by || "",
+    });
+    setEditOpen(true);
+  }
+
+  async function handleUpdate() {
+    if (!selectedDoc) return;
+    if (!validateEditForm()) return;
+
+    setSubmitting(true);
+    try {
+      const payload = {
+        machine_id: editForm.machine_id,
+        type_document: editForm.type_document.trim(),
+        description: editForm.description.trim(),
+        tags: parseTags(editForm.tags_text),
+        uploaded_by: editForm.uploaded_by.trim(),
+      };
+
+      await apiService.updateDocument(selectedDoc._id, payload);
+      showNotification("success", t("notifications.updated"));
+      setEditOpen(false);
+      setSelectedDoc(null);
+      await loadData();
+    } catch (error) {
+      console.error("Error updating document:", error);
+      showNotification("error", t("notifications.saveFailed"));
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  async function handleDelete(docId: string) {
+    if (!confirm(t("notifications.confirmDelete"))) return;
+
+    try {
+      await apiService.deleteDocument(docId);
+      showNotification("success", t("notifications.deleted"));
+      await loadData();
+    } catch (error) {
+      console.error("Error deleting document:", error);
+      showNotification("error", t("notifications.deleteFailed"));
+    }
+  }
+
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  if (loading) {
     return (
-        <DashboardLayout title="Documents">
-
-            {/* HEADER */}
-            <div className="panel mb-4">
-                <div className="flex justify-between items-center">
-                    <div>
-                        <h2 className="text-xl font-bold">Documents & Manuals</h2>
-                        <p className="text-gray-500 text-sm">
-                            PDF viewer + machine documentation system
-                        </p>
-                    </div>
-
-                    <button
-                        onClick={() => setUploadOpen(true)}
-                        className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2"
-                    >
-                        <CloudArrowUpIcon className="w-5 h-5" />
-                        Upload
-                    </button>
-                </div>
-
-                {/* FILTERS */}
-                <div className="mt-4 flex gap-3">
-                    <div className="relative flex-1">
-                        <MagnifyingGlassIcon className="w-4 h-4 absolute left-3 top-3 text-gray-400" />
-                        <input
-                            className="input-field pl-9"
-                            placeholder="Search documents..."
-                            value={search}
-                            onChange={(e) => setSearch(e.target.value)}
-                        />
-                    </div>
-
-                    <select
-                        className="input-field"
-                        value={selectedMachine}
-                        onChange={(e) => setSelectedMachine(e.target.value)}
-                    >
-                        <option value="">All machines</option>
-                        {machines.map(m => (
-                            <option key={m._id} value={m._id}>
-                                {m.machine_id}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-            </div>
-
-            {/* DOCUMENT GRID */}
-            <div className="grid grid-cols-3 gap-4">
-                {filtered.map(doc => (
-                    <div key={doc._id} className="panel hover:shadow-lg transition">
-
-                        <div className="flex justify-between">
-                            <DocumentIcon className="w-8 h-8 text-blue-600" />
-                            <button
-                                onClick={() => {
-                                    setSelectedDoc(doc);
-                                    setNumPages(null); // reset previous PDF state
-                                    setViewerOpen(true); // open modal
-                                }}
-                                className="text-blue-600"
-                            >
-                                <EyeIcon className="w-5 h-5" />
-                            </button>
-                        </div>
-
-                        <h3 className="font-bold mt-2">{doc.file_name}</h3>
-
-                        <p className="text-sm text-gray-500">
-                            {doc.description || 'No description'}
-                        </p>
-
-                        {/* TAGS */}
-                        <div className="flex flex-wrap gap-1 mt-2">
-                            {doc.tags?.map(tag => (
-                                <span
-                                    key={tag}
-                                    className="text-xs bg-gray-100 px-2 py-1 rounded flex items-center gap-1"
-                                >
-                                    <TagIcon className="w-3 h-3" />
-                                    {tag}
-                                </span>
-                            ))}
-                        </div>
-
-                        <div className="text-xs text-gray-400 mt-2">
-                            Machine: {doc.machine_id?.machine_id}
-                        </div>
-                    </div>
-                ))}
-            </div>
-
-            {/* ================= UPLOAD MODAL ================= */}
-            <Dialog open={uploadOpen} onClose={() => setUploadOpen(false)} className="fixed inset-0 flex items-center justify-center bg-black/40">
-                <div className="bg-white p-6 rounded-lg w-[500px]">
-
-                    <h2 className="text-lg font-bold mb-4">Upload Document</h2>
-
-                    <input
-                        type="file"
-                        accept="application/pdf"
-                        onChange={(e) => setFile(e.target.files?.[0] || null)}
-                    />
-
-                    <select
-                        className="input-field w-full mt-3"
-                        value={uploadMachine}
-                        onChange={(e) => setUploadMachine(e.target.value)}
-                    >
-                        <option value="">Select Machine</option>
-
-                        {machines.map((m) => (
-                            <option key={m._id} value={m._id}>
-                                {m.machine_id}
-                            </option>
-                        ))}
-                    </select>
-                    {/* TAGS */}
-                    <div className="mt-3 flex gap-2">
-                        <input
-                            className="input-field flex-1"
-                            placeholder="Add tag"
-                            value={tagInput}
-                            onChange={(e) => setTagInput(e.target.value)}
-                        />
-                        <button onClick={addTag}>Add</button>
-                    </div>
-
-                    <div className="flex flex-wrap gap-2 mt-2">
-                        {tags.map(tag => (
-                            <span key={tag} className="bg-gray-200 px-2 py-1 rounded flex items-center gap-2">
-                                {tag}
-                                <XMarkIcon onClick={() => removeTag(tag)} className="w-4 h-4 cursor-pointer" />
-                            </span>
-                        ))}
-                    </div>
-
-                    <button
-                        onClick={handleUpload}
-                        className="bg-blue-600 text-white w-full mt-4 py-2 rounded"
-                    >
-                        Upload
-                    </button>
-
-                </div>
-            </Dialog>
-
-            {/* ================= PDF VIEWER ================= */}
-            <Dialog
-                open={viewerOpen}
-                onClose={() => setViewerOpen(false)}
-                className="fixed inset-0 z-[99999]"
-            >
-                {/* BACKDROP */}
-                <div className="fixed inset-0 bg-black/70" />
-
-                {/* CENTER WRAPPER */}
-                <div className="fixed inset-0 flex items-center justify-center p-4">
-
-                    {/* MODAL PANEL */}
-                    <Dialog.Panel className="bg-white w-full max-w-6xl h-[95vh] rounded-xl shadow-2xl overflow-hidden flex flex-col">
-                        {/* HEADER */}
-                        <div className="flex justify-between items-center px-4 py-3 border-b">
-                            <h2 className="font-semibold text-gray-800">
-                                {selectedDoc?.file_name}
-                            </h2>
-
-                            <button
-                                onClick={() => setViewerOpen(false)}
-                                className="text-gray-500 hover:text-red-500 text-xl"
-                            >
-                                ✕
-                            </button>
-                        </div>
-
-                        {/* PDF BODY */}
-                        <div className="flex-1 overflow-y-auto bg-gray-100 p-6">
-                            {selectedDoc && (
-                                <div className="flex justify-center">
-                                    <PdfViewer file={getFileUrl(selectedDoc.file_path)} />
-                                </div>
-                            )}
-                        </div>
-
-                    </Dialog.Panel>
-                </div>
-            </Dialog>
-
-        </DashboardLayout>
+      <DashboardLayout title={t("title")}>
+        <div className="flex justify-center items-center h-[400px]">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600" />
+        </div>
+      </DashboardLayout>
     );
+  }
+
+  return (
+    <DashboardLayout title={t("title")}>
+      {notification && (
+        <div
+          className={`fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg flex items-center space-x-2 ${
+            notification.type === "success"
+              ? "bg-green-100 text-green-800 border border-green-200"
+              : "bg-red-100 text-red-800 border border-red-200"
+          }`}
+        >
+          {notification.type === "success" ? (
+            <CheckCircleIcon className="w-5 h-5" />
+          ) : (
+            <ExclamationTriangleIcon className="w-5 h-5" />
+          )}
+          <span>{notification.message}</span>
+          <button
+            onClick={() => setNotification(null)}
+            className="ml-2 text-gray-500 hover:text-gray-700"
+            title={tCommon("close")}
+          >
+            x
+          </button>
+        </div>
+      )}
+
+      <div className="panel mb-4">
+        <div className="flex justify-between items-center">
+          <div>
+            <h2 className="text-xl font-bold">{t("heading")}</h2>
+            <p className="text-gray-500 text-sm">{t("description")}</p>
+          </div>
+
+          <button
+            onClick={() => setUploadOpen(true)}
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2"
+          >
+            <PlusIcon className="w-4 h-4" />
+            {t("actions.add")}
+          </button>
+        </div>
+
+        <div className="mt-4 flex gap-3">
+          <div className="relative flex-1">
+            <MagnifyingGlassIcon className="w-4 h-4 absolute left-3 top-3 text-gray-400" />
+            <input
+              className="input-field pl-9"
+              placeholder={t("searchPlaceholder")}
+              title={t("searchPlaceholder")}
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          </div>
+
+          <select
+            className="input-field"
+            value={selectedMachine}
+            onChange={(e) => setSelectedMachine(e.target.value)}
+            title={t("form.machine")}
+          >
+            <option value="">{t("filterAllMachines")}</option>
+            {machines.map((machine) => (
+              <option key={machine._id} value={machine._id}>
+                {machine.machine_id}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+        {filteredDocuments.length === 0 ? (
+          <div className="panel col-span-full text-center py-8 text-gray-500">
+            {search ? t("empty.search") : t("empty.default")}
+          </div>
+        ) : (
+          filteredDocuments.map((doc) => (
+            <div key={doc._id} className="panel hover:shadow-lg transition">
+              <div className="flex justify-between items-start">
+                <DocumentIcon className="w-8 h-8 text-blue-600" />
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => {
+                      setSelectedDoc(doc);
+                      setViewerOpen(true);
+                    }}
+                    className="text-blue-600"
+                    title={t("actions.view")}
+                  >
+                    <EyeIcon className="w-5 h-5" />
+                  </button>
+                  <button
+                    onClick={() => openEdit(doc)}
+                    className="text-amber-600"
+                    title={t("actions.edit")}
+                  >
+                    <PencilIcon className="w-5 h-5" />
+                  </button>
+                  <button
+                    onClick={() => handleDelete(doc._id)}
+                    className="text-red-600"
+                    title={t("actions.delete")}
+                  >
+                    <TrashIcon className="w-5 h-5" />
+                  </button>
+                </div>
+              </div>
+
+              <h3 className="font-bold mt-2 break-all">{doc.file_name}</h3>
+
+              <div className="text-sm text-gray-500 mt-1">
+                <div>
+                  <span className="font-medium">{t("table.documentId")}: </span>
+                  {doc.document_id}
+                </div>
+                <div>
+                  <span className="font-medium">{t("table.type")}: </span>
+                  {doc.type_document}
+                </div>
+                <div>
+                  <span className="font-medium">{t("table.machine")}: </span>
+                  {machineRefLabel(doc.machine_id) || tCommon("notAvailable")}
+                </div>
+                <div>
+                  <span className="font-medium">{t("table.uploadedBy")}: </span>
+                  {doc.uploaded_by || tCommon("notAvailable")}
+                </div>
+                <div>
+                  <span className="font-medium">{t("table.dateAdded")}: </span>
+                  {doc.date_ajout ? new Date(doc.date_ajout).toLocaleString() : tCommon("notAvailable")}
+                </div>
+              </div>
+
+              <p className="text-sm text-gray-600 mt-2">{doc.description || tCommon("notAvailable")}</p>
+
+              <div className="flex flex-wrap gap-1 mt-2">
+                {(doc.tags || []).map((tag) => (
+                  <span
+                    key={`${doc._id}-${tag}`}
+                    className="text-xs bg-gray-100 px-2 py-1 rounded flex items-center gap-1"
+                  >
+                    <TagIcon className="w-3 h-3" />
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+
+      <Modal
+        isOpen={uploadOpen}
+        onClose={() => {
+          setUploadOpen(false);
+          resetUploadForm();
+        }}
+        title={t("modal.uploadTitle")}
+        size="lg"
+      >
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-dark mb-1">{t("form.file")}</label>
+            <input
+              type="file"
+              accept="application/pdf"
+              title={t("form.file")}
+              onChange={(e) => setFile(e.target.files?.[0] || null)}
+            />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-dark mb-1">{t("form.machine")}</label>
+              <select
+                className="input-field"
+                value={uploadForm.machine_id}
+                onChange={(e) => setUploadForm({ ...uploadForm, machine_id: e.target.value })}
+                title={t("form.machine")}
+              >
+                <option value="">{t("placeholders.selectMachine")}</option>
+                {machines.map((machine) => (
+                  <option key={machine._id} value={machine._id}>
+                    {machine.machine_id}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-dark mb-1">{t("form.type")}</label>
+              <input
+                className="input-field"
+                value={uploadForm.type_document}
+                onChange={(e) => setUploadForm({ ...uploadForm, type_document: e.target.value })}
+                placeholder={t("placeholders.type")}
+                title={t("form.type")}
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-dark mb-1">{t("form.description")}</label>
+            <textarea
+              className="input-field"
+              value={uploadForm.description}
+              onChange={(e) => setUploadForm({ ...uploadForm, description: e.target.value })}
+              placeholder={t("placeholders.description")}
+              title={t("form.description")}
+              rows={3}
+            />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-dark mb-1">{t("form.tags")}</label>
+              <input
+                className="input-field"
+                value={uploadForm.tags_text}
+                onChange={(e) => setUploadForm({ ...uploadForm, tags_text: e.target.value })}
+                placeholder={t("placeholders.tags")}
+                title={t("form.tags")}
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-dark mb-1">{t("form.uploadedBy")}</label>
+              <input
+                className="input-field"
+                value={uploadForm.uploaded_by}
+                onChange={(e) => setUploadForm({ ...uploadForm, uploaded_by: e.target.value })}
+                placeholder={t("placeholders.uploadedBy")}
+                title={t("form.uploadedBy")}
+              />
+            </div>
+          </div>
+
+          <div className="flex justify-end gap-3">
+            <button className="btn-secondary" onClick={() => setUploadOpen(false)}>
+              {tCommon("cancel")}
+            </button>
+            <button className="btn-primary" onClick={handleUpload} disabled={submitting}>
+              <CloudArrowUpIcon className="w-4 h-4 inline-block mr-2" />
+              {submitting ? tCommon("saving") : t("buttons.upload")}
+            </button>
+          </div>
+        </div>
+      </Modal>
+
+      <Modal
+        isOpen={editOpen}
+        onClose={() => {
+          setEditOpen(false);
+          setSelectedDoc(null);
+        }}
+        title={t("modal.editTitle")}
+        size="lg"
+      >
+        <div className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-dark mb-1">{t("form.machine")}</label>
+              <select
+                className="input-field"
+                value={editForm.machine_id}
+                onChange={(e) => setEditForm({ ...editForm, machine_id: e.target.value })}
+                title={t("form.machine")}
+              >
+                <option value="">{t("placeholders.selectMachine")}</option>
+                {machines.map((machine) => (
+                  <option key={machine._id} value={machine._id}>
+                    {machine.machine_id}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-dark mb-1">{t("form.type")}</label>
+              <input
+                className="input-field"
+                value={editForm.type_document}
+                onChange={(e) => setEditForm({ ...editForm, type_document: e.target.value })}
+                placeholder={t("placeholders.type")}
+                title={t("form.type")}
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-dark mb-1">{t("form.description")}</label>
+            <textarea
+              className="input-field"
+              value={editForm.description}
+              onChange={(e) => setEditForm({ ...editForm, description: e.target.value })}
+              placeholder={t("placeholders.description")}
+              title={t("form.description")}
+              rows={3}
+            />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-dark mb-1">{t("form.tags")}</label>
+              <input
+                className="input-field"
+                value={editForm.tags_text}
+                onChange={(e) => setEditForm({ ...editForm, tags_text: e.target.value })}
+                placeholder={t("placeholders.tags")}
+                title={t("form.tags")}
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-dark mb-1">{t("form.uploadedBy")}</label>
+              <input
+                className="input-field"
+                value={editForm.uploaded_by}
+                onChange={(e) => setEditForm({ ...editForm, uploaded_by: e.target.value })}
+                placeholder={t("placeholders.uploadedBy")}
+                title={t("form.uploadedBy")}
+              />
+            </div>
+          </div>
+
+          <div className="flex justify-end gap-3">
+            <button className="btn-secondary" onClick={() => setEditOpen(false)}>
+              {tCommon("cancel")}
+            </button>
+            <button className="btn-primary" onClick={handleUpdate} disabled={submitting}>
+              {submitting ? tCommon("saving") : t("buttons.update")}
+            </button>
+          </div>
+        </div>
+      </Modal>
+
+      <Modal
+        isOpen={viewerOpen}
+        onClose={() => setViewerOpen(false)}
+        title={selectedDoc?.file_name || t("viewer.title")}
+        size="xl"
+      >
+        <div className="h-[70vh] overflow-auto bg-gray-100 p-4 rounded-lg">
+          {selectedDoc ? (
+            <div className="flex justify-center">
+              <PdfViewer file={getFileUrl(selectedDoc.file_path)} />
+            </div>
+          ) : (
+            <div className="text-center text-gray-500">{tCommon("loading")}</div>
+          )}
+        </div>
+      </Modal>
+    </DashboardLayout>
+  );
 }

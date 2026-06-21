@@ -538,6 +538,84 @@
       "saveFailed": "Errore durante il salvataggio dell'ordine di lavoro"
     }
   },
+  "catalogues": {
+    "title": "Catalogo ricambi",
+    "pageTitle": "Catalogo ricambi",
+    "heading": "Catalogo ricambi",
+    "totalParts": "Totale ricambi",
+    "addPart": "Aggiungi ricambio",
+    "allParts": "Tutti i ricambi",
+    "searchPlaceholder": "Cerca ricambi...",
+    "header": {
+      "title": "Catalogo ricambi",
+      "subtitle": "Gestisci l'inventario di ricambi e componenti"
+    },
+    "stats": {
+      "totalParts": "Totale ricambi"
+    },
+    "search": {
+      "placeholder": "Cerca ricambi..."
+    },
+    "table": {
+      "title": "Catalogo ricambi",
+      "partId": "ID ricambio",
+      "partName": "Nome ricambio",
+      "manufacturerRef": "Rif. produttore",
+      "manufacturer": "Produttore",
+      "category": "Categoria",
+      "actions": "Azioni"
+    },
+    "empty": {
+      "search": "Nessun ricambio corrisponde alla ricerca.",
+      "default": "Nessun ricambio disponibile."
+    },
+    "modal": {
+      "edit": "Modifica ricambio",
+      "add": "Aggiungi nuovo ricambio",
+      "editTitle": "Modifica ricambio",
+      "createTitle": "Aggiungi nuovo ricambio"
+    },
+    "form": {
+      "partId": "ID ricambio",
+      "partName": "Nome ricambio",
+      "manufacturerReference": "Riferimento produttore",
+      "manufacturer": "Produttore",
+      "category": "Categoria"
+    },
+    "validation": {
+      "partIdRequired": "L'ID ricambio è obbligatorio",
+      "partNameRequired": "Il nome del ricambio è obbligatorio",
+      "manufacturerRefRequired": "Il riferimento del produttore è obbligatorio"
+    },
+    "placeholders": {
+      "enterPartId": "Inserisci ID ricambio",
+      "enterPartName": "Inserisci nome ricambio",
+      "enterManufacturerRef": "Inserisci riferimento produttore",
+      "enterManufacturer": "Inserisci produttore",
+      "enterCategory": "Inserisci categoria"
+    },
+    "actions": {
+      "addPart": "Aggiungi ricambio",
+      "edit": "Modifica",
+      "delete": "Elimina",
+      "cancel": "Annulla",
+      "saving": "Salvataggio in corso...",
+      "updatePart": "Aggiorna ricambio",
+      "createPart": "Crea ricambio"
+    },
+    "notifications": {
+      "deleted": "Ricambio eliminato con successo",
+      "deleteFailed": "Errore durante l'eliminazione del ricambio",
+      "updated": "Ricambio aggiornato con successo",
+      "created": "Ricambio creato con successo",
+      "saveFailed": "Errore durante il salvataggio del ricambio"
+    },
+    "messages": {
+      "noSearchResults": "Nessun ricambio corrisponde alla ricerca.",
+      "noParts": "Nessun ricambio disponibile.",
+      "confirmDelete": "Sei sicuro di voler eliminare questo ricambio? Questa azione non può essere annullata."
+    }
+  },
   "users": {
     "pageTitle": "Gestione utenti",
     "heading": "Gestione utenti",
@@ -721,6 +799,71 @@
       "update": "Update",
       "create": "Create",
       "saving": "Saving..."
+    }
+  },
+  "documents": {
+    "title": "Documenti",
+    "heading": "Documenti e manuali",
+    "description": "Gestisci i documenti macchina con caricamento, modifica ed eliminazione completi",
+    "addDocument": "Aggiungi documento",
+    "searchPlaceholder": "Cerca per nome, descrizione, tipo, tag, autore o macchina...",
+    "filterAllMachines": "Tutte le macchine",
+    "table": {
+      "documentId": "ID documento",
+      "fileName": "Nome file",
+      "type": "Tipo",
+      "machine": "Macchina",
+      "uploadedBy": "Caricato da",
+      "dateAdded": "Data caricamento",
+      "tags": "Tag",
+      "actions": "Azioni"
+    },
+    "empty": {
+      "search": "Nessun documento corrisponde alla ricerca.",
+      "default": "Nessun documento disponibile."
+    },
+    "modal": {
+      "uploadTitle": "Carica documento",
+      "editTitle": "Modifica documento"
+    },
+    "form": {
+      "file": "File PDF",
+      "machine": "Macchina",
+      "type": "Tipo documento",
+      "description": "Descrizione",
+      "tags": "Tag",
+      "uploadedBy": "Caricato da"
+    },
+    "placeholders": {
+      "selectMachine": "Seleziona macchina",
+      "type": "es. manuale, manutenzione, istruzione",
+      "description": "Inserisci descrizione",
+      "tags": "Tag separati da virgola",
+      "uploadedBy": "Inserisci nome autore"
+    },
+    "actions": {
+      "add": "Carica",
+      "view": "Visualizza",
+      "edit": "Modifica",
+      "delete": "Elimina"
+    },
+    "buttons": {
+      "upload": "Carica",
+      "update": "Aggiorna"
+    },
+    "notifications": {
+      "created": "Documento caricato con successo",
+      "updated": "Documento aggiornato con successo",
+      "deleted": "Documento eliminato con successo",
+      "saveFailed": "Errore durante il salvataggio del documento",
+      "deleteFailed": "Errore durante l'eliminazione del documento",
+      "confirmDelete": "Sei sicuro di voler eliminare questo documento? Questa azione non puo essere annullata.",
+      "fileRequired": "Il file PDF e obbligatorio",
+      "machineRequired": "La macchina e obbligatoria",
+      "typeRequired": "Il tipo documento e obbligatorio"
+    },
+    "viewer": {
+      "title": "Visualizzatore documenti"
     }
   }
 }
