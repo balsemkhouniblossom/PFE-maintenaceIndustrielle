@@ -58,11 +58,15 @@ export default function UsersPage() {
     photo: '',
     is_active: true,
   };
+  const departmentOptions = ['IT', 'Maintenance', 'Production', 'Administration'];
+  const CUSTOM_DEPARTMENT_VALUE = '__custom_department__';
 
   const [formData, setFormData] = useState(emptyForm);
+  const [useCustomDepartment, setUseCustomDepartment] = useState(false);
 
   function resetForm() {
     setFormData(emptyForm);
+    setUseCustomDepartment(false);
     setEditingUser(null);
   }
   function showNotification(type: 'success' | 'error', message: string) {
@@ -97,14 +101,18 @@ export default function UsersPage() {
   }
 
   function handleEdit(user: User) {
+    const existingDepartment = user.department || '';
+    const isCustomDepartment = !!existingDepartment && !departmentOptions.includes(existingDepartment);
+
     setEditingUser(user);
+    setUseCustomDepartment(isCustomDepartment);
     setFormData({
       user_id: user.user_id || '',
       nom_complet: user.nom_complet || '',
       email: user.email || '',
       password: '',
       role: user.role || 'operator',
-      department: user.department || '',
+      department: existingDepartment,
       phone: user.phone || '',
       photo: user.photo || '',
       is_active: user.is_active ?? true,
@@ -147,7 +155,13 @@ export default function UsersPage() {
 
     try {
       if (editingUser) {
-        await apiService.updateUser(editingUser._id, formData);
+        const payload = { ...formData };
+
+        if (!payload.password?.trim()) {
+          delete (payload as Partial<typeof payload>).password;
+        }
+
+        await apiService.updateUser(editingUser._id, payload);
         showNotification('success', tUsers('notifications.updated'));
       } else {
         const payload = {
@@ -483,6 +497,8 @@ export default function UsersPage() {
                   })
                 }
                 className="input-field"
+                title={tUsers('form.userId')}
+                placeholder={tUsers('form.userId')}
               />
             </div>
 
@@ -500,6 +516,8 @@ export default function UsersPage() {
                   })
                 }
                 className="input-field"
+                title={tUsers('form.fullName')}
+                placeholder={tUsers('form.fullName')}
                 required
               />
             </div>
@@ -522,6 +540,8 @@ export default function UsersPage() {
                   })
                 }
                 className="input-field"
+                title={tUsers('form.email')}
+                placeholder={tUsers('form.email')}
                 required
               />
             </div>
@@ -542,7 +562,9 @@ export default function UsersPage() {
                   })
                 }
                 className="input-field"
+                title="Password"
                 required={!editingUser}
+                placeholder={editingUser ? tUsers('form.editPassword') : 'Password'}
               />
             </div>
             <div>
@@ -559,6 +581,8 @@ export default function UsersPage() {
                   })
                 }
                 className="input-field"
+                title={tUsers('form.phone')}
+                placeholder={tUsers('form.phone')}
               />
             </div>
 
@@ -570,17 +594,50 @@ export default function UsersPage() {
               <label className="block text-sm font-medium mb-1">
                 {tUsers('form.department')}
               </label>
-              <input
-                type="text"
-                value={formData.department}
-                onChange={(e) =>
+              <select
+                value={useCustomDepartment ? CUSTOM_DEPARTMENT_VALUE : formData.department}
+                onChange={(e) => {
+                  if (e.target.value === CUSTOM_DEPARTMENT_VALUE) {
+                    setUseCustomDepartment(true);
+                    setFormData({
+                      ...formData,
+                      department: '',
+                    });
+                    return;
+                  }
+
+                  setUseCustomDepartment(false);
                   setFormData({
                     ...formData,
                     department: e.target.value,
-                  })
-                }
+                  });
+                }}
                 className="input-field"
-              />
+                title={tUsers('form.department')}
+              >
+                <option value="">{tUsers('form.department', { default: 'Department' })}</option>
+                {departmentOptions.map((department) => (
+                  <option key={department} value={department}>
+                    {department}
+                  </option>
+                ))}
+                <option value={CUSTOM_DEPARTMENT_VALUE}>Custom department...</option>
+              </select>
+              {useCustomDepartment && (
+                <input
+                  type="text"
+                  value={formData.department}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      department: e.target.value,
+                    })
+                  }
+                  className="input-field mt-2"
+                  title="Custom department"
+                  placeholder="Enter custom department"
+                />
+              )}
             </div>
 
             <div>
@@ -596,6 +653,7 @@ export default function UsersPage() {
                   })
                 }
                 className="input-field"
+                title={tUsers('form.role')}
               >
                 <option value="admin">{tUsers('roles.admin')}</option>
                 <option value="technician">{tUsers('roles.technician')}</option>
@@ -619,6 +677,7 @@ export default function UsersPage() {
                 })
               }
               className="input-field"
+              title={tUsers('form.status')}
             >
               <option value="true">{tUsers('status.active')}</option>
               <option value="false">{tUsers('status.inactive')}</option>

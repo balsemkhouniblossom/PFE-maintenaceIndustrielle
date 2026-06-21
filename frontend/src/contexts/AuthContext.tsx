@@ -70,8 +70,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // Return user role for redirect logic
       return data.user.role;
     } catch (error: any) {
-      const message = error?.response?.data?.message || error?.message || 'Login failed';
-      throw new Error(Array.isArray(message) ? message.join(', ') : message);
+      const status = error?.response?.status;
+      const responseData = error?.response?.data;
+      const responseMessage = responseData?.message;
+
+      if (status === 401) {
+        throw new Error('Invalid credentials');
+      }
+
+      if (Array.isArray(responseMessage)) {
+        throw new Error(responseMessage.join(', '));
+      }
+
+      if (typeof responseMessage === 'string' && responseMessage.trim()) {
+        throw new Error(responseMessage);
+      }
+
+      throw new Error(error?.message || 'Login failed');
     }
   };
 

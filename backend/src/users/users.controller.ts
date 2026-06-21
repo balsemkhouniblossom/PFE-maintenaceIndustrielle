@@ -12,9 +12,18 @@ export class UsersController {
     private readonly fileUploadService: FileUploadService,
   ) {}
 
+  private sanitizeUser(user: any) {
+    if (!user) return user;
+    const plain = typeof user.toObject === 'function' ? user.toObject() : { ...user };
+    delete plain.password;
+    delete plain.refresh_token_hash;
+    return plain;
+  }
+
   @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+  async create(@Body() createUserDto: CreateUserDto) {
+    const created = await this.usersService.create(createUserDto);
+    return this.sanitizeUser(created);
   }
 
   @Post('upload-photo')
@@ -37,13 +46,15 @@ export class UsersController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.usersService.findOne(id);
+  async findOne(@Param('id') id: string) {
+    const user = await this.usersService.findOne(id);
+    return this.sanitizeUser(user);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(id, updateUserDto);
+  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+    const updated = await this.usersService.update(id, updateUserDto);
+    return this.sanitizeUser(updated);
   }
 
   @Delete(':id')

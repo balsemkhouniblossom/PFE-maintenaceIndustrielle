@@ -36,8 +36,20 @@ export default function LoginPage() {
       else router.replace(`/${locale}/operator`);
 
     } catch (err: unknown) {
-      if (err instanceof Error) setError(err.message);
-      else setError('Network error. Please try again.');
+      if (err instanceof Error) {
+        const normalizedMessage = err.message.toLowerCase();
+        if (
+          normalizedMessage.includes('invalid credentials') ||
+          normalizedMessage.includes('unauthorized') ||
+          normalizedMessage.includes('status code 401')
+        ) {
+          setError(t('loginFailed'));
+        } else {
+          setError(err.message);
+        }
+      } else {
+        setError(t('networkError'));
+      }
     } finally {
       setLoading(false);
     }
@@ -45,7 +57,7 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex">
-      <div className="absolute top-4 right-4">
+      <div className="absolute top-4 left-4 z-20">
         <LanguageSwitcher />
       </div>
 

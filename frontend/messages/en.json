@@ -52,7 +52,10 @@
   },
   "common": {
     "actions": {
-      "cancel": "Cancel"
+      "cancel": "Cancel",
+      "saving": "Saving...",
+      "create": "Create",
+      "update": "Update"
     },
     "status": {
       "pending": "Pending",
@@ -99,7 +102,6 @@
     "logout": "Logout",
     "notAvailable": "N/A",
     "saving": "Saving..."
-    
   },
   "dashboard": {
     "status": {
@@ -589,7 +591,6 @@
       "technician": "Technician",
       "operator": "Operator"
     },
-    
     "empty": {
       "search": "No users found matching your search.",
       "default": "No users available."
@@ -635,7 +636,9 @@
       "validEmail": "Please enter a valid email address",
       "passwordRequired": "Password is required",
       "passwordMin": "Password must be at least 6 characters long",
-      "fullNameRequired": "Full name is required"
+      "fullNameRequired": "Full name is required",
+      "photoUploaded": "Photo uploaded successfully",
+      "photoUploadFailed": "Failed to upload photo"
     },
     "button": {
       "cancel": "Cancel",

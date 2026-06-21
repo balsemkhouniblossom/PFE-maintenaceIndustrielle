@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 import { useTranslations } from 'next-intl';
 
@@ -10,6 +10,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 
 export default function RegisterPage() {
+  const departmentOptions = ['IT', 'Maintenance', 'Production', 'Administration'];
   const [formData, setFormData] = useState({
     nom_complet: '',
     email: '',
@@ -26,6 +27,8 @@ export default function RegisterPage() {
   const [error, setError] = useState('');
 
   const router = useRouter();
+  const params = useParams<{ locale: string }>();
+  const locale = params.locale || 'en';
   const { register } = useAuth();
   const t = useTranslations('auth');
 
@@ -56,7 +59,6 @@ export default function RegisterPage() {
         department: formData.department
       });
 
-      const locale = window.location.pathname.split('/')[1] || 'en';
       router.push(`/${locale}/auth/login?message=${encodeURIComponent(t('registrationSuccess'))}`);
 
     } catch (err: unknown) {
@@ -69,7 +71,7 @@ export default function RegisterPage() {
 
   return (
     <div className="min-h-screen flex">
-      <div className="absolute top-4 end-4">
+      <div className="absolute top-4 left-4 z-20">
         <LanguageSwitcher />
       </div>
 
@@ -170,15 +172,20 @@ export default function RegisterPage() {
                   <label htmlFor="department" className="block text-sm font-medium text-gray-700 mb-2">
                     {t('department')}
                   </label>
-                  <input
+                  <select
                     id="department"
                     name="department"
-                    type="text"
                     value={formData.department}
                     onChange={(e) => setFormData({ ...formData, department: e.target.value })}
                     className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-white/50 backdrop-blur-sm hover:border-gray-300"
-                    placeholder={t('enterDepartment')}
-                  />
+                  >
+                    <option value="">{t('enterDepartment')}</option>
+                    {departmentOptions.map((department) => (
+                      <option key={department} value={department}>
+                        {department}
+                      </option>
+                    ))}
+                  </select>
                 </div>
               </div>
 
@@ -261,7 +268,7 @@ export default function RegisterPage() {
             <div className="text-center mt-6">
               <p className="text-sm text-gray-600">
                 {t('login')}{' '}
-                <Link href="auth/login" className="font-semibold text-blue-600 hover:text-blue-700 transition-colors">
+                <Link href={`/${locale}/auth/login`} className="font-semibold text-blue-600 hover:text-blue-700 transition-colors">
                   {t('signInHere')}
                 </Link>
               </p>

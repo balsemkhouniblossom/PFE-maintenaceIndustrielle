@@ -40,6 +40,7 @@ function DashboardLayoutBody({ children, title }: DashboardLayoutProps) {
   const params = useParams();
   const locale = params.locale as string;
   const tCommon = useTranslations('common');
+  const tUsers = useTranslations('users');
   const tDashboardStatus = useTranslations('dashboard.status');
   const t = useTranslations('sidebar');
   const [sidebarOpen, setSidebarOpen] = useState(false);

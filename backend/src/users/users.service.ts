@@ -70,7 +70,20 @@ export class UsersService {
   }
 
   async update(id: string, updateUserDto: UpdateUserDto): Promise<any> {
-    return this.userModel.findByIdAndUpdate(id, updateUserDto, { new: true }).exec();
+    const sanitizedUpdate: Record<string, any> = { ...updateUserDto };
+
+    if (typeof sanitizedUpdate.password === 'string') {
+      if (sanitizedUpdate.password.trim()) {
+        sanitizedUpdate.password = await bcrypt.hash(sanitizedUpdate.password, 10);
+      } else {
+        delete sanitizedUpdate.password;
+      }
+    }
+
+    return this.userModel
+      .findByIdAndUpdate(id, sanitizedUpdate, { new: true })
+      .select('-password -refresh_token_hash')
+      .exec();
   }
 
   async remove(id: string): Promise<any> {

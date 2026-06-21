@@ -35,5 +35,13 @@ export class CreateUserDto {
 
   @IsString()
   @IsOptional()
+  phone?: string;
+
+  @IsString()
+  @IsOptional()
+  department?: string;
+
+  @IsString()
+  @IsOptional()
   photo?: string;
 }
