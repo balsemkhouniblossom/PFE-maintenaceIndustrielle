@@ -368,6 +368,7 @@
       "machines": "Machines",
       "workOrders": "Work Orders",
       "maintenancePlans": "Maintenance Plans",
+      "preventiveTaskChecklist": "Preventive Task Checklist",
       "catalogues": "Catalogues",
       "machineTypes": "Machine Types",
       "sensors": "Sensors",
@@ -1057,6 +1058,7 @@
       "sensors": "Sensors",
       "capteurs": "Capteurs",
       "maintenancePlans": "Maintenance Plans",
+      "preventiveTaskChecklist": "Preventive Task Checklist",
       "documents": "Documents",
       "moduleTypes": "Module Types",
       "categories": {
@@ -1454,6 +1456,72 @@
       "createSuccess": "Maintenance plan created successfully",
       "updateSuccess": "Maintenance plan updated successfully",
       "saveFailed": "Failed to save maintenance plan"
+    }
+  },
+  "preventiveTaskChecklist": {
+    "title": "Preventive Task Checklist",
+    "heading": "Preventive Maintenance Tasks",
+    "description": "Coordinated preventive maintenance task checklist from maintenance plans",
+    "totalTasks": "Total Tasks",
+    "completedTasks": "Completed Tasks",
+    "pendingTasks": "Pending Tasks",
+    "taskStatus": "Task Status",
+    "table": {
+      "planId": "Plan ID",
+      "machine": "Machine",
+      "module": "Module",
+      "maintenanceType": "Maintenance Type",
+      "frequency": "Frequency",
+      "instruction": "Instruction",
+      "responsable": "Responsible",
+      "status": "Status"
+    },
+    "empty": {
+      "default": "No preventive maintenance tasks available",
+      "search": "No preventive tasks match your search"
+    },
+    "modal": {
+      "taskDetails": "Task Details",
+      "markComplete": "Mark as Complete"
+    },
+    "form": {
+      "selectMachine": "Select Machine",
+      "selectModule": "Select Module",
+      "taskName": "Task Name",
+      "instruction": "Instruction",
+      "notes": "Notes"
+    },
+    "placeholders": {
+      "selectMachine": "Choose a machine...",
+      "selectModule": "Choose a module...",
+      "taskName": "Enter task name",
+      "notes": "Add notes..."
+    },
+    "actions": {
+      "complete": "Mark Complete",
+      "edit": "Edit",
+      "delete": "Delete",
+      "view": "View Details",
+      "filter": "Filter Tasks"
+    },
+    "status": {
+      "pending": "Pending",
+      "completed": "Completed",
+      "overdue": "Overdue"
+    },
+    "notifications": {
+      "loadFailed": "Failed to load preventive tasks",
+      "taskMarkedComplete": "Task marked as complete",
+      "taskUpdated": "Task updated successfully",
+      "taskDeleted": "Task deleted successfully",
+      "noTasksAvailable": "No preventive maintenance tasks available. Please create maintenance plans first.",
+      "confirmMarkComplete": "Are you sure you want to mark this task as complete?"
+    },
+    "filters": {
+      "all": "All Tasks",
+      "pending": "Pending Only",
+      "completed": "Completed Only",
+      "overdue": "Overdue Tasks"
     }
   }
 }

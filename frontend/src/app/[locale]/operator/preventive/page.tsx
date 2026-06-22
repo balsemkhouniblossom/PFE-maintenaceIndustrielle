@@ -57,7 +57,19 @@ interface Kpi {
   availability_rate?: number;
 }
 
+interface GeneratedReportRow {
+  id: string;
+  type: "preventive" | "corrective";
+  workOrderId: string;
+  reportId: string;
+  machine: string;
+  summary: string;
+  createdAt: string;
+  status: string;
+}
+
 type MachineCondition = "good" | "followUp" | "technicianRequired" | "custom";
+const REPORTS_STORAGE_KEY = "operator_generated_reports_history";
 
 function refId(value: EntityRef | undefined): string {
   if (!value) return "";
@@ -110,6 +122,43 @@ export default function OperatorPreventivePage() {
   const [selectedLubrifiant, setSelectedLubrifiant] = useState("");
   const [lubrificationQty, setLubrificationQty] = useState("");
   const [submitValidationReason, setSubmitValidationReason] = useState("");
+  const [generatedReports, setGeneratedReports] = useState<GeneratedReportRow[]>([]);
+  const [notification, setNotification] = useState<{ type: "success" | "error"; message: string } | null>(null);
+
+  useEffect(() => {
+    if (!notification) return;
+
+    const timeout = setTimeout(() => {
+      setNotification(null);
+    }, 5000);
+
+    return () => clearTimeout(timeout);
+  }, [notification]);
+
+  function showNotification(type: "success" | "error", message: string): void {
+    setNotification({ type, message });
+  }
+
+  function addGeneratedReport(report: GeneratedReportRow): void {
+    setGeneratedReports((prev) => {
+      const next = [report, ...prev].slice(0, 30);
+      localStorage.setItem(REPORTS_STORAGE_KEY, JSON.stringify(next));
+      return next;
+    });
+  }
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(REPORTS_STORAGE_KEY);
+      if (!saved) return;
+      const parsed = JSON.parse(saved) as GeneratedReportRow[];
+      if (Array.isArray(parsed)) {
+        setGeneratedReports(parsed);
+      }
+    } catch {
+      setGeneratedReports([]);
+    }
+  }, []);
 
   useEffect(() => {
     async function loadAll() {
@@ -229,13 +278,13 @@ export default function OperatorPreventivePage() {
   async function submitPreventiveMaintenance(): Promise<void> {
     if (!user?._id || !selectedMachine) {
       setSubmitValidationReason("missing-user-or-machine");
-      window.alert(t("validation"));
+      showNotification("error", t("validation"));
       return;
     }
 
     if (selectedTaskLabels.length === 0) {
       setSubmitValidationReason("no-tasks-selected");
-      window.alert(t("preventiveTasks"));
+      showNotification("error", t("preventiveTasks"));
       return;
     }
 
@@ -243,7 +292,7 @@ export default function OperatorPreventivePage() {
     const moduleRef = modulesForMachine[0]?._id;
     if (!moduleRef) {
       setSubmitValidationReason("missing-module-for-machine");
-      window.alert(t("validation"));
+      showNotification("error", t("validation"));
       return;
     }
 
@@ -274,8 +323,10 @@ export default function OperatorPreventivePage() {
         throw new Error("Work order creation failed");
       }
 
+      const reportId = uniqueId("REP-PREV");
+
       const reportPayload = {
-        report_id: uniqueId("REP-PREV"),
+        report_id: reportId,
         ot_id: workOrderId,
         technician_id: user._id,
         date_debut: startIso,
@@ -300,11 +351,22 @@ export default function OperatorPreventivePage() {
       }
 
       await uploadPhotoIfPresent(selectedMachine);
-      window.alert(t("waitingValidation"));
+      const machineLabel = machines.find((item) => item._id === selectedMachine)?.machine_id ?? tCommon("notAvailable");
+      addGeneratedReport({
+        id: `${workOrderId}-${reportId}`,
+        type: "preventive",
+        workOrderId,
+        reportId,
+        machine: machineLabel,
+        summary: selectedTaskLabels.join(" | "),
+        createdAt: nowIso,
+        status: "waiting_validation",
+      });
+      showNotification("success", t("notifications.submitSuccess"));
     } catch (error) {
       console.error("Failed to submit preventive maintenance", error);
       setSubmitValidationReason("submit-failed");
-      window.alert(tCommon("error"));
+      showNotification("error", tCommon("error"));
     } finally {
       setSubmitting(false);
     }
@@ -324,6 +386,18 @@ export default function OperatorPreventivePage() {
     <ProtectedRoute requiredRole="operator">
       <DashboardLayout title={t("preventiveMaintenance")}>
         <div className="bento-grid">
+          {notification ? (
+            <div
+              className={`col-span-full panel border ${
+                notification.type === "success"
+                  ? "border-emerald-200 bg-emerald-50 text-emerald-800"
+                  : "border-red-200 bg-red-50 text-red-800"
+              }`}
+            >
+              {notification.message}
+            </div>
+          ) : null}
+
           <div className="col-span-full panel">
             <div className="card-title mb-4">{t("preventiveMaintenance")}</div>
             <div className="stats-grid grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -387,14 +461,22 @@ export default function OperatorPreventivePage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
               {allTaskItems.length === 0 && <div className="text-sm text-slate-500">{tCommon("table.noData")}</div>}
               {allTaskItems.map((task, index) => (
-                <label key={task} className="flex items-center gap-2 text-sm">
+                <label
+                  key={task}
+                  className={`flex items-start gap-3 text-sm rounded-lg border p-3 cursor-pointer transition-colors ${
+                    checkedTasks[task]
+                      ? "border-emerald-500 bg-emerald-50"
+                      : "border-slate-200 bg-white hover:bg-slate-50"
+                  }`}
+                >
                   <input
                     type="checkbox"
                     checked={Boolean(checkedTasks[task])}
                     onChange={() => toggleTask(task)}
                     data-testid={`preventive-task-checkbox-${index}`}
+                    className="mt-0.5 h-4 w-4"
                   />
-                  <span>{task}</span>
+                  <span className="leading-5">{task}</span>
                 </label>
               ))}
             </div>
@@ -570,6 +652,40 @@ export default function OperatorPreventivePage() {
                 {submitValidationReason}
               </div>
             ) : null}
+          </div>
+
+          <div className="col-span-full panel overflow-x-auto">
+            <div className="card-title mb-3">{t("myReports")}</div>
+            {generatedReports.filter((item) => item.type === "preventive").length === 0 ? (
+              <div className="text-sm text-slate-500">{tCommon("table.noData")}</div>
+            ) : (
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-slate-200">
+                    <th className="text-left py-2 px-3">{t("report")}</th>
+                    <th className="text-left py-2 px-3">{t("workOrder")}</th>
+                    <th className="text-left py-2 px-3">{t("machine")}</th>
+                    <th className="text-left py-2 px-3">{t("actionsPerformed")}</th>
+                    <th className="text-left py-2 px-3">{t("validation")}</th>
+                    <th className="text-left py-2 px-3">{tCommon("time.justNow")}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {generatedReports
+                    .filter((item) => item.type === "preventive")
+                    .map((item) => (
+                      <tr key={item.id} className="border-b border-slate-100">
+                        <td className="py-2 px-3 font-mono text-xs">{item.reportId}</td>
+                        <td className="py-2 px-3 font-mono text-xs">{item.workOrderId}</td>
+                        <td className="py-2 px-3">{item.machine}</td>
+                        <td className="py-2 px-3 truncate max-w-xs">{item.summary}</td>
+                        <td className="py-2 px-3">{item.status === "waiting_validation" ? t("waitingValidation") : item.status}</td>
+                        <td className="py-2 px-3">{new Date(item.createdAt).toLocaleString()}</td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+            )}
           </div>
         </div>
       </DashboardLayout>

@@ -875,6 +875,7 @@
       "sensors": "المستشعرات",
       "capteurs": "المستشعرات",
       "maintenancePlans": "خطط الصيانة",
+      "preventiveTaskChecklist": "قائمة مراجعة مهام الصيانة الوقائية",
       "moduleTypes": "أنواع الوحدات",
       "documents": "المستندات",
       "categories": {
@@ -1254,6 +1255,72 @@
       "createSuccess": "تم إنشاء خطة الصيانة بنجاح",
       "updateSuccess": "تم تحديث خطة الصيانة بنجاح",
       "saveFailed": "فشل حفظ خطة الصيانة"
+    }
+  },
+  "preventiveTaskChecklist": {
+    "title": "قائمة مراجعة مهام الصيانة الوقائية",
+    "heading": "مهام الصيانة الوقائية",
+    "description": "قائمة مراجعة مهام الصيانة الوقائية المنسقة من خطط الصيانة",
+    "totalTasks": "إجمالي المهام",
+    "completedTasks": "المهام المكتملة",
+    "pendingTasks": "المهام المعلقة",
+    "taskStatus": "حالة المهمة",
+    "table": {
+      "planId": "معرف الخطة",
+      "machine": "الآلة",
+      "module": "الوحدة",
+      "maintenanceType": "نوع الصيانة",
+      "frequency": "التكرار",
+      "instruction": "التعليمات",
+      "responsable": "المسؤول",
+      "status": "الحالة"
+    },
+    "empty": {
+      "default": "لا توجد مهام صيانة وقائية متاحة",
+      "search": "لا توجد مهام وقائية تتطابق مع بحثك"
+    },
+    "modal": {
+      "taskDetails": "تفاصيل المهمة",
+      "markComplete": "وضع علامة مكتملة"
+    },
+    "form": {
+      "selectMachine": "اختر آلة",
+      "selectModule": "اختر وحدة",
+      "taskName": "اسم المهمة",
+      "instruction": "التعليمات",
+      "notes": "ملاحظات"
+    },
+    "placeholders": {
+      "selectMachine": "اختر آلة...",
+      "selectModule": "اختر وحدة...",
+      "taskName": "أدخل اسم المهمة",
+      "notes": "أضف ملاحظات..."
+    },
+    "actions": {
+      "complete": "وضع علامة مكتملة",
+      "edit": "تعديل",
+      "delete": "حذف",
+      "view": "عرض التفاصيل",
+      "filter": "تصفية المهام"
+    },
+    "status": {
+      "pending": "معلق",
+      "completed": "مكتمل",
+      "overdue": "متأخر"
+    },
+    "notifications": {
+      "loadFailed": "فشل في تحميل مهام الصيانة الوقائية",
+      "taskMarkedComplete": "تم وضع علامة على المهمة كمكتملة",
+      "taskUpdated": "تم تحديث المهمة بنجاح",
+      "taskDeleted": "تم حذف المهمة بنجاح",
+      "noTasksAvailable": "لا توجد مهام صيانة وقائية متاحة. يرجى إنشاء خطط صيانة أولاً.",
+      "confirmMarkComplete": "هل أنت متأكد من رغبتك في وضع علامة على هذه المهمة كمكتملة؟"
+    },
+    "filters": {
+      "all": "جميع المهام",
+      "pending": "المعلقة فقط",
+      "completed": "المكتملة فقط",
+      "overdue": "المهام المتأخرة"
     }
   }
 }

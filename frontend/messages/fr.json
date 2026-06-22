@@ -1007,6 +1007,7 @@
       "sensors": "Capteurs",
       "capteurs": "Capteurs",
       "maintenancePlans": "Plans de maintenance",
+      "preventiveTaskChecklist": "Liste de contrôle des tâches préventives",
       "documents": "Documents",
       "moduleTypes": "Types de modules",
       "categories": {
@@ -1386,6 +1387,72 @@
       "createSuccess": "Plan de maintenance cree avec succes",
       "updateSuccess": "Plan de maintenance mis a jour avec succes",
       "saveFailed": "Echec de l'enregistrement du plan de maintenance"
+    }
+  },
+  "preventiveTaskChecklist": {
+    "title": "Liste de controle des taches preventives",
+    "heading": "Taches de maintenance preventive",
+    "description": "Liste de controle des taches de maintenance preventive coordonnee a partir des plans de maintenance",
+    "totalTasks": "Nombre total de taches",
+    "completedTasks": "Taches completes",
+    "pendingTasks": "Taches en attente",
+    "taskStatus": "Etat de la tache",
+    "table": {
+      "planId": "ID du plan",
+      "machine": "Machine",
+      "module": "Module",
+      "maintenanceType": "Type de maintenance",
+      "frequency": "Frequence",
+      "instruction": "Instruction",
+      "responsable": "Responsable",
+      "status": "Etat"
+    },
+    "empty": {
+      "default": "Aucune tache de maintenance preventive disponible",
+      "search": "Aucune tache preventive ne correspond a votre recherche"
+    },
+    "modal": {
+      "taskDetails": "Details de la tache",
+      "markComplete": "Marquer comme complete"
+    },
+    "form": {
+      "selectMachine": "Selectionner une machine",
+      "selectModule": "Selectionner un module",
+      "taskName": "Nom de la tache",
+      "instruction": "Instruction",
+      "notes": "Notes"
+    },
+    "placeholders": {
+      "selectMachine": "Choisir une machine...",
+      "selectModule": "Choisir un module...",
+      "taskName": "Entrer le nom de la tache",
+      "notes": "Ajouter des notes..."
+    },
+    "actions": {
+      "complete": "Marquer comme complete",
+      "edit": "Modifier",
+      "delete": "Supprimer",
+      "view": "Voir les details",
+      "filter": "Filtrer les taches"
+    },
+    "status": {
+      "pending": "En attente",
+      "completed": "Complete",
+      "overdue": "En retard"
+    },
+    "notifications": {
+      "loadFailed": "Echec du chargement des taches preventives",
+      "taskMarkedComplete": "Tache marquee comme complete",
+      "taskUpdated": "Tache mise a jour avec succes",
+      "taskDeleted": "Tache supprimee avec succes",
+      "noTasksAvailable": "Aucune tache de maintenance preventive disponible. Veuillez d'abord creer des plans de maintenance.",
+      "confirmMarkComplete": "Etes-vous sur de vouloir marquer cette tache comme complete ?"
+    },
+    "filters": {
+      "all": "Toutes les taches",
+      "pending": "En attente seulement",
+      "completed": "Completes seulement",
+      "overdue": "Taches en retard"
     }
   }
 }

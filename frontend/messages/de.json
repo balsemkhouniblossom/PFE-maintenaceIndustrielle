@@ -123,11 +123,26 @@
       },
       "machines": {
         "availability": "Verfügbarkeit",
+        "overview": "Maschinenübersicht",
         "online": "Online",
         "offline": "Offline"
       }
     },
     "operator": {
+      "manuals": {
+        "winding": "Wickelhandbuch",
+        "braiding": "Flechthandbuch",
+        "cutting": "Schneidehandbuch",
+        "rolling": "Rollhandbuch"
+      },
+      "cards": {
+        "urgentWork": "Dringende Arbeiten",
+        "completedToday": "Heute abgeschlossen",
+        "waitingActions": "Ausstehende Aktionen",
+        "machinesActive": "Aktive Maschinen"
+      },
+      "machineInspection": "Maschineninspektion",
+      "viewAllReports": "Alle Berichte anzeigen",
       "title": "Bediener-Dashboard",
       "welcome": "Willkommen zurück, {name}!",
       "description": "Hier ist Ihre heutige Übersicht der Wartungsaufgaben.",
@@ -146,7 +161,14 @@
         "workOrders": "Arbeitsaufträge anzeigen",
         "checkMachines": "Maschinen prüfen",
         "monitorSensors": "Sensoren überwachen",
-        "browseCatalogues": "Kataloge durchsuchen"
+        "browseCatalogues": "Kataloge durchsuchen",
+        "viewWorkOrders": "Arbeitsaufträge anzeigen",
+        "reportProblem": "Problem melden",
+        "preventiveMaintenance": "Präventive Wartung",
+        "correctiveMaintenance": "Korrektive Wartung",
+        "manuals": "Maschinenhandbücher",
+        "reports": "Meine Wartungsberichte",
+        "myReports": "Meine Wartungsberichte"
       },
       "health": {
         "title": "Systemzustand",
@@ -182,7 +204,22 @@
       "preventiveTasks": "Praeventive Aufgabenliste",
       "correctiveTasks": "Korrektive Aufgabenliste",
       "waitingValidation": "Wartet auf Validierung",
+      "assigned": "Zugewiesen",
+      "inProgress": "In Bearbeitung",
       "completed": "Abgeschlossen",
+      "machineCategories": "Maschinenkategorien",
+      "viewMachines": "Maschinen anzeigen",
+      "validated": "Validiert",
+      "pending": "Ausstehend",
+      "urgent": "Dringend",
+      "overdue": "Überfällig",
+      "scheduled": "Geplant",
+      "reportProblem": "Problem melden",
+      "preventiveMaintenance": "Präventive Wartung",
+      "correctiveMaintenance": "Korrektive Wartung",
+      "machineManuals": "Maschinenhandbücher",
+      "myReports": "Meine Wartungsberichte",
+      "overview": "Übersicht",
       "solved": "Geloest",
       "notSolved": "Nicht geloest",
       "followUp": "Nachverfolgung erforderlich",
@@ -271,6 +308,12 @@
     }
   },
   "catalogues": {
+    "pageTitle": "Teilekatalog",
+    "heading": "Teilekatalog",
+    "totalParts": "Gesamtteile",
+    "addPart": "Teil hinzufügen",
+    "allParts": "Alle Teile",
+    "searchPlaceholder": "Teile suchen...",
     "header": {
       "title": "Kataloge",
       "subtitle": "Verwalten Sie Ihre Kataloge"
@@ -286,6 +329,8 @@
       "createPart": "Teil erstellen"
     },
     "modal": {
+      "edit": "Teil bearbeiten",
+      "add": "Neues Teil hinzufügen",
       "createTitle": "Katalog erstellen",
       "editTitle": "Katalog bearbeiten"
     },
@@ -299,7 +344,10 @@
       "deleteFailed": "Fehler beim Löschen des Teils",
       "updated": "Teil erfolgreich aktualisiert",
       "created": "Teil erfolgreich erstellt",
-      "saveFailed": "Fehler beim Speichern des Teils"
+      "saveFailed": "Fehler beim Speichern des Teils",
+      "partIdRequired": "Teile-ID ist erforderlich",
+      "partNameRequired": "Teilename ist erforderlich",
+      "manufacturerRefRequired": "Herstellerreferenz ist erforderlich"
     },
     "messages": {
       "noSearchResults": "Keine Teile gefunden, die Ihrer Suche entsprechen.",
@@ -350,7 +398,22 @@
       "enterPartName": "Teilename eingeben",
       "enterManufacturerRef": "Herstellerreferenz eingeben",
       "enterManufacturer": "Hersteller eingeben",
-      "enterCategory": "Kategorie eingeben"
+      "enterCategory": "Kategorie eingeben",
+      "enterLocation": "Standort eingeben"
+    },
+    "empty": {
+      "search": "Keine Teile gefunden, die Ihrer Suche entsprechen.",
+      "default": "Keine Teile verfügbar."
+    },
+    "options": {
+      "inStock": "Auf Lager",
+      "lowStock": "Niedriger Bestand",
+      "outOfStock": "Nicht auf Lager"
+    },
+    "status": {
+      "inStock": "Auf Lager",
+      "lowStock": "Niedriger Bestand",
+      "outOfStock": "Nicht auf Lager"
     }
   },
   "common": {
@@ -401,7 +464,11 @@
     "notAvailable": "k.A.",
     "saving": "Speichern...",
     "actions": {
-      "cancel": "Abbrechen"
+      "cancel": "Abbrechen",
+      "create": "Erstellen",
+      "update": "Aktualisieren",
+      "search": "Suchen",
+      "saving": "Wird gespeichert..."
     }
   },
   "navigation": {
@@ -411,6 +478,7 @@
       "machines": "Maschinen",
       "workOrders": "Arbeitsaufträge",
       "maintenancePlans": "Wartungspläne",
+      "preventiveTaskChecklist": "Checkliste für präventive Aufgaben",
       "catalogues": "Kataloge",
       "machineTypes": "Maschinentypen",
       "sensors": "Sensoren",
@@ -541,7 +609,8 @@
       "machines": "Maschinen",
       "workOrders": "Arbeitsaufträge",
       "catalogues": "Kataloge",
-      "machineTypes": "Typen"
+      "machineTypes": "Typen",
+      "types": "Typen"
     }
   },
   "operatorDashboard": {
@@ -695,7 +764,11 @@
       "pending": "Ausstehend",
       "in_progress": "In Bearbeitung",
       "completed": "Abgeschlossen",
-      "cancelled": "Abgebrochen"
+      "cancelled": "Abgebrochen",
+      "technician_required": "Techniker erforderlich",
+      "returned": "Zurückgegeben",
+      "waiting_validation": "Wartet auf Validierung",
+      "assigned": "Zugewiesen"
     },
     "actions": {
       "update": "Arbeitsauftrag aktualisieren",
@@ -707,6 +780,7 @@
       "technicianRequired": "Technikerzuweisung ist erforderlich"
     },
     "notifications": {
+      "confirmDelete": "Sind Sie sicher, dass Sie diesen Benutzer löschen möchten?",
       "deleted": "Arbeitsauftrag erfolgreich gelöscht",
       "deleteFailed": "Fehler beim Löschen des Arbeitsauftrags",
       "updated": "Arbeitsauftrag erfolgreich aktualisiert",
@@ -720,6 +794,7 @@
     "totalUsers": "Benutzer insgesamt",
     "addUser": "Benutzer hinzufügen",
     "allUsers": "Alle Benutzer",
+    "placeholder": "Dies ist ein Platzhaltertext",
     "searchPlaceholder": "Benutzer suchen...",
     "subtitle": "Systembenutzer verwalten",
     "table": {
@@ -788,7 +863,9 @@
       "validEmail": "Bitte geben Sie eine gültige E-Mail-Adresse ein",
       "passwordRequired": "Passwort ist erforderlich",
       "passwordMin": "Das Passwort muss mindestens 6 Zeichen lang sein",
-      "fullNameRequired": "Der vollständige Name ist erforderlich"
+      "fullNameRequired": "Der vollständige Name ist erforderlich",
+      "photoUploaded": "Foto erfolgreich hochgeladen",
+      "photoUploadFailed": "Foto konnte nicht hochgeladen werden"
     },
     "button": {
       "cancel": "Abbrechen",
@@ -820,6 +897,10 @@
       "expectedLifespan": "Erwartete Lebensdauer",
       "actions": "Aktionen"
     },
+    "empty": {
+      "search": "Keine Maschinentypen gefunden, die Ihrer Suche entsprechen.",
+      "default": "Keine Maschinentypen verfügbar."
+    },
     "modal": {
       "edit": "Typ bearbeiten",
       "add": "Neuen Typ hinzufügen"
@@ -840,12 +921,26 @@
       "pneumatic": "Pneumatisch",
       "mixed": "Gemischt"
     },
+    "placeholders": {
+      "enterTypeId": "Typ-ID eingeben",
+      "enterModelName": "Modellname eingeben",
+      "enterManufacturer": "Hersteller eingeben",
+      "enterCategory": "Kategorie eingeben",
+      "enterDescription": "Beschreibung eingeben"
+    },
+    "status": {
+      "active": "Aktiv",
+      "inactive": "Inaktiv"
+    },
     "notifications": {
       "deleted": "Maschinentyp erfolgreich gelöscht",
       "deleteFailed": "Fehler beim Löschen des Maschinentyps",
       "updated": "Maschinentyp erfolgreich aktualisiert",
       "created": "Maschinentyp erfolgreich erstellt",
-      "saveFailed": "Fehler beim Speichern des Maschinentyps"
+      "saveFailed": "Fehler beim Speichern des Maschinentyps",
+      "typeIdRequired": "Typ-ID ist erforderlich",
+      "modelNameRequired": "Modellname ist erforderlich",
+      "manufacturerRequired": "Hersteller ist erforderlich"
     },
     "button": {
       "cancel": "Abbrechen",
@@ -870,6 +965,10 @@
       "specifications": "Spezifikationen",
       "actions": "Aktionen"
     },
+    "empty": {
+      "search": "Keine Modultypen gefunden, die Ihrer Suche entsprechen.",
+      "default": "Keine Modultypen verfügbar."
+    },
     "modal": {
       "edit": "Modul-Typ bearbeiten",
       "add": "Neuen Modul-Typ hinzufügen"
@@ -889,12 +988,26 @@
       "communication": "Kommunikation",
       "power": "Energie"
     },
+    "placeholders": {
+      "enterModuleTypeId": "Modultyp-ID eingeben",
+      "enterName": "Namen eingeben",
+      "enterCategory": "Kategorie eingeben",
+      "enterCompatibility": "Kompatibilität eingeben (z. B. Maschine A, Maschine B)",
+      "enterDescription": "Beschreibung eingeben",
+      "enterSpecifications": "Technische Spezifikationen eingeben"
+    },
+    "status": {
+      "active": "Aktiv",
+      "inactive": "Inaktiv"
+    },
     "notifications": {
       "deleted": "Modul-Typ erfolgreich gelöscht",
       "deleteFailed": "Fehler beim Löschen des Modul-Typs",
       "updated": "Modul-Typ erfolgreich aktualisiert",
       "created": "Modul-Typ erfolgreich erstellt",
-      "saveFailed": "Fehler beim Speichern des Modul-Typs"
+      "saveFailed": "Fehler beim Speichern des Modul-Typs",
+      "moduleTypeIdRequired": "Modul-Typ-ID ist erforderlich",
+      "nameRequired": "Name ist erforderlich"
     },
     "button": {
       "cancel": "Abbrechen",
@@ -972,16 +1085,17 @@
       "sensors": "Sensoren",
       "capteurs": "Sensoren",
       "maintenancePlans": "Wartungspläne",
+      "preventiveTaskChecklist": "Checkliste für vorbeugende Aufgaben",
       "documents": "Dokumente",
       "moduleTypes": "Modultypen",
       "categories": {
-        "overview": "Uberblick",
+        "overview": "Überblick",
         "userManagement": "Benutzerverwaltung",
         "equipment": "Ausrüstung",
         "maintenance": "Wartung",
         "partsInventory": "Teile und Bestand",
         "equipmentTypes": "Ausrüstungstypen",
-        "iotMonitoring": "IoT Uberwachung",
+        "iotMonitoring": "IoT Überwachung",
         "systemModules": "Systemmodule",
         "technicalReference": "Technische Referenz"
       },
@@ -991,6 +1105,7 @@
     }
   },
   "machines": {
+    "singular": "Maschine",
     "pageTitle": "Maschinenverwaltung",
     "heading": "Maschinenverwaltung",
     "totalMachines": "Maschinen gesamt",
@@ -1288,25 +1403,25 @@
     "title": "WARTUNGSPLANVERWALTUNG",
     "heading": "Wartungsplanverwaltung",
     "description": "Verwalten Sie die Felder responsable, huile_graisse und documentation explizit.",
-    "totalPlans": "Gesamtzahl Wartungsplaene",
-    "addPlan": "Plan hinzufuegen",
-    "allPlans": "Alle Wartungsplaene",
-    "searchPlaceholder": "Nach Plan, Modul, Verantwortlichem, Oel/Fett, Dokumentation suchen...",
+    "totalPlans": "Gesamtzahl Wartungspläne",
+    "addPlan": "Plan hinzufügen",
+    "allPlans": "Alle Wartungspläne",
+    "searchPlaceholder": "Nach Plan, Modul, Verantwortlichem, Öl/Fett, Dokumentation suchen...",
     "table": {
       "planId": "Plan-ID",
       "module": "Modul",
       "maintenanceType": "Wartungstyp",
       "frequency": "Frequenz",
       "responsable": "Verantwortlich",
-      "huileGraisse": "Oel / Fett",
+      "huileGraisse": "Öl / Fett",
       "documentation": "Dokumentation"
     },
     "empty": {
-      "default": "Keine Wartungsplaene verfuegbar.",
-      "search": "Keine Wartungsplaene entsprechen Ihrer Suche."
+      "default": "Keine Wartungspläne verfügbar.",
+      "search": "Keine Wartungspläne entsprechen Ihrer Suche."
     },
     "modal": {
-      "add": "Wartungsplan hinzufuegen",
+      "add": "Wartungsplan hinzufügen",
       "edit": "Wartungsplan bearbeiten"
     },
     "form": {
@@ -1316,14 +1431,14 @@
       "frequency": "Frequenz",
       "frequencyUnit": "Frequenzeinheit",
       "responsable": "Verantwortlich",
-      "huileGraisse": "Oel / Fett",
+      "huileGraisse": "Öl / Fett",
       "documentation": "Dokumentation",
       "instruction": "Anweisung"
     },
     "placeholders": {
       "planId": "Plan-ID eingeben",
-      "module": "Modul auswaehlen",
-      "maintenanceType": "praeventiv / korrektiv",
+      "module": "Modul auswählen",
+      "maintenanceType": "präventiv / korrektiv",
       "frequency": "1",
       "frequencyUnit": "Tag / Woche / Monat / Jahr",
       "responsable": "Ruster / Wartung",
@@ -1333,24 +1448,90 @@
     },
     "actions": {
       "edit": "Bearbeiten",
-      "delete": "Loeschen",
+      "delete": "Löschen",
       "cancel": "Abbrechen",
       "create": "Erstellen",
       "update": "Aktualisieren"
     },
     "notifications": {
-      "loadFailed": "Laden der Wartungsplaene fehlgeschlagen",
+      "loadFailed": "Laden der Wartungspläne fehlgeschlagen",
       "planIdRequired": "Plan-ID ist erforderlich",
       "moduleRequired": "Modul ist erforderlich",
       "maintenanceTypeRequired": "Wartungstyp ist erforderlich",
       "frequencyUnitRequired": "Frequenzeinheit ist erforderlich",
       "frequencyPositive": "Die Frequenz muss eine positive Zahl sein",
-      "confirmDelete": "Sind Sie sicher, dass Sie diesen Wartungsplan loeschen moechten?",
-      "deleteSuccess": "Wartungsplan erfolgreich geloescht",
-      "deleteFailed": "Loeschen des Wartungsplans fehlgeschlagen",
+      "confirmDelete": "Sind Sie sicher, dass Sie diesen Wartungsplan löschen möchten?",
+      "deleteSuccess": "Wartungsplan erfolgreich gelöscht",
+      "deleteFailed": "Löschen des Wartungsplans fehlgeschlagen",
       "createSuccess": "Wartungsplan erfolgreich erstellt",
       "updateSuccess": "Wartungsplan erfolgreich aktualisiert",
       "saveFailed": "Speichern des Wartungsplans fehlgeschlagen"
+    }
+  },
+  "preventiveTaskChecklist": {
+    "title": "Checkliste für präventive Aufgaben",
+    "heading": "Vorbeugende Wartungsaufgaben",
+    "description": "Koordinierte Checkliste für vorbeugende Wartungsaufgaben aus Wartungsplänen",
+    "totalTasks": "Gesamtaufgaben",
+    "completedTasks": "Abgeschlossene Aufgaben",
+    "pendingTasks": "Ausstehende Aufgaben",
+    "taskStatus": "Aufgabenstatus",
+    "table": {
+      "planId": "Plan-ID",
+      "machine": "Maschine",
+      "module": "Modul",
+      "maintenanceType": "Wartungstyp",
+      "frequency": "Frequenz",
+      "instruction": "Anweisung",
+      "responsable": "Verantwortlich",
+      "status": "Status"
+    },
+    "empty": {
+      "default": "Keine vorbeugenden Wartungsaufgaben verfügbar",
+      "search": "Keine präventiven Aufgaben entsprechen Ihrer Suche"
+    },
+    "modal": {
+      "taskDetails": "Aufgabendetails",
+      "markComplete": "Als abgeschlossen markieren"
+    },
+    "form": {
+      "selectMachine": "Maschine auswählen",
+      "selectModule": "Modul auswählen",
+      "taskName": "Aufgabenname",
+      "instruction": "Anweisung",
+      "notes": "Notizen"
+    },
+    "placeholders": {
+      "selectMachine": "Maschine wählen...",
+      "selectModule": "Modul wählen...",
+      "taskName": "Aufgabennamen eingeben",
+      "notes": "Notizen hinzufügen..."
+    },
+    "actions": {
+      "complete": "Als abgeschlossen markieren",
+      "edit": "Bearbeiten",
+      "delete": "Löschen",
+      "view": "Details anzeigen",
+      "filter": "Aufgaben filtern"
+    },
+    "status": {
+      "pending": "Ausstehend",
+      "completed": "Abgeschlossen",
+      "overdue": "Überfällig"
+    },
+    "notifications": {
+      "loadFailed": "Fehler beim Laden der präventiven Aufgaben",
+      "taskMarkedComplete": "Aufgabe als abgeschlossen markiert",
+      "taskUpdated": "Aufgabe erfolgreich aktualisiert",
+      "taskDeleted": "Aufgabe erfolgreich gelöscht",
+      "noTasksAvailable": "Keine vorbeugenden Wartungsaufgaben verfügbar. Bitte erstellen Sie zuerst Wartungspläne.",
+      "confirmMarkComplete": "Sind Sie sicher, dass Sie diese Aufgabe als abgeschlossen markieren möchten?"
+    },
+    "filters": {
+      "all": "Alle Aufgaben",
+      "pending": "Nur ausstehend",
+      "completed": "Nur abgeschlossen",
+      "overdue": "Überfällige Aufgaben"
     }
   }
 }

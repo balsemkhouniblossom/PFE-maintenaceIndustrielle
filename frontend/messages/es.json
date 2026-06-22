@@ -789,6 +789,7 @@
       "machines": "Máquinas",
       "workOrders": "Órdenes de trabajo",
       "maintenancePlans": "Planes de mantenimiento",
+      "preventiveTaskChecklist": "Lista de verificación de tareas preventivas",
       "catalogues": "Catálogos",
       "machineTypes": "Tipos de máquinas",
       "sensors": "Sensores",
@@ -1167,6 +1168,26 @@
       "createSuccess": "Plan de mantenimiento creado correctamente",
       "updateSuccess": "Plan de mantenimiento actualizado correctamente",
       "saveFailed": "Error al guardar el plan de mantenimiento"
+    }
+  },
+  "preventiveTaskChecklist": {
+    "title": "Lista de verificaci?n de tareas preventivas",
+    "heading": "Tareas de mantenimiento preventivo",
+    "totalTasks": "Total de tareas",
+    "table": {
+      "planId": "ID de plan",
+      "machine": "M?quina",
+      "module": "M?dulo"
+    },
+    "empty": {
+      "default": "No hay tareas de mantenimiento preventivo disponibles"
+    },
+    "actions": {
+      "complete": "Marcar como completo",
+      "edit": "Editar"
+    },
+    "notifications": {
+      "loadFailed": "Error al cargar"
     }
   }
 }

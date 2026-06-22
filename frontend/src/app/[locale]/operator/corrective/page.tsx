@@ -105,6 +105,21 @@ export default function OperatorCorrectivePage() {
   const [photo, setPhoto] = useState<File | null>(null);
   const [selectedParts, setSelectedParts] = useState<Record<string, string>>({});
   const [submitValidationReason, setSubmitValidationReason] = useState("");
+  const [notification, setNotification] = useState<{ type: "success" | "error"; message: string } | null>(null);
+
+  useEffect(() => {
+    if (!notification) return;
+
+    const timeout = setTimeout(() => {
+      setNotification(null);
+    }, 5000);
+
+    return () => clearTimeout(timeout);
+  }, [notification]);
+
+  function showNotification(type: "success" | "error", message: string): void {
+    setNotification({ type, message });
+  }
 
   useEffect(() => {
     async function loadAll() {
@@ -222,13 +237,13 @@ export default function OperatorCorrectivePage() {
   async function submitCorrectiveMaintenance(): Promise<void> {
     if (!user?._id || !selectedMachine || !selectedFault) {
       setSubmitValidationReason("missing-user-machine-or-fault");
-      window.alert(t("validation"));
+      showNotification("error", t("notifications.validationFailed"));
       return;
     }
 
     if (selectedActionLabels.length === 0) {
       setSubmitValidationReason("no-actions-selected");
-      window.alert(t("actionsPerformed"));
+      showNotification("error", t("notifications.validationFailed"));
       return;
     }
 
@@ -286,11 +301,11 @@ export default function OperatorCorrectivePage() {
       );
 
       await uploadPhotoIfPresent(selectedMachine);
-      window.alert(t("waitingValidation"));
+      showNotification("success", t("notifications.submitSuccess"));
     } catch (error) {
       console.error("Failed to submit corrective maintenance", error);
       setSubmitValidationReason("submit-failed");
-      window.alert(tCommon("error"));
+      showNotification("error", tCommon("error"));
     } finally {
       setSubmitting(false);
     }
@@ -310,6 +325,18 @@ export default function OperatorCorrectivePage() {
     <ProtectedRoute requiredRole="operator">
       <DashboardLayout title={t("correctiveMaintenance")}>
         <div className="bento-grid">
+          {notification ? (
+            <div
+              className={`col-span-full panel border ${
+                notification.type === "success"
+                  ? "border-emerald-200 bg-emerald-50 text-emerald-800"
+                  : "border-red-200 bg-red-50 text-red-800"
+              }`}
+            >
+              {notification.message}
+            </div>
+          ) : null}
+
           <div className="col-span-full panel">
             <div className="card-title mb-4">{t("correctiveMaintenance")}</div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

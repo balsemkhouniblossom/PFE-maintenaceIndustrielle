@@ -775,6 +775,7 @@
       "sensors": "Sensori",
       "capteurs": "Sensori",
       "maintenancePlans": "Piani di manutenzione",
+      "preventiveTaskChecklist": "Elenco di controllo attività preventive",
       "documents": "Documenti",
       "moduleTypes": "Tipi di modulo",
       "categories": {
@@ -1149,6 +1150,26 @@
       "createSuccess": "Piano di manutenzione creato con successo",
       "updateSuccess": "Piano di manutenzione aggiornato con successo",
       "saveFailed": "Salvataggio del piano di manutenzione non riuscito"
+    }
+  },
+  "preventiveTaskChecklist": {
+    "title": "Elenco di controllo attivit? preventive",
+    "heading": "Attivit? di manutenzione preventiva",
+    "totalTasks": "Numero totale attivit?",
+    "table": {
+      "planId": "ID piano",
+      "machine": "Macchina",
+      "module": "Modulo"
+    },
+    "empty": {
+      "default": "Nessuna attivit? di manutenzione preventiva disponibile"
+    },
+    "actions": {
+      "complete": "Segna come completo",
+      "edit": "Modifica"
+    },
+    "notifications": {
+      "loadFailed": "Errore nel caricamento"
     }
   }
 }
