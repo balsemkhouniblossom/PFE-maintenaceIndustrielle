@@ -410,6 +410,7 @@
       "users": "Benutzer",
       "machines": "Maschinen",
       "workOrders": "Arbeitsaufträge",
+      "maintenancePlans": "Wartungspläne",
       "catalogues": "Kataloge",
       "machineTypes": "Maschinentypen",
       "sensors": "Sensoren",
@@ -970,6 +971,7 @@
       "machineTypes": "Maschinentypen",
       "sensors": "Sensoren",
       "capteurs": "Sensoren",
+      "maintenancePlans": "Wartungspläne",
       "documents": "Dokumente",
       "moduleTypes": "Modultypen",
       "categories": {
@@ -1280,6 +1282,75 @@
       "saveFailed": "Dokument konnte nicht gespeichert werden",
       "deleteFailed": "Dokument konnte nicht geloescht werden",
       "confirmDelete": "Sind Sie sicher, dass Sie dieses Dokument loeschen moechten? Diese Aktion kann nicht rueckgaengig gemacht werden."
+    }
+  },
+  "maintenancePlans": {
+    "title": "WARTUNGSPLANVERWALTUNG",
+    "heading": "Wartungsplanverwaltung",
+    "description": "Verwalten Sie die Felder responsable, huile_graisse und documentation explizit.",
+    "totalPlans": "Gesamtzahl Wartungsplaene",
+    "addPlan": "Plan hinzufuegen",
+    "allPlans": "Alle Wartungsplaene",
+    "searchPlaceholder": "Nach Plan, Modul, Verantwortlichem, Oel/Fett, Dokumentation suchen...",
+    "table": {
+      "planId": "Plan-ID",
+      "module": "Modul",
+      "maintenanceType": "Wartungstyp",
+      "frequency": "Frequenz",
+      "responsable": "Verantwortlich",
+      "huileGraisse": "Oel / Fett",
+      "documentation": "Dokumentation"
+    },
+    "empty": {
+      "default": "Keine Wartungsplaene verfuegbar.",
+      "search": "Keine Wartungsplaene entsprechen Ihrer Suche."
+    },
+    "modal": {
+      "add": "Wartungsplan hinzufuegen",
+      "edit": "Wartungsplan bearbeiten"
+    },
+    "form": {
+      "planId": "Plan-ID",
+      "module": "Modul",
+      "maintenanceType": "Wartungstyp",
+      "frequency": "Frequenz",
+      "frequencyUnit": "Frequenzeinheit",
+      "responsable": "Verantwortlich",
+      "huileGraisse": "Oel / Fett",
+      "documentation": "Dokumentation",
+      "instruction": "Anweisung"
+    },
+    "placeholders": {
+      "planId": "Plan-ID eingeben",
+      "module": "Modul auswaehlen",
+      "maintenanceType": "praeventiv / korrektiv",
+      "frequency": "1",
+      "frequencyUnit": "Tag / Woche / Monat / Jahr",
+      "responsable": "Ruster / Wartung",
+      "huileGraisse": "ARAL Degol B 220",
+      "documentation": "Wartungsplandokument",
+      "instruction": "Detaillierte Wartungsschritte eingeben"
+    },
+    "actions": {
+      "edit": "Bearbeiten",
+      "delete": "Loeschen",
+      "cancel": "Abbrechen",
+      "create": "Erstellen",
+      "update": "Aktualisieren"
+    },
+    "notifications": {
+      "loadFailed": "Laden der Wartungsplaene fehlgeschlagen",
+      "planIdRequired": "Plan-ID ist erforderlich",
+      "moduleRequired": "Modul ist erforderlich",
+      "maintenanceTypeRequired": "Wartungstyp ist erforderlich",
+      "frequencyUnitRequired": "Frequenzeinheit ist erforderlich",
+      "frequencyPositive": "Die Frequenz muss eine positive Zahl sein",
+      "confirmDelete": "Sind Sie sicher, dass Sie diesen Wartungsplan loeschen moechten?",
+      "deleteSuccess": "Wartungsplan erfolgreich geloescht",
+      "deleteFailed": "Loeschen des Wartungsplans fehlgeschlagen",
+      "createSuccess": "Wartungsplan erfolgreich erstellt",
+      "updateSuccess": "Wartungsplan erfolgreich aktualisiert",
+      "saveFailed": "Speichern des Wartungsplans fehlgeschlagen"
     }
   }
 }

@@ -390,6 +390,7 @@
       "users": "المستخدمون",
       "machines": "الآلات",
       "workOrders": "أوامر العمل",
+      "maintenancePlans": "خطط الصيانة",
       "catalogues": "الكتالوجات",
       "machineTypes": "أنواع الآلات",
       "sensors": "المستشعرات",
@@ -873,6 +874,7 @@
       "machineTypes": "أنواع الآلات",
       "sensors": "المستشعرات",
       "capteurs": "المستشعرات",
+      "maintenancePlans": "خطط الصيانة",
       "moduleTypes": "أنواع الوحدات",
       "documents": "المستندات",
       "categories": {
@@ -1183,6 +1185,75 @@
       "saveFailed": "فشل حفظ الوثيقة",
       "deleteFailed": "فشل حذف الوثيقة",
       "confirmDelete": "هل أنت متأكد من حذف هذه الوثيقة؟ لا يمكن التراجع عن هذا الإجراء."
+    }
+  },
+  "maintenancePlans": {
+    "title": "إدارة خطط الصيانة",
+    "heading": "إدارة خطط الصيانة",
+    "description": "إدارة حقول المسؤول والزيت/الشحم والتوثيق بشكل صريح.",
+    "totalPlans": "إجمالي خطط الصيانة",
+    "addPlan": "إضافة خطة",
+    "allPlans": "جميع خطط الصيانة",
+    "searchPlaceholder": "ابحث حسب الخطة أو الوحدة أو المسؤول أو الزيت/الشحم أو التوثيق...",
+    "table": {
+      "planId": "معرف الخطة",
+      "module": "الوحدة",
+      "maintenanceType": "نوع الصيانة",
+      "frequency": "التكرار",
+      "responsable": "المسؤول",
+      "huileGraisse": "زيت / شحم",
+      "documentation": "التوثيق"
+    },
+    "empty": {
+      "default": "لا توجد خطط صيانة متاحة.",
+      "search": "لا توجد خطط صيانة مطابقة للبحث."
+    },
+    "modal": {
+      "add": "إضافة خطة صيانة",
+      "edit": "تعديل خطة صيانة"
+    },
+    "form": {
+      "planId": "معرف الخطة",
+      "module": "الوحدة",
+      "maintenanceType": "نوع الصيانة",
+      "frequency": "التكرار",
+      "frequencyUnit": "وحدة التكرار",
+      "responsable": "المسؤول",
+      "huileGraisse": "زيت / شحم",
+      "documentation": "التوثيق",
+      "instruction": "التعليمات"
+    },
+    "placeholders": {
+      "planId": "أدخل معرف الخطة",
+      "module": "اختر وحدة",
+      "maintenanceType": "وقائي / تصحيحي",
+      "frequency": "1",
+      "frequencyUnit": "يوم / أسبوع / شهر / سنة",
+      "responsable": "المناولة / الصيانة",
+      "huileGraisse": "ARAL Degol B 220",
+      "documentation": "بطاقة خطة الصيانة",
+      "instruction": "أدخل خطوات الصيانة بالتفصيل"
+    },
+    "actions": {
+      "edit": "تعديل",
+      "delete": "حذف",
+      "cancel": "إلغاء",
+      "create": "إنشاء",
+      "update": "تحديث"
+    },
+    "notifications": {
+      "loadFailed": "فشل تحميل خطط الصيانة",
+      "planIdRequired": "معرف الخطة مطلوب",
+      "moduleRequired": "الوحدة مطلوبة",
+      "maintenanceTypeRequired": "نوع الصيانة مطلوب",
+      "frequencyUnitRequired": "وحدة التكرار مطلوبة",
+      "frequencyPositive": "يجب أن يكون التكرار رقما موجبا",
+      "confirmDelete": "هل أنت متأكد من حذف خطة الصيانة هذه؟",
+      "deleteSuccess": "تم حذف خطة الصيانة بنجاح",
+      "deleteFailed": "فشل حذف خطة الصيانة",
+      "createSuccess": "تم إنشاء خطة الصيانة بنجاح",
+      "updateSuccess": "تم تحديث خطة الصيانة بنجاح",
+      "saveFailed": "فشل حفظ خطة الصيانة"
     }
   }
 }

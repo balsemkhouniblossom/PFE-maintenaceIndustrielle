@@ -1,0 +1,465 @@
+'use client';
+
+import { useEffect, useMemo, useState } from 'react';
+import { useTranslations } from 'next-intl';
+import DashboardLayout from '@/components/DashboardLayout';
+import { Modal } from '@/components/Modal';
+import { apiService } from '@/services/api';
+import {
+  CheckCircleIcon,
+  ExclamationTriangleIcon,
+  MagnifyingGlassIcon,
+  PencilIcon,
+  PlusIcon,
+  TrashIcon,
+} from '@heroicons/react/24/outline';
+
+interface ModuleEntity {
+  _id: string;
+  module_id?: string;
+  localisation?: string;
+}
+
+interface MaintenancePlan {
+  _id: string;
+  plan_id: string;
+  module_id: string | ModuleEntity;
+  type_maintenance: string;
+  frequence: number;
+  unite_frequence: string;
+  instruction?: string;
+  responsable?: string;
+  huile_graisse?: string;
+  documentation?: string;
+}
+
+function getModuleLabel(value: string | ModuleEntity, modules: ModuleEntity[], fallback: string): string {
+  if (!value) return fallback;
+  if (typeof value === 'object') {
+    return value.module_id || value.localisation || value._id;
+  }
+  const found = modules.find((module) => module._id === value);
+  return found?.module_id || value || fallback;
+}
+
+export default function MaintenancePlansPage() {
+  const t = useTranslations('maintenancePlans');
+  const tCommon = useTranslations('common');
+
+  const [plans, setPlans] = useState<MaintenancePlan[]>([]);
+  const [modules, setModules] = useState<ModuleEntity[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [editingPlan, setEditingPlan] = useState<MaintenancePlan | null>(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [notification, setNotification] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+  const [formData, setFormData] = useState({
+    plan_id: '',
+    module_id: '',
+    type_maintenance: 'preventive',
+    frequence: '1',
+    unite_frequence: 'semaine',
+    responsable: '',
+    huile_graisse: '',
+    documentation: '',
+    instruction: '',
+  });
+
+  useEffect(() => {
+    void loadData();
+  }, []);
+
+  async function loadData() {
+    try {
+      setLoading(true);
+      const [plansResponse, modulesResponse] = await Promise.all([
+        apiService.getMaintenancePlans(),
+        apiService.getModules(),
+      ]);
+      setPlans(plansResponse.data ?? []);
+      setModules(modulesResponse.data ?? []);
+    } catch (error) {
+      console.error('Error loading maintenance plans:', error);
+      showNotification('error', t('notifications.loadFailed'));
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  function showNotification(type: 'success' | 'error', message: string) {
+    setNotification({ type, message });
+    setTimeout(() => setNotification(null), 4000);
+  }
+
+  function resetForm() {
+    setFormData({
+      plan_id: '',
+      module_id: '',
+      type_maintenance: 'preventive',
+      frequence: '1',
+      unite_frequence: 'semaine',
+      responsable: '',
+      huile_graisse: '',
+      documentation: '',
+      instruction: '',
+    });
+    setEditingPlan(null);
+  }
+
+  function validateForm(): boolean {
+    if (!formData.plan_id.trim()) {
+      showNotification('error', t('notifications.planIdRequired'));
+      return false;
+    }
+    if (!formData.module_id.trim()) {
+      showNotification('error', t('notifications.moduleRequired'));
+      return false;
+    }
+    if (!formData.type_maintenance.trim()) {
+      showNotification('error', t('notifications.maintenanceTypeRequired'));
+      return false;
+    }
+    if (!formData.unite_frequence.trim()) {
+      showNotification('error', t('notifications.frequencyUnitRequired'));
+      return false;
+    }
+    const frequencyValue = Number(formData.frequence);
+    if (!Number.isFinite(frequencyValue) || frequencyValue <= 0) {
+      showNotification('error', t('notifications.frequencyPositive'));
+      return false;
+    }
+    return true;
+  }
+
+  function handleCreate() {
+    resetForm();
+    setShowModal(true);
+  }
+
+  function handleEdit(plan: MaintenancePlan) {
+    setEditingPlan(plan);
+    setFormData({
+      plan_id: plan.plan_id || '',
+      module_id: typeof plan.module_id === 'string' ? plan.module_id : plan.module_id?._id || '',
+      type_maintenance: plan.type_maintenance || 'preventive',
+      frequence: String(plan.frequence ?? 1),
+      unite_frequence: plan.unite_frequence || 'semaine',
+      responsable: plan.responsable || '',
+      huile_graisse: plan.huile_graisse || '',
+      documentation: plan.documentation || '',
+      instruction: plan.instruction || '',
+    });
+    setShowModal(true);
+  }
+
+  async function handleDelete(planId: string) {
+    if (!confirm(t('notifications.confirmDelete'))) return;
+
+    try {
+      await apiService.deleteMaintenancePlan(planId);
+      showNotification('success', t('notifications.deleteSuccess'));
+      await loadData();
+    } catch (error) {
+      console.error('Error deleting maintenance plan:', error);
+      showNotification('error', t('notifications.deleteFailed'));
+    }
+  }
+
+  async function handleSubmit(event: React.FormEvent) {
+    event.preventDefault();
+    if (!validateForm()) return;
+
+    setSubmitting(true);
+    try {
+      const payload = {
+        plan_id: formData.plan_id.trim(),
+        module_id: formData.module_id,
+        type_maintenance: formData.type_maintenance.trim(),
+        frequence: Number(formData.frequence),
+        unite_frequence: formData.unite_frequence.trim(),
+        responsable: formData.responsable.trim() || undefined,
+        huile_graisse: formData.huile_graisse.trim() || undefined,
+        documentation: formData.documentation.trim() || undefined,
+        instruction: formData.instruction.trim() || undefined,
+      };
+
+      if (editingPlan) {
+        await apiService.updateMaintenancePlan(editingPlan._id, payload);
+        showNotification('success', t('notifications.updateSuccess'));
+      } else {
+        await apiService.createMaintenancePlan(payload);
+        showNotification('success', t('notifications.createSuccess'));
+      }
+
+      setShowModal(false);
+      resetForm();
+      await loadData();
+    } catch (error) {
+      console.error('Error saving maintenance plan:', error);
+      showNotification('error', t('notifications.saveFailed'));
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  const filteredPlans = useMemo(() => {
+    const term = searchTerm.trim().toLowerCase();
+    if (!term) return plans;
+
+    return plans.filter((plan) => {
+      const moduleLabel = getModuleLabel(plan.module_id, modules, tCommon('notAvailable')).toLowerCase();
+      return (
+        String(plan.plan_id || '').toLowerCase().includes(term) ||
+        String(plan.type_maintenance || '').toLowerCase().includes(term) ||
+        String(plan.responsable || '').toLowerCase().includes(term) ||
+        String(plan.huile_graisse || '').toLowerCase().includes(term) ||
+        String(plan.documentation || '').toLowerCase().includes(term) ||
+        moduleLabel.includes(term)
+      );
+    });
+  }, [plans, modules, searchTerm]);
+
+  if (loading) {
+    return (
+      <DashboardLayout title={t('title')}>
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="animate-spin rounded-full h-24 w-24 border-b-2 border-blue-600"></div>
+        </div>
+      </DashboardLayout>
+    );
+  }
+
+  return (
+    <DashboardLayout title={t('title')}>
+      {notification && (
+        <div
+          className={`fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg flex items-center gap-2 ${
+            notification.type === 'success'
+              ? 'bg-green-100 text-green-800 border border-green-200'
+              : 'bg-red-100 text-red-800 border border-red-200'
+          }`}
+        >
+          {notification.type === 'success' ? <CheckCircleIcon className="w-5 h-5" /> : <ExclamationTriangleIcon className="w-5 h-5" />}
+          <span>{notification.message}</span>
+          <button className="ml-2 text-gray-600 hover:text-gray-800" onClick={() => setNotification(null)}>
+            ×
+          </button>
+        </div>
+      )}
+
+      <div className="bento-grid">
+        <div className="col-span-full mb-6 bento-item">
+          <div className="panel">
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <h1 className="text-2xl font-bold text-slate-800">{t('heading')}</h1>
+                <p className="text-slate-600 mt-1">{t('description')}</p>
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="text-right">
+                  <div className="text-3xl font-bold text-blue-600">{plans.length}</div>
+                  <div className="text-sm text-slate-500">{t('totalPlans')}</div>
+                </div>
+                <button onClick={handleCreate} className="btn-primary flex items-center gap-2">
+                  <PlusIcon className="w-4 h-4" />
+                  <span>{t('addPlan')}</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="col-span-full bento-item panel">
+          <div className="flex items-center justify-between mb-4 gap-4">
+            <div className="card-title">{t('allPlans')}</div>
+            <div className="relative">
+              <MagnifyingGlassIcon className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              <input
+                type="text"
+                placeholder={t('searchPlaceholder')}
+                value={searchTerm}
+                onChange={(event) => setSearchTerm(event.target.value)}
+                className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+          </div>
+
+          <div className="overflow-x-auto">
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>{t('table.planId')}</th>
+                  <th>{t('table.module')}</th>
+                  <th>{t('table.maintenanceType')}</th>
+                  <th>{t('table.frequency')}</th>
+                  <th>{t('table.responsable')}</th>
+                  <th>{t('table.huileGraisse')}</th>
+                  <th>{t('table.documentation')}</th>
+                  <th>{tCommon('table.actions')}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredPlans.length === 0 ? (
+                  <tr>
+                    <td colSpan={8} className="text-center py-8 text-gray-500">
+                      {searchTerm ? t('empty.search') : t('empty.default')}
+                    </td>
+                  </tr>
+                ) : (
+                  filteredPlans.map((plan) => (
+                    <tr key={plan._id}>
+                      <td className="font-medium">{plan.plan_id}</td>
+                      <td>{getModuleLabel(plan.module_id, modules, tCommon('notAvailable'))}</td>
+                      <td>{plan.type_maintenance}</td>
+                      <td>{`${plan.frequence} ${plan.unite_frequence}`}</td>
+                      <td>{plan.responsable || tCommon('notAvailable')}</td>
+                      <td>{plan.huile_graisse || tCommon('notAvailable')}</td>
+                      <td>{plan.documentation || tCommon('notAvailable')}</td>
+                      <td>
+                        <div className="flex gap-2">
+                          <button className="btn-secondary p-2" title={t('actions.edit')} onClick={() => handleEdit(plan)}>
+                            <PencilIcon className="w-4 h-4" />
+                          </button>
+                          <button className="btn-danger p-2" title={t('actions.delete')} onClick={() => handleDelete(plan._id)}>
+                            <TrashIcon className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <Modal isOpen={showModal} onClose={() => setShowModal(false)} title={editingPlan ? t('modal.edit') : t('modal.add')}>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-1">{t('form.planId')}</label>
+            <input
+              type="text"
+              value={formData.plan_id}
+              onChange={(event) => setFormData((prev) => ({ ...prev, plan_id: event.target.value }))}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+              placeholder={t('placeholders.planId')}
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-1">{t('form.module')}</label>
+            <select
+              value={formData.module_id}
+              onChange={(event) => setFormData((prev) => ({ ...prev, module_id: event.target.value }))}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+              title={t('form.module')}
+              required
+            >
+              <option value="">{t('placeholders.module')}</option>
+              {modules.map((module) => (
+                <option key={module._id} value={module._id}>
+                  {module.module_id || module._id}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1">{t('form.maintenanceType')}</label>
+              <input
+                type="text"
+                value={formData.type_maintenance}
+                onChange={(event) => setFormData((prev) => ({ ...prev, type_maintenance: event.target.value }))}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                placeholder={t('placeholders.maintenanceType')}
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1">{t('form.frequency')}</label>
+              <input
+                type="number"
+                min="1"
+                value={formData.frequence}
+                onChange={(event) => setFormData((prev) => ({ ...prev, frequence: event.target.value }))}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                title={t('form.frequency')}
+                placeholder={t('placeholders.frequency')}
+                required
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-1">{t('form.frequencyUnit')}</label>
+            <input
+              type="text"
+              value={formData.unite_frequence}
+              onChange={(event) => setFormData((prev) => ({ ...prev, unite_frequence: event.target.value }))}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+              placeholder={t('placeholders.frequencyUnit')}
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-1">{t('form.responsable')}</label>
+            <input
+              type="text"
+              value={formData.responsable}
+              onChange={(event) => setFormData((prev) => ({ ...prev, responsable: event.target.value }))}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+              placeholder={t('placeholders.responsable')}
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-1">{t('form.huileGraisse')}</label>
+            <input
+              type="text"
+              value={formData.huile_graisse}
+              onChange={(event) => setFormData((prev) => ({ ...prev, huile_graisse: event.target.value }))}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+              placeholder={t('placeholders.huileGraisse')}
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-1">{t('form.documentation')}</label>
+            <input
+              type="text"
+              value={formData.documentation}
+              onChange={(event) => setFormData((prev) => ({ ...prev, documentation: event.target.value }))}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+              placeholder={t('placeholders.documentation')}
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-1">{t('form.instruction')}</label>
+            <textarea
+              rows={5}
+              value={formData.instruction}
+              onChange={(event) => setFormData((prev) => ({ ...prev, instruction: event.target.value }))}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+              placeholder={t('placeholders.instruction')}
+            />
+          </div>
+
+          <div className="flex justify-end gap-2 pt-2">
+            <button type="button" className="btn-secondary" onClick={() => setShowModal(false)}>
+              {t('actions.cancel')}
+            </button>
+            <button type="submit" className="btn-primary" disabled={submitting}>
+              {submitting ? tCommon('saving') : editingPlan ? t('actions.update') : t('actions.create')}
+            </button>
+          </div>
+        </form>
+      </Modal>
+    </DashboardLayout>
+  );
+}

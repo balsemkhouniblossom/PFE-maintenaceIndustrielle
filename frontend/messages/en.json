@@ -367,6 +367,7 @@
       "users": "Users",
       "machines": "Machines",
       "workOrders": "Work Orders",
+      "maintenancePlans": "Maintenance Plans",
       "catalogues": "Catalogues",
       "machineTypes": "Machine Types",
       "sensors": "Sensors",
@@ -1055,6 +1056,7 @@
       "machineTypes": "Machine Types",
       "sensors": "Sensors",
       "capteurs": "Capteurs",
+      "maintenancePlans": "Maintenance Plans",
       "documents": "Documents",
       "moduleTypes": "Module Types",
       "categories": {
@@ -1383,6 +1385,75 @@
       "saveFailed": "Failed to save document",
       "deleteFailed": "Failed to delete document",
       "confirmDelete": "Are you sure you want to delete this document? This action cannot be undone."
+    }
+  },
+  "maintenancePlans": {
+    "title": "MAINTENANCE PLANS MANAGEMENT",
+    "heading": "Maintenance Plans Management",
+    "description": "Explicitly manage responsable, huile_graisse, and documentation fields.",
+    "totalPlans": "Total Maintenance Plans",
+    "addPlan": "Add Plan",
+    "allPlans": "All Maintenance Plans",
+    "searchPlaceholder": "Search by plan, module, responsable, oil/fat, documentation...",
+    "table": {
+      "planId": "Plan ID",
+      "module": "Module",
+      "maintenanceType": "Maintenance Type",
+      "frequency": "Frequency",
+      "responsable": "Responsable",
+      "huileGraisse": "Huile / Graisse",
+      "documentation": "Documentation"
+    },
+    "empty": {
+      "default": "No maintenance plans available.",
+      "search": "No maintenance plans match your search."
+    },
+    "modal": {
+      "add": "Add Maintenance Plan",
+      "edit": "Edit Maintenance Plan"
+    },
+    "form": {
+      "planId": "Plan ID",
+      "module": "Module",
+      "maintenanceType": "Maintenance Type",
+      "frequency": "Frequency",
+      "frequencyUnit": "Frequency Unit",
+      "responsable": "Responsable",
+      "huileGraisse": "Huile / Graisse",
+      "documentation": "Documentation",
+      "instruction": "Instruction"
+    },
+    "placeholders": {
+      "planId": "Enter plan ID",
+      "module": "Select a module",
+      "maintenanceType": "preventive / corrective",
+      "frequency": "1",
+      "frequencyUnit": "jour / semaine / mois / an",
+      "responsable": "Ruster / Maintenance",
+      "huileGraisse": "ARAL Degol B 220",
+      "documentation": "Fiche plan de maintenance",
+      "instruction": "Enter detailed maintenance steps"
+    },
+    "actions": {
+      "edit": "Edit",
+      "delete": "Delete",
+      "cancel": "Cancel",
+      "create": "Create",
+      "update": "Update"
+    },
+    "notifications": {
+      "loadFailed": "Failed to load maintenance plans",
+      "planIdRequired": "Plan ID is required",
+      "moduleRequired": "Module is required",
+      "maintenanceTypeRequired": "Maintenance type is required",
+      "frequencyUnitRequired": "Frequency unit is required",
+      "frequencyPositive": "Frequency must be a positive number",
+      "confirmDelete": "Are you sure you want to delete this maintenance plan?",
+      "deleteSuccess": "Maintenance plan deleted successfully",
+      "deleteFailed": "Failed to delete maintenance plan",
+      "createSuccess": "Maintenance plan created successfully",
+      "updateSuccess": "Maintenance plan updated successfully",
+      "saveFailed": "Failed to save maintenance plan"
     }
   }
 }

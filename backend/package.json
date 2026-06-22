@@ -8,6 +8,7 @@
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "import:braiding-maintenance": "node scripts/import-braiding-maintenance-plan.js",
     "start": "nest start",
     "start:dev": "nest start",
     "start:debug": "nest start --debug --watch",
