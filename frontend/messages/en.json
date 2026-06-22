@@ -94,7 +94,8 @@
     },
     "table": {
       "actions": "Actions",
-      "noData": "No data available"
+      "noData": "No data available",
+       "allFields": "All Fields"
     },
     "systemOnline": "System online",
     "percentageChangeFromLastMonth": {
@@ -1032,6 +1033,7 @@
       "failures": "Failures",
       "monitoring": "Monitoring",
       "inventory": "Inventory",
+      "inventoryLubrication": "Inventory & Lubrication",
       "documents": "Documents"
     },
     "systemStatus": {
@@ -1061,6 +1063,10 @@
       "preventiveTaskChecklist": "Preventive Task Checklist",
       "documents": "Documents",
       "moduleTypes": "Module Types",
+      "stocks": "Stocks",
+      "lubrifiants": "Lubricants",
+      "lubrificationLogs": "Lubrication Logs",
+      "otPieces": "OT Pieces",
       "categories": {
         "overview": "Overview",
         "userManagement": "User management",

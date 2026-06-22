@@ -2,8 +2,10 @@
 
 import { useState, useEffect, useMemo } from 'react';
 import DashboardLayout from '@/components/DashboardLayout';
+import DynamicSearchControls from '@/components/DynamicSearchControls';
 import { Modal } from '@/components/Modal';
 import { apiService } from '@/services/api';
+import { ALL_FIELDS_TOKEN, getSearchableFields, matchesDynamicSearch } from '@/services/dynamicSearch';
 import { PencilIcon, TrashIcon, PlusIcon, MagnifyingGlassIcon, ExclamationTriangleIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
 
 interface ModuleType {
@@ -23,6 +25,7 @@ export default function ModuleTypesPage() {
   const [editingModuleType, setEditingModuleType] = useState<ModuleType | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedSearchField, setSelectedSearchField] = useState(ALL_FIELDS_TOKEN);
   const [notification, setNotification] = useState<{ type: 'success' | 'error', message: string } | null>(null);
   const [formData, setFormData] = useState({
     module_type_id: '',
@@ -47,13 +50,12 @@ export default function ModuleTypesPage() {
     }
   }
 
-  const filteredModuleTypes = useMemo(() => moduleTypes.filter(moduleType =>
-    (moduleType.module_type_id && moduleType.module_type_id.toLowerCase().includes(searchTerm.toLowerCase())) ||
-    (moduleType.nom_module && moduleType.nom_module.toLowerCase().includes(searchTerm.toLowerCase())) ||
-    (moduleType.description && moduleType.description.toLowerCase().includes(searchTerm.toLowerCase())) ||
-    (moduleType.category && moduleType.category.toLowerCase().includes(searchTerm.toLowerCase())) ||
-    (moduleType.compatibility && moduleType.compatibility.join(', ').toLowerCase().includes(searchTerm.toLowerCase()))
-  ), [moduleTypes, searchTerm]);
+  const searchableFields = useMemo(() => getSearchableFields(moduleTypes), [moduleTypes]);
+
+  const filteredModuleTypes = useMemo(
+    () => moduleTypes.filter((moduleType) => matchesDynamicSearch(moduleType, searchTerm, selectedSearchField)),
+    [moduleTypes, searchTerm, selectedSearchField],
+  );
 
   const showNotification = (type: 'success' | 'error', message: string) => {
     setNotification({ type, message });
@@ -205,18 +207,20 @@ export default function ModuleTypesPage() {
 
         {/* Module Types Table */}
         <div className="col-span-full bento-item panel">
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center justify-between mb-4 gap-3">
             <div className="card-title">ALL MODULE TYPES</div>
-            <div className="relative">
-              <MagnifyingGlassIcon className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Search module types..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
-            </div>
+            <DynamicSearchControls
+              className=""
+              selectClassName="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              inputClassName="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent w-full"
+              selectedField={selectedSearchField}
+              onSelectedFieldChange={setSelectedSearchField}
+              searchableFields={searchableFields}
+              allFieldsLabel="All fields"
+              searchTerm={searchTerm}
+              onSearchTermChange={setSearchTerm}
+              searchPlaceholder="Search module types..."
+            />
           </div>
           <div className="overflow-x-auto">
             <table className="table">

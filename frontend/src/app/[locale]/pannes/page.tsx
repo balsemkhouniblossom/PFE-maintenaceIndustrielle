@@ -12,9 +12,11 @@ import {
   TrashIcon,
 } from '@heroicons/react/24/outline';
 import DashboardLayout from '@/components/DashboardLayout';
+import DynamicSearchControls from '@/components/DynamicSearchControls';
 import { Modal } from '@/components/Modal';
 import { apiService } from '@/services/api';
 import { useAuth } from '@/contexts/AuthContext';
+import { ALL_FIELDS_TOKEN, getSearchableFields, matchesDynamicSearch } from '@/services/dynamicSearch';
 
 interface Panne {
   _id: string;
@@ -36,6 +38,7 @@ export default function PannesPage() {
   const [pannes, setPannes] = useState<Panne[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedSearchField, setSelectedSearchField] = useState(ALL_FIELDS_TOKEN);
   const [showModal, setShowModal] = useState(false);
   const [editingPanne, setEditingPanne] = useState<Panne | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -76,18 +79,12 @@ export default function PannesPage() {
     setTimeout(() => setNotification(null), 5000);
   }
 
-  const filteredPannes = useMemo(() => {
-    const term = searchTerm.trim().toLowerCase();
-    if (!term) return pannes;
+  const searchableFields = useMemo(() => getSearchableFields(pannes), [pannes]);
 
-    return pannes.filter(
-      (panne) =>
-        (panne.panne_id ?? '').toLowerCase().includes(term) ||
-        (panne.code_panne ?? '').toLowerCase().includes(term) ||
-        (panne.description ?? '').toLowerCase().includes(term) ||
-        (panne.gravite ?? '').toLowerCase().includes(term),
-    );
-  }, [pannes, searchTerm]);
+  const filteredPannes = useMemo(
+    () => pannes.filter((panne) => matchesDynamicSearch(panne, searchTerm, selectedSearchField)),
+    [pannes, searchTerm, selectedSearchField],
+  );
 
   const panneTemplates = useMemo(() => {
     const byId = new Map<string, Panne>();
@@ -292,19 +289,15 @@ export default function PannesPage() {
               </div>
             </div>
 
-            <div className="mt-4 relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <MagnifyingGlassIcon className="h-5 w-5 text-gray-400" />
-              </div>
-              <input
-                type="text"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder={t('searchPlaceholder')}
-                title={t('searchPlaceholder')}
-                className="input-field pl-10 w-full"
-              />
-            </div>
+            <DynamicSearchControls
+              selectedField={selectedSearchField}
+              onSelectedFieldChange={setSelectedSearchField}
+              searchableFields={searchableFields}
+              allFieldsLabel={tCommon('table.allFields', { default: 'All fields' })}
+              searchTerm={searchTerm}
+              onSearchTermChange={setSearchTerm}
+              searchPlaceholder={t('searchPlaceholder')}
+            />
           </div>
         </div>
 

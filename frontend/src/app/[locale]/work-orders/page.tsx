@@ -1,10 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import DashboardLayout from "@/components/DashboardLayout";
+import DynamicSearchControls from "@/components/DynamicSearchControls";
 import { Modal } from "@/components/Modal";
 import ProfileAvatar from "@/components/ProfileAvatar";
 import { apiService } from "@/services/api";
+import { ALL_FIELDS_TOKEN, getSearchableFields, matchesDynamicSearch } from "@/services/dynamicSearch";
 import { PencilIcon, TrashIcon, PlusIcon, MagnifyingGlassIcon, ExclamationTriangleIcon, CheckCircleIcon } from "@heroicons/react/24/outline";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
@@ -39,7 +41,6 @@ export default function WorkOrdersPage() {
   const tCommon = useTranslations("common");
   const router = useRouter();
   const [workOrders, setWorkOrders] = useState<WorkOrder[]>([]);
-  const [filteredWorkOrders, setFilteredWorkOrders] = useState<WorkOrder[]>([]);
   const [machines, setMachines] = useState<Machine[]>([]);
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
@@ -47,6 +48,7 @@ export default function WorkOrdersPage() {
   const [editingWorkOrder, setEditingWorkOrder] = useState<WorkOrder | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedSearchField, setSelectedSearchField] = useState(ALL_FIELDS_TOKEN);
   const [notification, setNotification] = useState<{ type: 'success' | 'error', message: string } | null>(null);
   const [formData, setFormData] = useState({
     ot_id: '',
@@ -106,18 +108,22 @@ export default function WorkOrdersPage() {
     }
   };
 
-  useEffect(() => {
-    const filtered = workOrders.filter(workOrder =>
-      workOrder.ot_id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (workOrder.description && workOrder.description.toLowerCase().includes(searchTerm.toLowerCase())) ||
-      workOrder.status.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (workOrder.priorite && workOrder.priorite.toLowerCase().includes(searchTerm.toLowerCase())) ||
-      (workOrder.machine_id && workOrder.machine_id.machine_id.toLowerCase().includes(searchTerm.toLowerCase())) ||
-      (workOrder.technician_id && workOrder.technician_id.nom_complet.toLowerCase().includes(searchTerm.toLowerCase()))
-    );
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setFilteredWorkOrders(filtered);
-  }, [workOrders, searchTerm]);
+  const searchableWorkOrders = useMemo(
+    () =>
+      workOrders.map((workOrder) => ({
+        ...workOrder,
+        machine_label: workOrder.machine_id?.machine_id || '',
+        technician_label: workOrder.technician_id?.nom_complet || '',
+      })),
+    [workOrders],
+  );
+
+  const searchableFields = useMemo(() => getSearchableFields(searchableWorkOrders), [searchableWorkOrders]);
+
+  const filteredWorkOrders = useMemo(
+    () => searchableWorkOrders.filter((workOrder) => matchesDynamicSearch(workOrder, searchTerm, selectedSearchField)),
+    [searchableWorkOrders, searchTerm, selectedSearchField],
+  );
 
   const showNotification = (type: 'success' | 'error', message: string) => {
     setNotification({ type, message });
@@ -288,18 +294,20 @@ export default function WorkOrdersPage() {
 
         {/* Work Orders Table */}
         <div className="col-span-full bento-item panel">
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center justify-between mb-4 gap-3">
             <div className="card-title">{tWorkOrders("allWorkOrders")}</div>
-            <div className="relative">
-              <MagnifyingGlassIcon className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-              <input
-                type="text"
-                placeholder={tWorkOrders("searchPlaceholder")}
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
-            </div>
+            <DynamicSearchControls
+              className=""
+              selectClassName="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              inputClassName="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent w-full"
+              selectedField={selectedSearchField}
+              onSelectedFieldChange={setSelectedSearchField}
+              searchableFields={searchableFields}
+              allFieldsLabel={tCommon("table.allFields", { default: "All fields" })}
+              searchTerm={searchTerm}
+              onSearchTermChange={setSearchTerm}
+              searchPlaceholder={tWorkOrders("searchPlaceholder")}
+            />
           </div>
           <div className="overflow-x-auto">
             <table className="table">

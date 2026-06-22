@@ -749,6 +749,7 @@
       "failures": "Guasti",
       "monitoring": "Monitoraggio",
       "inventory": "Inventario",
+      "inventoryLubrication": "Inventario e lubrificazione",
       "documents": "Documenti"
     },
     "systemStatus": {
@@ -778,6 +779,10 @@
       "preventiveTaskChecklist": "Elenco di controllo attività preventive",
       "documents": "Documenti",
       "moduleTypes": "Tipi di modulo",
+      "stocks": "Scorte",
+      "lubrifiants": "Lubrificanti",
+      "lubrificationLogs": "Registri di lubrificazione",
+      "otPieces": "Pezzi OT",
       "categories": {
         "overview": "Panoramica",
         "userManagement": "Gestione utenti",

@@ -849,6 +849,7 @@
       "failures": "الأعطال",
       "monitoring": "المراقبة",
       "inventory": "المخزون",
+      "inventoryLubrication": "المخزون والتشحيم",
       "documents": "المستندات"
     },
     "systemStatus": {
@@ -878,6 +879,10 @@
       "preventiveTaskChecklist": "قائمة مراجعة مهام الصيانة الوقائية",
       "moduleTypes": "أنواع الوحدات",
       "documents": "المستندات",
+      "stocks": "المخزون",
+      "lubrifiants": "مواد التشحيم",
+      "lubrificationLogs": "سجلات التشحيم",
+      "otPieces": "قطع أوامر العمل",
       "categories": {
         "overview": "نظرة عامة",
         "userManagement": "إدارة المستخدمين",

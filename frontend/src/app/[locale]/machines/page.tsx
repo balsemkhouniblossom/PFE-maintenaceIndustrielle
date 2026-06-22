@@ -2,8 +2,10 @@
 
 import { useState, useEffect, useMemo } from 'react';
 import DashboardLayout from '@/components/DashboardLayout';
+import DynamicSearchControls from '@/components/DynamicSearchControls';
 import { Modal } from '@/components/Modal';
 import { apiService } from '@/services/api';
+import { ALL_FIELDS_TOKEN, getSearchableFields, matchesDynamicSearch } from '@/services/dynamicSearch';
 import { PencilIcon, TrashIcon, PlusIcon, MagnifyingGlassIcon, ExclamationTriangleIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
@@ -39,6 +41,7 @@ export default function MachinesPage() {
   const [editingMachine, setEditingMachine] = useState<Machine | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedSearchField, setSelectedSearchField] = useState(ALL_FIELDS_TOKEN);
   const [notification, setNotification] = useState<{ type: 'success' | 'error', message: string } | null>(null);
   const [formData, setFormData] = useState({
     machine_id: '',
@@ -118,17 +121,6 @@ export default function MachinesPage() {
     };
   }, []);
 
-  const filtered = useMemo(() => {
-    const term = searchTerm.toLowerCase();
-
-    return machines.filter((m) =>
-      (m.machine_id ?? "").toLowerCase().includes(term) ||
-      (m.serial_no ?? "").toLowerCase().includes(term) ||
-      (m.fabricant ?? "").toLowerCase().includes(term) ||
-      (m.model ?? "").toLowerCase().includes(term) ||
-      (m.location ?? "").toLowerCase().includes(term)
-    );
-  }, [machines, searchTerm]);
   const loadMachines = async () => {
     try {
       const response = await apiService.getMachines();
@@ -158,6 +150,22 @@ export default function MachinesPage() {
 
     return map;
   }, [machineTypes]);
+
+  const searchableMachines = useMemo(
+    () =>
+      machines.map((machine) => ({
+        ...machine,
+        machine_type_name: machineTypeMap[String(machine.type_id)]?.name || '',
+      })),
+    [machines, machineTypeMap],
+  );
+
+  const searchableFields = useMemo(() => getSearchableFields(searchableMachines), [searchableMachines]);
+
+  const filtered = useMemo(
+    () => searchableMachines.filter((machine) => matchesDynamicSearch(machine, searchTerm, selectedSearchField)),
+    [searchableMachines, searchTerm, selectedSearchField],
+  );
 
   const validateForm = () => {
     if (!formData.machine_id.trim()) {
@@ -318,18 +326,15 @@ export default function MachinesPage() {
             </div>
 
             {/* Search Bar */}
-            <div className="mt-4 relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <MagnifyingGlassIcon className="h-5 w-5 text-gray-400" />
-              </div>
-              <input
-                type="text"
-                placeholder={tMachines('searchPlaceholder')}
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="input-field pl-10 w-full"
-              />
-            </div>
+            <DynamicSearchControls
+              selectedField={selectedSearchField}
+              onSelectedFieldChange={setSelectedSearchField}
+              searchableFields={searchableFields}
+              allFieldsLabel={tCommon('table.allFields', { default: 'All fields' })}
+              searchTerm={searchTerm}
+              onSearchTermChange={setSearchTerm}
+              searchPlaceholder={tMachines('searchPlaceholder')}
+            />
           </div>
         </div>
 

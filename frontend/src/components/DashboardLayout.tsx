@@ -94,7 +94,11 @@ function DashboardLayoutBody({ children, title }: DashboardLayoutProps) {
       { name: t('navigation.pannes'), href: '/pannes', icon: ExclamationTriangleIcon, categoryKey: 'categories.maintenance', domain: 'failures' },
       { name: t('navigation.panneSolutions'), href: '/panne-solutions', icon: DocumentTextIcon, categoryKey: 'categories.maintenance', domain: 'failures' },
       { name: t('navigation.capteurs'), href: '/capteurs', icon: CpuChipIcon, categoryKey: 'categories.iotMonitoring', domain: 'monitoring' },
-      { name: t('navigation.catalogues'), href: '/catalogues', icon: BuildingStorefrontIcon, categoryKey: 'categories.partsInventory', domain: 'inventory' },
+      { name: t('navigation.catalogues'), href: '/catalogues', icon: BuildingStorefrontIcon, categoryKey: 'categories.partsInventory', domain: 'inventoryLubrication' },
+      { name: t('navigation.stocks'), href: '/stocks', icon: BuildingStorefrontIcon, categoryKey: 'categories.partsInventory', domain: 'inventoryLubrication' },
+      { name: t('navigation.lubrifiants'), href: '/lubrifiants', icon: CubeIcon, categoryKey: 'categories.partsInventory', domain: 'inventoryLubrication' },
+      { name: t('navigation.lubrificationLogs'), href: '/lubrification-logs', icon: ClipboardDocumentListIcon, categoryKey: 'categories.partsInventory', domain: 'inventoryLubrication' },
+      { name: t('navigation.otPieces'), href: '/ot-pieces', icon: ClipboardDocumentListIcon, categoryKey: 'categories.partsInventory', domain: 'inventoryLubrication' },
       { name: t('navigation.documents'), href: '/documents', icon: DocumentTextIcon, categoryKey: 'categories.technicalReference', domain: 'documents' }
     ];
 
@@ -129,7 +133,7 @@ function DashboardLayoutBody({ children, title }: DashboardLayoutProps) {
 
     // Group by domain
     const domainMap: Record<string, NavItem[]> = {};
-    const domainOrder = ['dashboard', 'users', 'assets', 'maintenance', 'failures', 'monitoring', 'inventory', 'documents'];
+    const domainOrder = ['dashboard', 'users', 'assets', 'maintenance', 'failures', 'monitoring', 'inventory', 'inventoryLubrication', 'documents'];
 
     navItems.forEach(item => {
       const domain = item.domain || 'other';

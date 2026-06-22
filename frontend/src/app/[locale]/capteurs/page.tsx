@@ -2,8 +2,10 @@
 
 import { Fragment, useEffect, useMemo, useState } from 'react';
 import DashboardLayout from '@/components/DashboardLayout';
+import DynamicSearchControls from '@/components/DynamicSearchControls';
 import { Modal } from '@/components/Modal';
 import { apiService } from '@/services/api';
+import { ALL_FIELDS_TOKEN, getSearchableFields, matchesDynamicSearch } from '@/services/dynamicSearch';
 import { useRouter } from 'next/navigation';
 import { CheckCircleIcon, ExclamationTriangleIcon, MagnifyingGlassIcon, PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { useTranslations } from 'next-intl';
@@ -31,6 +33,7 @@ export default function CapteursPage() {
   const [capteurs, setCapteurs] = useState<Capteur[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedSearchField, setSelectedSearchField] = useState(ALL_FIELDS_TOKEN);
   const [showModal, setShowModal] = useState(false);
   const [editingCapteur, setEditingCapteur] = useState<Capteur | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -72,18 +75,12 @@ export default function CapteursPage() {
     setTimeout(() => setNotification(null), 5000);
   }
 
-  const filteredCapteurs = useMemo(() => {
-    const term = searchTerm.trim().toLowerCase();
+  const searchableFields = useMemo(() => getSearchableFields(capteurs), [capteurs]);
 
-    if (!term) return capteurs;
-
-    return capteurs.filter((capteur) =>
-      (capteur.capteur_id ?? '').toLowerCase().includes(term) ||
-      (capteur.code_capteur ?? '').toLowerCase().includes(term) ||
-      (capteur.type_capteur ?? '').toLowerCase().includes(term) ||
-      String(capteur.module_id ?? '').toLowerCase().includes(term),
-    );
-  }, [capteurs, searchTerm]);
+  const filteredCapteurs = useMemo(
+    () => capteurs.filter((capteur) => matchesDynamicSearch(capteur, searchTerm, selectedSearchField)),
+    [capteurs, searchTerm, selectedSearchField],
+  );
 
   function resetForm() {
     setFormData({
@@ -281,18 +278,15 @@ export default function CapteursPage() {
               </div>
             </div>
 
-            <div className="mt-4 relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <MagnifyingGlassIcon className="h-5 w-5 text-gray-400" />
-              </div>
-              <input
-                type="text"
-                placeholder={tCapteurs('searchPlaceholder')}
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="input-field pl-10 w-full"
-              />
-            </div>
+            <DynamicSearchControls
+              selectedField={selectedSearchField}
+              onSelectedFieldChange={setSelectedSearchField}
+              searchableFields={searchableFields}
+              allFieldsLabel={tCommon('table.allFields', { default: 'All fields' })}
+              searchTerm={searchTerm}
+              onSearchTermChange={setSearchTerm}
+              searchPlaceholder={tCapteurs('searchPlaceholder')}
+            />
           </div>
         </div>
 

@@ -4,7 +4,9 @@ import { Modal } from '@/components/Modal';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import DashboardLayout from '@/components/DashboardLayout';
+import DynamicSearchControls from '@/components/DynamicSearchControls';
 import { apiService } from '@/services/api';
+import { ALL_FIELDS_TOKEN, getSearchableFields, matchesDynamicSearch } from '@/services/dynamicSearch';
 import { useRouter } from 'next/navigation';
 import {
   PencilIcon,
@@ -36,6 +38,7 @@ export default function UsersPage() {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedSearchField, setSelectedSearchField] = useState(ALL_FIELDS_TOKEN);
   const [submitting, setSubmitting] = useState(false);
   //const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [notification, setNotification] = useState<{
@@ -222,24 +225,15 @@ export default function UsersPage() {
     };
   }, []);
 
-  const filteredUsers = useMemo(() => {
-    const term = searchTerm.trim().toLowerCase();
+  const searchableFields = useMemo(
+    () => getSearchableFields(users, { exclude: ['photo'] }),
+    [users],
+  );
 
-    if (!term) return users;
-
-    return users.filter((u) => {
-      const fullName = (u.nom_complet ?? '').toLowerCase();
-
-      return (
-        (u.user_id ?? '').toLowerCase().includes(term) ||
-        fullName.includes(term) ||
-        (u.email ?? '').toLowerCase().includes(term) ||
-        (u.role ?? '').toLowerCase().includes(term) ||
-        (u.department ?? '').toLowerCase().includes(term) ||
-        (u.phone ?? '').toLowerCase().includes(term)
-      );
-    });
-  }, [users, searchTerm]);
+  const filteredUsers = useMemo(
+    () => users.filter((u) => matchesDynamicSearch(u, searchTerm, selectedSearchField)),
+    [users, searchTerm, selectedSearchField],
+  );
 
   async function handleDelete(userId?: string) {
     if (!userId) return;
@@ -328,18 +322,15 @@ export default function UsersPage() {
               </div>
             </div>
 
-            <div className="mt-4 relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <MagnifyingGlassIcon className="h-5 w-5 text-gray-400" />
-              </div>
-              <input
-                type="text"
-                placeholder={tUsers('searchPlaceholder', { default: 'Search users...' })}
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="input-field pl-10 w-full"
-              />
-            </div>
+            <DynamicSearchControls
+              selectedField={selectedSearchField}
+              onSelectedFieldChange={setSelectedSearchField}
+              searchableFields={searchableFields}
+              allFieldsLabel={tCommon('table.allFields', { default: 'All fields' })}
+              searchTerm={searchTerm}
+              onSearchTermChange={setSearchTerm}
+              searchPlaceholder={tUsers('searchPlaceholder', { default: 'Search users...' })}
+            />
           </div>
         </div>
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams, useRouter, useParams } from "next/navigation";
 import DashboardLayout from "@/components/DashboardLayout";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import { apiService } from "@/services/api";
@@ -33,6 +33,7 @@ interface MachineType {
 
 export default function OperatorMachinesPage() {
     const router = useRouter();
+    const params = useParams<{ locale?: string }>();
     const searchParams = useSearchParams();
     const tMachines = useTranslations("operatorMachines");
     const tCommon = useTranslations("common");
@@ -41,6 +42,7 @@ export default function OperatorMachinesPage() {
     const [machines, setMachines] = useState<Machine[]>([]);
     const [category, setCategory] = useState<MachineType | null>(null);
     const [loading, setLoading] = useState(true);
+    const locale = params?.locale ?? "en";
     const normalizeMachineTypeId = (machine: any) =>
         typeof machine.type_id === "object"
             ? machine.type_id?._id
@@ -189,7 +191,7 @@ export default function OperatorMachinesPage() {
                                 <button
                                     onClick={() =>
                                         router.push(
-                                            `/operator/report-problem?machine=${machine._id}`
+                                            `/${locale}/operator/corrective?machine=${machine._id}&intent=report-issue`
                                         )
                                     }
                                     className="flex-1 bg-red-600 hover:bg-red-700 text-white rounded-lg px-3 py-2 text-sm font-medium"
@@ -199,7 +201,7 @@ export default function OperatorMachinesPage() {
 
                                 <button
                                     onClick={() =>
-                                        router.push(`/operator/machine/${machine._id}`)
+                                        router.push(`/${locale}/operator/corrective?machine=${machine._id}&view=history#machine-history`)
                                     }
                                     className="flex-1 bg-blue-600 hover:bg-blue-700 text-white rounded-lg px-3 py-2 text-sm font-medium flex items-center justify-center gap-2"
                                 >

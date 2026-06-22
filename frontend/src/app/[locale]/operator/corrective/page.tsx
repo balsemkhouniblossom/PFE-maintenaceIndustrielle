@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import DashboardLayout from "@/components/DashboardLayout";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import { useAuth } from "@/contexts/AuthContext";
@@ -55,6 +56,25 @@ interface Stock {
   quantite_en_stock: number;
 }
 
+interface WorkOrder {
+  _id: string;
+  ot_id: string;
+  type_maintenance?: string;
+  status?: string;
+  machine_id?: EntityRef | { _id?: string; machine_id?: string };
+  date_created?: string;
+}
+
+interface InterventionReport {
+  _id: string;
+  report_id: string;
+  ot_id: EntityRef;
+  description_action?: string;
+  cause_racine?: string;
+  date_debut?: string;
+  date_fin?: string;
+}
+
 function refId(value: EntityRef | undefined): string {
   if (!value) return "";
   return typeof value === "string" ? value : value._id ?? "";
@@ -78,6 +98,7 @@ export default function OperatorCorrectivePage() {
   const t = useTranslations("dashboard.operator");
   const tCommon = useTranslations("common");
   const { user } = useAuth();
+  const searchParams = useSearchParams();
 
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
@@ -89,6 +110,8 @@ export default function OperatorCorrectivePage() {
   const [documents, setDocuments] = useState<DocumentEntity[]>([]);
   const [catalogues, setCatalogues] = useState<Catalogue[]>([]);
   const [stocks, setStocks] = useState<Stock[]>([]);
+  const [workOrders, setWorkOrders] = useState<WorkOrder[]>([]);
+  const [interventionReports, setInterventionReports] = useState<InterventionReport[]>([]);
 
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedMachine, setSelectedMachine] = useState("");
@@ -106,6 +129,11 @@ export default function OperatorCorrectivePage() {
   const [selectedParts, setSelectedParts] = useState<Record<string, string>>({});
   const [submitValidationReason, setSubmitValidationReason] = useState("");
   const [notification, setNotification] = useState<{ type: "success" | "error"; message: string } | null>(null);
+
+  const initialTypeId = searchParams.get("type") || "";
+  const initialMachineId = searchParams.get("machine") || "";
+  const initialView = searchParams.get("view") || "";
+  const intent = searchParams.get("intent") || "";
 
   useEffect(() => {
     if (!notification) return;
@@ -133,6 +161,8 @@ export default function OperatorCorrectivePage() {
           documentsRes,
           cataloguesRes,
           stocksRes,
+          workOrdersRes,
+          reportsRes,
         ] = await Promise.all([
           apiService.getMachineTypes(),
           apiService.getMachines(),
@@ -141,6 +171,8 @@ export default function OperatorCorrectivePage() {
           apiService.getDocuments(),
           apiService.getCatalogues(),
           apiService.getStocks(),
+          apiService.getWorkOrders(),
+          apiService.getInterventionReports(),
         ]);
 
         setMachineTypes(machineTypeRes.data ?? []);
@@ -150,6 +182,8 @@ export default function OperatorCorrectivePage() {
         setDocuments(documentsRes.data ?? []);
         setCatalogues(cataloguesRes.data ?? []);
         setStocks(stocksRes.data ?? []);
+        setWorkOrders(workOrdersRes.data ?? []);
+        setInterventionReports(reportsRes.data ?? []);
       } catch (error) {
         console.error("Failed to load corrective workflow data", error);
       } finally {
@@ -164,6 +198,32 @@ export default function OperatorCorrectivePage() {
     () => machines.filter((machine) => refId(machine.type_id) === selectedCategory),
     [machines, selectedCategory],
   );
+
+  useEffect(() => {
+    if (!machines.length) return;
+    if (!initialMachineId && !initialTypeId) return;
+
+    const preselectedMachine = machines.find((machine) => machine._id === initialMachineId);
+
+    if (preselectedMachine) {
+      const preselectedType = refId(preselectedMachine.type_id);
+      setSelectedCategory(preselectedType);
+      setSelectedMachine(preselectedMachine._id);
+      return;
+    }
+
+    if (initialTypeId) {
+      setSelectedCategory(initialTypeId);
+    }
+  }, [initialMachineId, initialTypeId, machines]);
+
+  useEffect(() => {
+    if (loading) return;
+    if (initialView !== "history") return;
+
+    const historySection = document.getElementById("machine-history");
+    historySection?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [initialView, loading]);
 
   const selectedFault = useMemo(
     () => pannes.find((item) => item._id === selectedPanne) ?? null,
@@ -201,6 +261,46 @@ export default function OperatorCorrectivePage() {
     });
     return stockMap;
   }, [stocks]);
+
+  const machineInterventionHistory = useMemo(() => {
+    if (!selectedMachine) return [];
+
+    return interventionReports
+      .map((report) => {
+        const workOrder = workOrders.find((item) => item._id === refId(report.ot_id));
+        if (!workOrder) return null;
+
+        const machineRef = typeof workOrder.machine_id === "string"
+          ? workOrder.machine_id
+          : refId(workOrder.machine_id as EntityRef);
+
+        if (machineRef !== selectedMachine) return null;
+
+        const date = report.date_fin || report.date_debut || workOrder.date_created || "";
+
+        return {
+          id: report._id,
+          reportId: report.report_id,
+          workOrderId: workOrder.ot_id,
+          type: workOrder.type_maintenance || "corrective",
+          status: workOrder.status || "waiting_validation",
+          action: report.description_action || tCommon("notAvailable"),
+          rootCause: report.cause_racine || tCommon("notAvailable"),
+          date,
+        };
+      })
+      .filter(Boolean)
+      .sort((a, b) => new Date(b!.date).getTime() - new Date(a!.date).getTime()) as Array<{
+      id: string;
+      reportId: string;
+      workOrderId: string;
+      type: string;
+      status: string;
+      action: string;
+      rootCause: string;
+      date: string;
+    }>;
+  }, [interventionReports, selectedMachine, tCommon, workOrders]);
 
   function toggleTask(task: string): void {
     setCheckedActions((prev) => ({ ...prev, [task]: !prev[task] }));
@@ -334,6 +434,12 @@ export default function OperatorCorrectivePage() {
               }`}
             >
               {notification.message}
+            </div>
+          ) : null}
+
+          {intent === "report-issue" ? (
+            <div className="col-span-full panel border border-blue-200 bg-blue-50 text-blue-800 text-sm">
+              This corrective workflow creates a corrective work order and links it to an intervention report.
             </div>
           ) : null}
 
@@ -499,6 +605,40 @@ export default function OperatorCorrectivePage() {
               </a>
             ) : (
               <div className="text-sm text-slate-500">{tCommon("table.noData")}</div>
+            )}
+          </div>
+
+          <div id="machine-history" className="col-span-full panel">
+            <div className="card-title mb-3">{t("report")} - {t("machine")}: {t("all")}</div>
+            <div className="text-sm text-slate-500 mb-3">
+              {selectedMachine
+                ? "Machine intervention history (preventive and corrective)"
+                : "Select a machine to view its intervention history."}
+            </div>
+            {!selectedMachine ? null : machineInterventionHistory.length === 0 ? (
+              <div className="text-sm text-slate-500">{tCommon("table.noData")}</div>
+            ) : (
+              <div className="space-y-3">
+                {machineInterventionHistory.slice(0, 8).map((item) => (
+                  <div key={item.id} className="border rounded-lg p-3">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <div className="font-semibold text-sm">{item.reportId} | {item.workOrderId}</div>
+                      <div className="text-xs text-slate-500">
+                        {item.date ? new Date(item.date).toLocaleString() : tCommon("notAvailable")}
+                      </div>
+                    </div>
+                    <div className="text-xs text-slate-600 mt-1">
+                      {item.type === "preventive" ? t("preventive") : t("corrective")} | {item.status}
+                    </div>
+                    <div className="text-sm mt-2">
+                      <span className="font-medium">{t("actionsPerformed")}: </span>{item.action}
+                    </div>
+                    <div className="text-sm mt-1">
+                      <span className="font-medium">{t("fault")}: </span>{item.rootCause}
+                    </div>
+                  </div>
+                ))}
+              </div>
             )}
           </div>
 

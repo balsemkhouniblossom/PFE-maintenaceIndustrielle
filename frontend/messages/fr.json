@@ -981,6 +981,7 @@
       "failures": "Pannes",
       "monitoring": "Surveillance",
       "inventory": "Inventaire",
+      "inventoryLubrication": "Inventaire & Lubrification",
       "documents": "Documents"
     },
     "systemStatus": {
@@ -1010,6 +1011,10 @@
       "preventiveTaskChecklist": "Liste de contrôle des tâches préventives",
       "documents": "Documents",
       "moduleTypes": "Types de modules",
+      "stocks": "Stocks",
+      "lubrifiants": "Lubrifiants",
+      "lubrificationLogs": "Journaux de lubrification",
+      "otPieces": "Pièces OT",
       "categories": {
         "overview": "Vue d'ensemble",
         "userManagement": "Gestion des utilisateurs",

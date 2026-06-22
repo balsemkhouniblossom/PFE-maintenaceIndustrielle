@@ -3,8 +3,10 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import DashboardLayout from '@/components/DashboardLayout';
+import DynamicSearchControls from '@/components/DynamicSearchControls';
 import { Modal } from '@/components/Modal';
 import { apiService } from '@/services/api';
+import { ALL_FIELDS_TOKEN, getSearchableFields, matchesDynamicSearch } from '@/services/dynamicSearch';
 import {
   CheckCircleIcon,
   ExclamationTriangleIcon,
@@ -53,6 +55,7 @@ export default function MaintenancePlansPage() {
   const [showModal, setShowModal] = useState(false);
   const [editingPlan, setEditingPlan] = useState<MaintenancePlan | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedSearchField, setSelectedSearchField] = useState(ALL_FIELDS_TOKEN);
   const [notification, setNotification] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
   const [formData, setFormData] = useState({
     plan_id: '',
@@ -203,22 +206,21 @@ export default function MaintenancePlansPage() {
     }
   }
 
-  const filteredPlans = useMemo(() => {
-    const term = searchTerm.trim().toLowerCase();
-    if (!term) return plans;
+  const searchablePlans = useMemo(
+    () =>
+      plans.map((plan) => ({
+        ...plan,
+        module_label: getModuleLabel(plan.module_id, modules, tCommon('notAvailable')),
+      })),
+    [plans, modules, tCommon],
+  );
 
-    return plans.filter((plan) => {
-      const moduleLabel = getModuleLabel(plan.module_id, modules, tCommon('notAvailable')).toLowerCase();
-      return (
-        String(plan.plan_id || '').toLowerCase().includes(term) ||
-        String(plan.type_maintenance || '').toLowerCase().includes(term) ||
-        String(plan.responsable || '').toLowerCase().includes(term) ||
-        String(plan.huile_graisse || '').toLowerCase().includes(term) ||
-        String(plan.documentation || '').toLowerCase().includes(term) ||
-        moduleLabel.includes(term)
-      );
-    });
-  }, [plans, modules, searchTerm]);
+  const searchableFields = useMemo(() => getSearchableFields(searchablePlans), [searchablePlans]);
+
+  const filteredPlans = useMemo(
+    () => searchablePlans.filter((plan) => matchesDynamicSearch(plan, searchTerm, selectedSearchField)),
+    [searchablePlans, searchTerm, selectedSearchField],
+  );
 
   if (loading) {
     return (
@@ -273,16 +275,18 @@ export default function MaintenancePlansPage() {
         <div className="col-span-full bento-item panel">
           <div className="flex items-center justify-between mb-4 gap-4">
             <div className="card-title">{t('allPlans')}</div>
-            <div className="relative">
-              <MagnifyingGlassIcon className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-              <input
-                type="text"
-                placeholder={t('searchPlaceholder')}
-                value={searchTerm}
-                onChange={(event) => setSearchTerm(event.target.value)}
-                className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
-            </div>
+            <DynamicSearchControls
+              className=""
+              selectClassName="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              inputClassName="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent w-full"
+              selectedField={selectedSearchField}
+              onSelectedFieldChange={setSelectedSearchField}
+              searchableFields={searchableFields}
+              allFieldsLabel={tCommon('table.allFields', { default: 'All fields' })}
+              searchTerm={searchTerm}
+              onSearchTermChange={setSearchTerm}
+              searchPlaceholder={t('searchPlaceholder')}
+            />
           </div>
 
           <div className="overflow-x-auto">

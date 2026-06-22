@@ -12,8 +12,10 @@ import {
   TrashIcon,
 } from '@heroicons/react/24/outline';
 import DashboardLayout from '@/components/DashboardLayout';
+import DynamicSearchControls from '@/components/DynamicSearchControls';
 import { Modal } from '@/components/Modal';
 import { apiService } from '@/services/api';
+import { ALL_FIELDS_TOKEN, getSearchableFields, matchesDynamicSearch } from '@/services/dynamicSearch';
 
 interface WorkOrderRef {
   _id: string;
@@ -73,6 +75,7 @@ export default function InterventionReportsPage() {
   const [technicians, setTechnicians] = useState<UserItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedSearchField, setSelectedSearchField] = useState(ALL_FIELDS_TOKEN);
   const [showModal, setShowModal] = useState(false);
   const [editingReport, setEditingReport] = useState<InterventionReport | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -118,20 +121,22 @@ export default function InterventionReportsPage() {
     setTimeout(() => setNotification(null), 5000);
   }
 
-  const filteredReports = useMemo(() => {
-    const term = searchTerm.trim().toLowerCase();
-    if (!term) return reports;
+  const searchableReports = useMemo(
+    () =>
+      reports.map((report) => ({
+        ...report,
+        work_order_label: getWorkOrderLabel(report.ot_id),
+        technician_label: getTechnicianLabel(report.technician_id),
+      })),
+    [reports],
+  );
 
-    return reports.filter((report) =>
-      (report.report_id ?? '').toLowerCase().includes(term) ||
-      getWorkOrderLabel(report.ot_id).toLowerCase().includes(term) ||
-      getTechnicianLabel(report.technician_id).toLowerCase().includes(term) ||
-      (report.cause_racine ?? '').toLowerCase().includes(term) ||
-      (report.description_action ?? '').toLowerCase().includes(term) ||
-      (report.etat_final ?? '').toLowerCase().includes(term) ||
-      (report.validation_responsable ?? '').toLowerCase().includes(term),
-    );
-  }, [reports, searchTerm]);
+  const searchableFields = useMemo(() => getSearchableFields(searchableReports), [searchableReports]);
+
+  const filteredReports = useMemo(
+    () => searchableReports.filter((report) => matchesDynamicSearch(report, searchTerm, selectedSearchField)),
+    [searchableReports, searchTerm, selectedSearchField],
+  );
 
   function resetForm() {
     setFormData({
@@ -315,19 +320,15 @@ export default function InterventionReportsPage() {
               </div>
             </div>
 
-            <div className="mt-4 relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <MagnifyingGlassIcon className="h-5 w-5 text-gray-400" />
-              </div>
-              <input
-                type="text"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder={t('searchPlaceholder')}
-                title={t('searchPlaceholder')}
-                className="input-field pl-10 w-full"
-              />
-            </div>
+            <DynamicSearchControls
+              selectedField={selectedSearchField}
+              onSelectedFieldChange={setSelectedSearchField}
+              searchableFields={searchableFields}
+              allFieldsLabel={tCommon('table.allFields', { default: 'All fields' })}
+              searchTerm={searchTerm}
+              onSearchTermChange={setSearchTerm}
+              searchPlaceholder={t('searchPlaceholder')}
+            />
           </div>
         </div>
 

@@ -12,9 +12,11 @@ import {
   TrashIcon,
 } from '@heroicons/react/24/outline';
 import DashboardLayout from '@/components/DashboardLayout';
+import DynamicSearchControls from '@/components/DynamicSearchControls';
 import { Modal } from '@/components/Modal';
 import { apiService } from '@/services/api';
 import { useAuth } from '@/contexts/AuthContext';
+import { ALL_FIELDS_TOKEN, getSearchableFields, matchesDynamicSearch } from '@/services/dynamicSearch';
 
 interface PanneItem {
   _id: string;
@@ -62,6 +64,7 @@ export default function PanneSolutionsPage() {
   const [pannes, setPannes] = useState<PanneItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedSearchField, setSelectedSearchField] = useState(ALL_FIELDS_TOKEN);
   const [showModal, setShowModal] = useState(false);
   const [editingSolution, setEditingSolution] = useState<PanneSolution | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -106,20 +109,21 @@ export default function PanneSolutionsPage() {
     setTimeout(() => setNotification(null), 5000);
   }
 
-  const filteredSolutions = useMemo(() => {
-    const term = searchTerm.trim().toLowerCase();
-    if (!term) return solutions;
+  const searchableSolutions = useMemo(
+    () =>
+      solutions.map((solution) => ({
+        ...solution,
+        panne_label: getPanneLabel(solution.panne_id),
+      })),
+    [solutions],
+  );
 
-    return solutions.filter((solution) => {
-      const panneLabel = getPanneLabel(solution.panne_id).toLowerCase();
-      return (
-        (solution.solution_id ?? '').toLowerCase().includes(term) ||
-        panneLabel.includes(term) ||
-        (solution.cause_probable ?? '').toLowerCase().includes(term) ||
-        (solution.solution_recommandee ?? '').toLowerCase().includes(term)
-      );
-    });
-  }, [solutions, searchTerm]);
+  const searchableFields = useMemo(() => getSearchableFields(searchableSolutions), [searchableSolutions]);
+
+  const filteredSolutions = useMemo(
+    () => searchableSolutions.filter((solution) => matchesDynamicSearch(solution, searchTerm, selectedSearchField)),
+    [searchableSolutions, searchTerm, selectedSearchField],
+  );
 
   const solutionTemplatesByPanne = useMemo(() => {
     const map = new Map<string, PanneSolution>();
@@ -339,19 +343,15 @@ export default function PanneSolutionsPage() {
               </div>
             </div>
 
-            <div className="mt-4 relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <MagnifyingGlassIcon className="h-5 w-5 text-gray-400" />
-              </div>
-              <input
-                type="text"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder={t('searchPlaceholder')}
-                title={t('searchPlaceholder')}
-                className="input-field pl-10 w-full"
-              />
-            </div>
+            <DynamicSearchControls
+              selectedField={selectedSearchField}
+              onSelectedFieldChange={setSelectedSearchField}
+              searchableFields={searchableFields}
+              allFieldsLabel={tCommon('table.allFields', { default: 'All fields' })}
+              searchTerm={searchTerm}
+              onSearchTermChange={setSearchTerm}
+              searchPlaceholder={t('searchPlaceholder')}
+            />
           </div>
         </div>
 

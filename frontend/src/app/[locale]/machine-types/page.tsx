@@ -2,8 +2,10 @@
 
 import { useState, useEffect, useMemo } from 'react';
 import DashboardLayout from '@/components/DashboardLayout';
+import DynamicSearchControls from '@/components/DynamicSearchControls';
 import { Modal } from '@/components/Modal';
 import { apiService } from '@/services/api';
+import { ALL_FIELDS_TOKEN, getSearchableFields, matchesDynamicSearch } from '@/services/dynamicSearch';
 import {
   PencilIcon,
   TrashIcon,
@@ -29,6 +31,7 @@ export default function MachineTypesPage() {
   const [submitting, setSubmitting] = useState(false);
 
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedSearchField, setSelectedSearchField] = useState(ALL_FIELDS_TOKEN);
   const [notification, setNotification] = useState<{
     type: 'success' | 'error';
     message: string;
@@ -81,14 +84,12 @@ export default function MachineTypesPage() {
     setShowModal(true);
   }
 
-  const filtered = useMemo(() => {
-    const t = searchTerm.toLowerCase();
-    return machineTypes.filter((m) =>
-      `${m.type_id} ${m.name} ${m.description || ''}`
-        .toLowerCase()
-        .includes(t)
-    );
-  }, [machineTypes, searchTerm]);
+  const searchableFields = useMemo(() => getSearchableFields(machineTypes), [machineTypes]);
+
+  const filtered = useMemo(
+    () => machineTypes.filter((machineType) => matchesDynamicSearch(machineType, searchTerm, selectedSearchField)),
+    [machineTypes, searchTerm, selectedSearchField],
+  );
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
@@ -155,16 +156,17 @@ export default function MachineTypesPage() {
       )}
 
       {/* HEADER */}
-      <div className="flex justify-between mb-4">
-        <div className="relative w-80">
-          <MagnifyingGlassIcon className="w-5 h-5 absolute left-3 top-2.5 text-gray-400" />
-          <input
-            className="input-field pl-10"
-            placeholder="Search..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </div>
+      <div className="flex justify-between mb-4 gap-3">
+        <DynamicSearchControls
+          className="w-full max-w-2xl"
+          selectedField={selectedSearchField}
+          onSelectedFieldChange={setSelectedSearchField}
+          searchableFields={searchableFields}
+          allFieldsLabel="All fields"
+          searchTerm={searchTerm}
+          onSearchTermChange={setSearchTerm}
+          searchPlaceholder="Search..."
+        />
 
         <button onClick={openCreate} className="btn-primary flex gap-2">
           <PlusIcon className="w-4 h-4" />

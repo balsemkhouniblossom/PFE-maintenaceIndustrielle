@@ -1059,6 +1059,7 @@
       "failures": "Ausfälle",
       "monitoring": "Überwachung",
       "inventory": "Bestand",
+      "inventoryLubrication": "Bestand und Schmierung",
       "documents": "Dokumente"
     },
     "systemStatus": {
@@ -1088,6 +1089,10 @@
       "preventiveTaskChecklist": "Checkliste für vorbeugende Aufgaben",
       "documents": "Dokumente",
       "moduleTypes": "Modultypen",
+      "stocks": "Bestände",
+      "lubrifiants": "Schmierstoffe",
+      "lubrificationLogs": "Schmierprotokolle",
+      "otPieces": "OT-Teile",
       "categories": {
         "overview": "Überblick",
         "userManagement": "Benutzerverwaltung",

@@ -2,9 +2,11 @@
 
 import { useEffect, useState, useMemo } from "react";
 import DashboardLayout from "@/components/DashboardLayout";
+import DynamicSearchControls from "@/components/DynamicSearchControls";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import { useTranslations } from "next-intl";
 import { apiService } from "@/services/api";
+import { ALL_FIELDS_TOKEN, getSearchableFields, matchesDynamicSearch } from "@/services/dynamicSearch";
 import { CheckIcon, XMarkIcon, EyeIcon } from "@heroicons/react/24/outline";
 
 type EntityRef = string | { _id?: string };
@@ -73,6 +75,7 @@ export default function PreventiveTaskChecklistPage() {
   const [tasks, setTasks] = useState<PreventiveTask[]>([]);
   const [selectedFilter, setSelectedFilter] = useState<keyof PreventiveTaskFilter>("all");
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedSearchField, setSelectedSearchField] = useState(ALL_FIELDS_TOKEN);
   const [selectedTask, setSelectedTask] = useState<PreventiveTask | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [completionNotes, setCompletionNotes] = useState("");
@@ -89,9 +92,9 @@ export default function PreventiveTaskChecklistPage() {
           apiService.getMachines(),
         ]);
 
-        const plansData = plansRes.data ?? [];
-        const modulesData = modulesRes.data ?? [];
-        const machinesData = machinesRes.data ?? [];
+        const plansData: MaintenancePlan[] = plansRes.data ?? [];
+        const modulesData: Module[] = modulesRes.data ?? [];
+        const machinesData: Machine[] = machinesRes.data ?? [];
 
         setPlans(plansData);
         setModules(modulesData);
@@ -181,13 +184,22 @@ export default function PreventiveTaskChecklistPage() {
     return machine ? machine.machine_id : tCommon("notAvailable");
   };
 
+  const searchableTasks = useMemo(
+    () =>
+      tasks.map((task) => ({
+        ...task,
+        machine_label: getMachineName(task.moduleId),
+        module_label: getModuleName(task.moduleId),
+      })),
+    [tasks, modules, machines],
+  );
+
+  const searchableFields = useMemo(() => getSearchableFields(searchableTasks), [searchableTasks]);
+
   // Filter tasks based on search and selected filter
   const filteredTasks = useMemo(() => {
-    return tasks.filter((task) => {
-      const matchesSearch =
-        task.instruction.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        task.plan_id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        getMachineName(task.moduleId).toLowerCase().includes(searchTerm.toLowerCase());
+    return searchableTasks.filter((task) => {
+      const matchesSearch = matchesDynamicSearch(task, searchTerm, selectedSearchField);
 
       const matchesFilter =
         selectedFilter === "all" ||
@@ -196,7 +208,7 @@ export default function PreventiveTaskChecklistPage() {
 
       return matchesSearch && matchesFilter;
     });
-  }, [tasks, searchTerm, selectedFilter]);
+  }, [searchableTasks, searchTerm, selectedSearchField, selectedFilter]);
 
   // Calculate statistics
   const stats = useMemo(() => ({
@@ -318,12 +330,17 @@ export default function PreventiveTaskChecklistPage() {
               </div>
               <div>
                 <label className="block text-sm font-medium mb-2">{tCommon("actions.search")}</label>
-                <input
-                  type="text"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  placeholder={t("placeholders.taskName")}
-                  className="w-full border rounded-lg px-3 py-2"
+                <DynamicSearchControls
+                  className=""
+                  selectClassName="w-full border rounded-lg px-3 py-2"
+                  inputClassName="w-full border rounded-lg px-3 py-2 pl-10"
+                  selectedField={selectedSearchField}
+                  onSelectedFieldChange={setSelectedSearchField}
+                  searchableFields={searchableFields}
+                  allFieldsLabel={tCommon("table.allFields", { default: "All fields" })}
+                  searchTerm={searchTerm}
+                  onSearchTermChange={setSearchTerm}
+                  searchPlaceholder={t("placeholders.taskName")}
                 />
               </div>
             </div>

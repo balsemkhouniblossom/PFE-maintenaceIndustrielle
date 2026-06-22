@@ -767,6 +767,7 @@
       "failures": "Fallas",
       "monitoring": "Supervisión",
       "inventory": "Inventario",
+      "inventoryLubrication": "Inventario y lubricación",
       "documents": "Documentos"
     },
     "systemStatus": {
@@ -796,6 +797,10 @@
       "capteurs": "Sensores",
       "documents": "Documentos",
       "moduleTypes": "Tipos de módulos",
+      "stocks": "Existencias",
+      "lubrifiants": "Lubricantes",
+      "lubrificationLogs": "Registros de lubricación",
+      "otPieces": "Piezas OT",
       "categories": {
         "overview": "Resumen",
         "userManagement": "Gestion de usuarios",
