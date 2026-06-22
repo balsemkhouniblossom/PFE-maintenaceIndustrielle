@@ -14,6 +14,7 @@ import {
 import DashboardLayout from '@/components/DashboardLayout';
 import { Modal } from '@/components/Modal';
 import { apiService } from '@/services/api';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface Panne {
   _id: string;
@@ -23,10 +24,14 @@ interface Panne {
   gravite?: string;
 }
 
+const CUSTOM_OPTION = '__custom__';
+
 export default function PannesPage() {
   const t = useTranslations('pannes');
   const tCommon = useTranslations('common');
   const router = useRouter();
+  const { user } = useAuth();
+  const isOperator = user?.role === 'operator';
 
   const [pannes, setPannes] = useState<Panne[]>([]);
   const [loading, setLoading] = useState(true);
@@ -40,6 +45,13 @@ export default function PannesPage() {
     code_panne: '',
     description: '',
     gravite: '',
+    details: '',
+  });
+  const [customMode, setCustomMode] = useState({
+    panne_id: false,
+    code_panne: false,
+    description: false,
+    gravite: false,
   });
 
   async function loadData() {
@@ -77,12 +89,45 @@ export default function PannesPage() {
     );
   }, [pannes, searchTerm]);
 
+  const panneTemplates = useMemo(() => {
+    const byId = new Map<string, Panne>();
+    pannes.forEach((panne) => {
+      if (panne?.panne_id) byId.set(panne.panne_id, panne);
+    });
+    return Array.from(byId.values()).sort((a, b) => a.panne_id.localeCompare(b.panne_id));
+  }, [pannes]);
+
+  const gravityOptions = ['Trouble (Probleme)', 'Warning (Avertissement)'];
+
+  function applyPanneTemplate(selectedPanneId: string) {
+    const template = panneTemplates.find((item) => item.panne_id === selectedPanneId);
+    if (!template) {
+      setFormData((prev) => ({ ...prev, panne_id: selectedPanneId }));
+      return;
+    }
+
+    setFormData({
+      panne_id: template.panne_id ?? '',
+      code_panne: template.code_panne ?? '',
+      description: template.description ?? '',
+      gravite: template.gravite ?? '',
+      details: '',
+    });
+  }
+
   function resetForm() {
     setFormData({
       panne_id: '',
       code_panne: '',
       description: '',
       gravite: '',
+      details: '',
+    });
+    setCustomMode({
+      panne_id: false,
+      code_panne: false,
+      description: false,
+      gravite: false,
     });
     setEditingPanne(null);
   }
@@ -115,6 +160,13 @@ export default function PannesPage() {
       code_panne: panne.code_panne ?? '',
       description: panne.description ?? '',
       gravite: panne.gravite ?? '',
+      details: '',
+    });
+    setCustomMode({
+      panne_id: false,
+      code_panne: false,
+      description: false,
+      gravite: false,
     });
     setShowModal(true);
   }
@@ -139,10 +191,14 @@ export default function PannesPage() {
     setSubmitting(true);
 
     try {
+      const descriptionWithDetails = formData.details.trim()
+        ? `${formData.description.trim()}\nDetails: ${formData.details.trim()}`
+        : formData.description.trim();
+
       const payload: Record<string, unknown> = {
         panne_id: formData.panne_id.trim(),
         code_panne: formData.code_panne.trim(),
-        description: formData.description.trim(),
+        description: descriptionWithDetails,
       };
 
       if (formData.gravite.trim()) payload.gravite = formData.gravite.trim();
@@ -319,48 +375,199 @@ export default function PannesPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-dark mb-1">{t('form.panneId')}</label>
-              <input
-                type="text"
-                value={formData.panne_id}
-                onChange={(e) => setFormData({ ...formData, panne_id: e.target.value })}
-                className="input-field"
-                title={t('form.panneId')}
-                required
-              />
+              {isOperator ? (
+                <select
+                  value={formData.panne_id}
+                  onChange={(e) => {
+                    const selectedValue = e.target.value;
+                    if (selectedValue === CUSTOM_OPTION) {
+                      setCustomMode((prev) => ({ ...prev, panne_id: true }));
+                      setFormData((prev) => ({ ...prev, panne_id: '' }));
+                      return;
+                    }
+                    setCustomMode((prev) => ({ ...prev, panne_id: false }));
+                    applyPanneTemplate(selectedValue);
+                  }}
+                  className="input-field"
+                  title={t('form.panneId')}
+                  required
+                >
+                  <option value="">{t('form.panneId')}</option>
+                  <option value={CUSTOM_OPTION}>Custom value...</option>
+                  {panneTemplates.map((panne) => (
+                    <option key={panne._id} value={panne.panne_id}>
+                      {panne.panne_id}
+                    </option>
+                  ))}
+                </select>
+              ) : (
+                <input
+                  type="text"
+                  value={formData.panne_id}
+                  onChange={(e) => setFormData({ ...formData, panne_id: e.target.value })}
+                  className="input-field"
+                  title={t('form.panneId')}
+                  required
+                />
+              )}
+              {isOperator && customMode.panne_id && (
+                <input
+                  type="text"
+                  value={formData.panne_id}
+                  onChange={(e) => setFormData({ ...formData, panne_id: e.target.value })}
+                  className="input-field mt-2"
+                  title={t('form.panneId')}
+                  placeholder="Custom panne ID"
+                  required
+                />
+              )}
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-dark mb-1">{t('form.code')}</label>
-              <input
-                type="text"
-                value={formData.code_panne}
-                onChange={(e) => setFormData({ ...formData, code_panne: e.target.value })}
-                className="input-field"
-                title={t('form.code')}
-                required
-              />
+              {isOperator ? (
+                <select
+                  value={formData.code_panne}
+                  onChange={(e) => {
+                    if (e.target.value === CUSTOM_OPTION) {
+                      setCustomMode((prev) => ({ ...prev, code_panne: true }));
+                      setFormData((prev) => ({ ...prev, code_panne: '' }));
+                      return;
+                    }
+                    setCustomMode((prev) => ({ ...prev, code_panne: false }));
+                    const template = panneTemplates.find((item) => item.code_panne === e.target.value);
+                    if (template) applyPanneTemplate(template.panne_id);
+                  }}
+                  className="input-field"
+                  title={t('form.code')}
+                  required
+                >
+                  <option value="">{t('form.code')}</option>
+                  <option value={CUSTOM_OPTION}>Custom value...</option>
+                  {panneTemplates.map((panne) => (
+                    <option key={`${panne._id}-code`} value={panne.code_panne}>
+                      {panne.code_panne}
+                    </option>
+                  ))}
+                </select>
+              ) : (
+                <input
+                  type="text"
+                  value={formData.code_panne}
+                  onChange={(e) => setFormData({ ...formData, code_panne: e.target.value })}
+                  className="input-field"
+                  title={t('form.code')}
+                  required
+                />
+              )}
+              {isOperator && customMode.code_panne && (
+                <input
+                  type="text"
+                  value={formData.code_panne}
+                  onChange={(e) => setFormData({ ...formData, code_panne: e.target.value })}
+                  className="input-field mt-2"
+                  title={t('form.code')}
+                  placeholder="Custom code"
+                  required
+                />
+              )}
             </div>
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-dark mb-1">{t('form.description')}</label>
-            <textarea
-              value={formData.description}
-              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-              className="input-field"
-              title={t('form.description')}
-              rows={3}
-              required
-            />
+            {isOperator ? (
+              <select
+                value={formData.description}
+                onChange={(e) => {
+                  if (e.target.value === CUSTOM_OPTION) {
+                    setCustomMode((prev) => ({ ...prev, description: true }));
+                    setFormData((prev) => ({ ...prev, description: '' }));
+                    return;
+                  }
+                  setCustomMode((prev) => ({ ...prev, description: false }));
+                  const template = panneTemplates.find((item) => item.description === e.target.value);
+                  if (template) applyPanneTemplate(template.panne_id);
+                }}
+                className="input-field"
+                title={t('form.description')}
+                required
+              >
+                <option value="">{t('form.description')}</option>
+                <option value={CUSTOM_OPTION}>Custom value...</option>
+                {panneTemplates.map((panne) => (
+                  <option key={`${panne._id}-description`} value={panne.description}>
+                    {panne.description}
+                  </option>
+                ))}
+              </select>
+            ) : (
+              <textarea
+                value={formData.description}
+                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                className="input-field"
+                title={t('form.description')}
+                rows={3}
+                required
+              />
+            )}
+            {isOperator && customMode.description && (
+              <textarea
+                value={formData.description}
+                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                className="input-field mt-2"
+                title={t('form.description')}
+                rows={3}
+                placeholder="Custom description"
+                required
+              />
+            )}
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-dark mb-1">{t('form.severity')}</label>
-            <input
-              type="text"
+            <select
               value={formData.gravite}
-              onChange={(e) => setFormData({ ...formData, gravite: e.target.value })}
+              onChange={(e) => {
+                if (e.target.value === CUSTOM_OPTION) {
+                  setCustomMode((prev) => ({ ...prev, gravite: true }));
+                  setFormData((prev) => ({ ...prev, gravite: '' }));
+                  return;
+                }
+                setCustomMode((prev) => ({ ...prev, gravite: false }));
+                setFormData({ ...formData, gravite: e.target.value });
+              }}
               className="input-field"
               title={t('form.severity')}
+            >
+              <option value="">{t('form.severity')}</option>
+              <option value={CUSTOM_OPTION}>Custom value...</option>
+              {gravityOptions.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+            {customMode.gravite && (
+              <input
+                type="text"
+                value={formData.gravite}
+                onChange={(e) => setFormData({ ...formData, gravite: e.target.value })}
+                className="input-field mt-2"
+                title={t('form.severity')}
+                placeholder="Custom severity"
+              />
+            )}
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-dark mb-1">Additional details (optional)</label>
+            <textarea
+              value={formData.details}
+              onChange={(e) => setFormData({ ...formData, details: e.target.value })}
+              className="input-field"
+              rows={3}
+              title="Additional details"
+              placeholder="Add any extra context you want to keep with this record"
             />
           </div>
 

@@ -96,11 +96,51 @@ export const apiService = {
   updateModuleType: (id: string, data: AnyObject) => api.patch(`/module-types/${id}`, data),
   deleteModuleType: (id: string) => api.delete(`/module-types/${id}`),
 
+  // Modules
+  getModules: () => api.get('/modules'),
+  createModule: (data: AnyObject) => api.post('/modules', data),
+  updateModule: (id: string, data: AnyObject) => api.patch(`/modules/${id}`, data),
+  deleteModule: (id: string) => api.delete(`/modules/${id}`),
+
+  // Maintenance Plans
+  getMaintenancePlans: () => api.get('/maintenance-plans'),
+  createMaintenancePlan: (data: AnyObject) => api.post('/maintenance-plans', data),
+  updateMaintenancePlan: (id: string, data: AnyObject) => api.patch(`/maintenance-plans/${id}`, data),
+  deleteMaintenancePlan: (id: string) => api.delete(`/maintenance-plans/${id}`),
+
   // Catalogues
   getCatalogues: () => api.get('/catalogues'),
   createCatalogue: (data: AnyObject) => api.post('/catalogues', data),
   updateCatalogue: (id: string, data: AnyObject) => api.patch(`/catalogues/${id}`, data),
   deleteCatalogue: (id: string) => api.delete(`/catalogues/${id}`),
+
+  // Stocks
+  getStocks: () => api.get('/stocks'),
+  createStock: (data: AnyObject) => api.post('/stocks', data),
+  updateStock: (id: string, data: AnyObject) => api.patch(`/stocks/${id}`, data),
+  deleteStock: (id: string) => api.delete(`/stocks/${id}`),
+
+  // OT Pieces
+  getOtPieces: () => api.get('/ot-pieces'),
+  createOtPiece: (data: AnyObject) => api.post('/ot-pieces', data),
+  updateOtPiece: (id: string, data: AnyObject) => api.patch(`/ot-pieces/${id}`, data),
+  deleteOtPiece: (id: string) => api.delete(`/ot-pieces/${id}`),
+
+  // Lubrifiants and logs
+  getLubrifiants: () => api.get('/lubrifiants'),
+  createLubrifiant: (data: AnyObject) => api.post('/lubrifiants', data),
+  updateLubrifiant: (id: string, data: AnyObject) => api.patch(`/lubrifiants/${id}`, data),
+  deleteLubrifiant: (id: string) => api.delete(`/lubrifiants/${id}`),
+  getLubrificationLogs: () => api.get('/lubrification-logs'),
+  createLubrificationLog: (data: AnyObject) => api.post('/lubrification-logs', data),
+  updateLubrificationLog: (id: string, data: AnyObject) => api.patch(`/lubrification-logs/${id}`, data),
+  deleteLubrificationLog: (id: string) => api.delete(`/lubrification-logs/${id}`),
+
+  // KPI
+  getKpis: () => api.get('/kpis'),
+  createKpi: (data: AnyObject) => api.post('/kpis', data),
+  updateKpi: (id: string, data: AnyObject) => api.patch(`/kpis/${id}`, data),
+  deleteKpi: (id: string) => api.delete(`/kpis/${id}`),
 
   // Work Orders
   getWorkOrders: () => api.get('/work-orders'),

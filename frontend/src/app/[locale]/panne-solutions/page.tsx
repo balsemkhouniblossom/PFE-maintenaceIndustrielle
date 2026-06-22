@@ -14,6 +14,7 @@ import {
 import DashboardLayout from '@/components/DashboardLayout';
 import { Modal } from '@/components/Modal';
 import { apiService } from '@/services/api';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface PanneItem {
   _id: string;
@@ -37,6 +38,8 @@ interface PanneSolution {
   solution_recommandee?: string;
 }
 
+const CUSTOM_OPTION = '__custom__';
+
 function getPanneLabel(panne: string | PanneRef): string {
   if (typeof panne === 'string') return panne;
   const code = panne?.code_panne ? ` (${panne.code_panne})` : '';
@@ -52,6 +55,8 @@ export default function PanneSolutionsPage() {
   const t = useTranslations('panneSolutions');
   const tCommon = useTranslations('common');
   const router = useRouter();
+  const { user } = useAuth();
+  const isOperator = user?.role === 'operator';
 
   const [solutions, setSolutions] = useState<PanneSolution[]>([]);
   const [pannes, setPannes] = useState<PanneItem[]>([]);
@@ -66,6 +71,12 @@ export default function PanneSolutionsPage() {
     panne_id: '',
     cause_probable: '',
     solution_recommandee: '',
+    details: '',
+  });
+  const [customMode, setCustomMode] = useState({
+    solution_id: false,
+    cause_probable: false,
+    solution_recommandee: false,
   });
 
   async function loadData() {
@@ -110,12 +121,65 @@ export default function PanneSolutionsPage() {
     });
   }, [solutions, searchTerm]);
 
+  const solutionTemplatesByPanne = useMemo(() => {
+    const map = new Map<string, PanneSolution>();
+    solutions.forEach((solution) => {
+      const panneRefId = getPanneRefId(solution.panne_id);
+      if (panneRefId) map.set(panneRefId, solution);
+    });
+    return map;
+  }, [solutions]);
+
+  const causeOptions = useMemo(
+    () => Array.from(new Set(solutions.map((item) => item.cause_probable || '').filter(Boolean))).sort(),
+    [solutions],
+  );
+
+  const recommendationOptions = useMemo(
+    () => Array.from(new Set(solutions.map((item) => item.solution_recommandee || '').filter(Boolean))).sort(),
+    [solutions],
+  );
+
+  function applyTemplateFromPanneId(panneRefId: string) {
+    const template = solutionTemplatesByPanne.get(panneRefId);
+    const panne = pannes.find((item) => item._id === panneRefId);
+    const generatedSolutionId = panne ? `${panne.panne_id}-SOL` : '';
+
+    setFormData((prev) => ({
+      ...prev,
+      panne_id: panneRefId,
+      solution_id: template?.solution_id || generatedSolutionId,
+      cause_probable: template?.cause_probable || prev.cause_probable,
+      solution_recommandee: template?.solution_recommandee || prev.solution_recommandee,
+    }));
+  }
+
+  const solutionIdOptions = useMemo(() => {
+    return pannes
+      .map((panne) => {
+        const template = solutionTemplatesByPanne.get(panne._id);
+        const solutionId = template?.solution_id || `${panne.panne_id}-SOL`;
+        return {
+          panneRefId: panne._id,
+          solutionId,
+          label: `${solutionId} (${panne.panne_id})`,
+        };
+      })
+      .sort((a, b) => a.solutionId.localeCompare(b.solutionId));
+  }, [pannes, solutionTemplatesByPanne]);
+
   function resetForm() {
     setFormData({
       solution_id: '',
       panne_id: '',
       cause_probable: '',
       solution_recommandee: '',
+      details: '',
+    });
+    setCustomMode({
+      solution_id: false,
+      cause_probable: false,
+      solution_recommandee: false,
     });
     setEditingSolution(null);
   }
@@ -144,6 +208,12 @@ export default function PanneSolutionsPage() {
       panne_id: getPanneRefId(solution.panne_id),
       cause_probable: solution.cause_probable ?? '',
       solution_recommandee: solution.solution_recommandee ?? '',
+      details: '',
+    });
+    setCustomMode({
+      solution_id: false,
+      cause_probable: false,
+      solution_recommandee: false,
     });
     setShowModal(true);
   }
@@ -168,13 +238,17 @@ export default function PanneSolutionsPage() {
     setSubmitting(true);
 
     try {
+      const recommendationWithDetails = formData.details.trim()
+        ? `${formData.solution_recommandee.trim()}\nDetails: ${formData.details.trim()}`
+        : formData.solution_recommandee.trim();
+
       const payload: Record<string, unknown> = {
         solution_id: formData.solution_id.trim(),
         panne_id: formData.panne_id,
       };
 
       if (formData.cause_probable.trim()) payload.cause_probable = formData.cause_probable.trim();
-      if (formData.solution_recommandee.trim()) payload.solution_recommandee = formData.solution_recommandee.trim();
+      if (recommendationWithDetails.trim()) payload.solution_recommandee = recommendationWithDetails;
 
       if (editingSolution) {
         await apiService.updatePanneSolution(editingSolution._id, payload);
@@ -348,20 +422,68 @@ export default function PanneSolutionsPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-dark mb-1">{t('form.solutionId')}</label>
-              <input
-                type="text"
-                value={formData.solution_id}
-                onChange={(e) => setFormData({ ...formData, solution_id: e.target.value })}
-                className="input-field"
-                title={t('form.solutionId')}
-                required
-              />
+              {isOperator ? (
+                <select
+                  value={formData.solution_id}
+                  onChange={(e) => {
+                    if (e.target.value === CUSTOM_OPTION) {
+                      setCustomMode((prev) => ({ ...prev, solution_id: true }));
+                      setFormData((prev) => ({ ...prev, solution_id: '' }));
+                      return;
+                    }
+                    setCustomMode((prev) => ({ ...prev, solution_id: false }));
+                    const selected = solutionIdOptions.find((item) => item.solutionId === e.target.value);
+                    if (selected) {
+                      applyTemplateFromPanneId(selected.panneRefId);
+                    } else {
+                      setFormData((prev) => ({ ...prev, solution_id: e.target.value }));
+                    }
+                  }}
+                  className="input-field"
+                  title={t('form.solutionId')}
+                  required
+                >
+                  <option value="">{t('form.solutionId')}</option>
+                  <option value={CUSTOM_OPTION}>Custom value...</option>
+                  {solutionIdOptions.map((option) => (
+                    <option key={`${option.panneRefId}-solution`} value={option.solutionId}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              ) : (
+                <input
+                  type="text"
+                  value={formData.solution_id}
+                  onChange={(e) => setFormData({ ...formData, solution_id: e.target.value })}
+                  className="input-field"
+                  title={t('form.solutionId')}
+                  required
+                />
+              )}
+              {isOperator && customMode.solution_id && (
+                <input
+                  type="text"
+                  value={formData.solution_id}
+                  onChange={(e) => setFormData({ ...formData, solution_id: e.target.value })}
+                  className="input-field mt-2"
+                  title={t('form.solutionId')}
+                  placeholder="Custom solution ID"
+                  required
+                />
+              )}
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-dark mb-1">{t('form.panne')}</label>
               <select
                 value={formData.panne_id}
-                onChange={(e) => setFormData({ ...formData, panne_id: e.target.value })}
+                onChange={(e) => {
+                  if (isOperator) {
+                    applyTemplateFromPanneId(e.target.value);
+                    return;
+                  }
+                  setFormData({ ...formData, panne_id: e.target.value });
+                }}
                 className="input-field"
                 title={t('form.panne')}
                 required
@@ -378,23 +500,105 @@ export default function PanneSolutionsPage() {
 
           <div>
             <label className="block text-sm font-medium text-gray-dark mb-1">{t('form.cause')}</label>
-            <textarea
-              value={formData.cause_probable}
-              onChange={(e) => setFormData({ ...formData, cause_probable: e.target.value })}
-              className="input-field"
-              title={t('form.cause')}
-              rows={3}
-            />
+            {isOperator ? (
+              <select
+                value={formData.cause_probable}
+                onChange={(e) => {
+                  if (e.target.value === CUSTOM_OPTION) {
+                    setCustomMode((prev) => ({ ...prev, cause_probable: true }));
+                    setFormData((prev) => ({ ...prev, cause_probable: '' }));
+                    return;
+                  }
+                  setCustomMode((prev) => ({ ...prev, cause_probable: false }));
+                  setFormData({ ...formData, cause_probable: e.target.value });
+                }}
+                className="input-field"
+                title={t('form.cause')}
+              >
+                <option value="">{t('form.cause')}</option>
+                <option value={CUSTOM_OPTION}>Custom value...</option>
+                {causeOptions.map((option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </select>
+            ) : (
+              <textarea
+                value={formData.cause_probable}
+                onChange={(e) => setFormData({ ...formData, cause_probable: e.target.value })}
+                className="input-field"
+                title={t('form.cause')}
+                rows={3}
+              />
+            )}
+            {isOperator && customMode.cause_probable && (
+              <textarea
+                value={formData.cause_probable}
+                onChange={(e) => setFormData({ ...formData, cause_probable: e.target.value })}
+                className="input-field mt-2"
+                title={t('form.cause')}
+                rows={3}
+                placeholder="Custom probable cause"
+              />
+            )}
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-dark mb-1">{t('form.solution')}</label>
+            {isOperator ? (
+              <select
+                value={formData.solution_recommandee}
+                onChange={(e) => {
+                  if (e.target.value === CUSTOM_OPTION) {
+                    setCustomMode((prev) => ({ ...prev, solution_recommandee: true }));
+                    setFormData((prev) => ({ ...prev, solution_recommandee: '' }));
+                    return;
+                  }
+                  setCustomMode((prev) => ({ ...prev, solution_recommandee: false }));
+                  setFormData({ ...formData, solution_recommandee: e.target.value });
+                }}
+                className="input-field"
+                title={t('form.solution')}
+              >
+                <option value="">{t('form.solution')}</option>
+                <option value={CUSTOM_OPTION}>Custom value...</option>
+                {recommendationOptions.map((option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </select>
+            ) : (
+              <textarea
+                value={formData.solution_recommandee}
+                onChange={(e) => setFormData({ ...formData, solution_recommandee: e.target.value })}
+                className="input-field"
+                title={t('form.solution')}
+                rows={3}
+              />
+            )}
+            {isOperator && customMode.solution_recommandee && (
+              <textarea
+                value={formData.solution_recommandee}
+                onChange={(e) => setFormData({ ...formData, solution_recommandee: e.target.value })}
+                className="input-field mt-2"
+                title={t('form.solution')}
+                rows={3}
+                placeholder="Custom recommendation"
+              />
+            )}
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-dark mb-1">Additional details (optional)</label>
             <textarea
-              value={formData.solution_recommandee}
-              onChange={(e) => setFormData({ ...formData, solution_recommandee: e.target.value })}
+              value={formData.details}
+              onChange={(e) => setFormData({ ...formData, details: e.target.value })}
               className="input-field"
-              title={t('form.solution')}
               rows={3}
+              title="Additional details"
+              placeholder="Add any extra context you want to keep with this record"
             />
           </div>
 

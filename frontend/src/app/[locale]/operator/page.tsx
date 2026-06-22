@@ -202,11 +202,32 @@ export default function OperatorDashboard() {
                         </div>
                     </div>
 
+                    {/* Maintenance Center */}
+                    <div className="col-span-full mb-6 panel">
+                        <div className="card-title mb-4">{tOperator("maintenanceCenter")}</div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <button
+                                onClick={() => router.push(`/${locale}/operator/preventive`)}
+                                className="panel border-2 border-blue-500 hover:shadow-xl transition-all hover:-translate-y-1"
+                            >
+                                <div className="text-xl font-bold text-blue-700 mb-2">{tOperator("preventive")}</div>
+                                <div className="text-sm text-slate-600">{tOperator("preventiveTasks")}</div>
+                            </button>
+                            <button
+                                onClick={() => router.push(`/${locale}/operator/corrective`)}
+                                className="panel border-2 border-emerald-500 hover:shadow-xl transition-all hover:-translate-y-1"
+                            >
+                                <div className="text-xl font-bold text-emerald-700 mb-2">{tOperator("corrective")}</div>
+                                <div className="text-sm text-slate-600">{tOperator("correctiveTasks")}</div>
+                            </button>
+                        </div>
+                    </div>
+
                     {/* Emergency Button */}
                     <div className="col-span-full mb-6">
                         <div className="panel bg-red-600 text-black">
                             <button
-                                onClick={() => router.push('/operator/report-problem')}
+                                onClick={() => router.push(`/${locale}/operator/report-problem`)}
                                 className="w-full py-6 text-2xl font-bold"
                             >
                                 🚨{tOperator("reportProblem")}
@@ -304,35 +325,35 @@ export default function OperatorDashboard() {
                         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-4">
 
                             <button
-                                onClick={() => router.push('/operator/report-problem')}
+                                onClick={() => router.push(`/${locale}/operator/report-problem`)}
                                 className="bg-red-600 hover:bg-red-700 text-white rounded-lg p-4 transition"
                             >
                                 🚨  {tOperator("reportProblem")}
                             </button>
 
                             <button
-                                onClick={() => router.push('/operator/preventive')}
+                                onClick={() => router.push(`/${locale}/operator/preventive`)}
                                 className="bg-blue-600 hover:bg-blue-700 text-white rounded-lg p-4 transition"
                             >
                                 📅  {tOperator("preventiveMaintenance")}
                             </button>
 
                             <button
-                                onClick={() => router.push('/operator/corrective')}
+                                onClick={() => router.push(`/${locale}/operator/corrective`)}
                                 className="bg-green-600 hover:bg-green-700 text-white rounded-lg p-4 transition"
                             >
                                 🔧{tOperator("correctiveMaintenance")}
                             </button>
 
                             <button
-                                onClick={() => router.push('/operator/manuals')}
+                                onClick={() => router.push(`/${locale}/operator/manuals`)}
                                 className="bg-purple-600 hover:bg-purple-700 text-white rounded-lg p-4 transition"
                             >
                                 📄 {tOperator("quickActions.manuals")}
                             </button>
 
                             <button
-                                onClick={() => router.push('/operator/my-reports')}
+                                onClick={() => router.push(`/${locale}/operator/my-reports`)}
                                 className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg p-4 transition"
                             >
                                 📋 {tOperator("quickActions.myReports")}
@@ -350,34 +371,34 @@ export default function OperatorDashboard() {
                         </div>
 
                         <p className="text-gray-500 mb-4">
-                            Access operation guides, maintenance procedures, and technical documentation.
+                            {tOperator("manualsIntro")}
                         </p>
 
                         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
 
                             <button
-                                onClick={() => router.push('/operator/manuals')}
+                                onClick={() => router.push(`/${locale}/operator/manuals`)}
                                 className="border rounded-lg p-4 hover:bg-gray-50 transition"
                             >
                                 📄 {tOperator("manuals.winding")}
                             </button>
 
                             <button
-                                onClick={() => router.push('/operator/manuals')}
+                                onClick={() => router.push(`/${locale}/operator/manuals`)}
                                 className="border rounded-lg p-4 hover:bg-gray-50 transition"
                             >
                                 📄{tOperator("manuals.braiding")}
                             </button>
 
                             <button
-                                onClick={() => router.push('/operator/manuals')}
+                                onClick={() => router.push(`/${locale}/operator/manuals`)}
                                 className="border rounded-lg p-4 hover:bg-gray-50 transition"
                             >
                                 📄 {tOperator("manuals.cutting")}
                             </button>
 
                             <button
-                                onClick={() => router.push('/operator/manuals')}
+                                onClick={() => router.push(`/${locale}/operator/manuals`)}
                                 className="border rounded-lg p-4 hover:bg-gray-50 transition"
                             >
                                 📄 {tOperator("manuals.rolling")}
@@ -431,7 +452,7 @@ export default function OperatorDashboard() {
                     </div>
 
                     <button
-                        onClick={() => router.push('/operator/my-reports')}
+                        onClick={() => router.push(`/${locale}/operator/my-reports`)}
                         className="mt-4 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg"
                     >
                         {tOperator("viewAllReports")}

@@ -39,6 +39,13 @@ import { DocumentsModule } from './documents/documents.module';
 import { InterventionReportsModule } from './intervention-reports/intervention-reports.module';
 import { PannesModule } from './pannes/pannes.module';
 import { PanneSolutionsModule } from './panne-solutions/panne-solutions.module';
+import { ModulesModule } from './modules/modules.module';
+import { MaintenancePlansModule } from './maintenance-plans/maintenance-plans.module';
+import { StocksModule } from './stocks/stocks.module';
+import { KpisModule } from './kpis/kpis.module';
+import { LubrifiantsModule } from './lubrifiants/lubrifiants.module';
+import { LubrificationLogsModule } from './lubrification-logs/lubrification-logs.module';
+import { OtPiecesModule } from './ot-pieces/ot-pieces.module';
 
 @Module({
   imports: [
@@ -89,6 +96,13 @@ import { PanneSolutionsModule } from './panne-solutions/panne-solutions.module';
     InterventionReportsModule,
     PannesModule,
     PanneSolutionsModule,
+    ModulesModule,
+    MaintenancePlansModule,
+    StocksModule,
+    KpisModule,
+    LubrifiantsModule,
+    LubrificationLogsModule,
+    OtPiecesModule,
 
   ],
   controllers: [AppController],
