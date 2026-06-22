@@ -197,7 +197,11 @@
       "partRequest": "Cantidad solicitada",
       "kpiTitle": "KPI",
       "mtbf": "MTBF",
-      "mttr": "MTTR"
+      "mttr": "MTTR",
+      "all": "Todos",
+      "returned": "Devuelto",
+      "workOrder": "Orden de trabajo",
+      "download": "Descargar"
     },
     "technician": {
       "title": "Panel del técnico",

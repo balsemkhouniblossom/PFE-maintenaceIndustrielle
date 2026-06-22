@@ -292,7 +292,11 @@
       "partRequest": "Requested quantity",
       "kpiTitle": "KPI",
       "mtbf": "MTBF",
-      "mttr": "MTTR"
+      "mttr": "MTTR",
+      "all": "All",
+      "returned": "Returned",
+      "workOrder": "Work order",
+      "download": "Download"
     },
     "technician": {
       "title": "Technician Dashboard",

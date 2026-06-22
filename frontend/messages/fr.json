@@ -258,7 +258,11 @@
       "partRequest": "Quantité demandée",
       "kpiTitle": "KPI",
       "mtbf": "MTBF",
-      "mttr": "MTTR"
+      "mttr": "MTTR",
+      "all": "Tous",
+      "returned": "Retourne",
+      "workOrder": "Ordre de travail",
+      "download": "Telecharger"
     },
     "technician": {
       "title": "Tableau de bord technicien",
