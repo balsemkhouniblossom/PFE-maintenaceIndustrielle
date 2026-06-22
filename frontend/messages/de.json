@@ -362,6 +362,7 @@
     "delete": "Löschen",
     "edit": "Bearbeiten",
     "add": "Hinzufügen",
+    "defaultUserName": "Benutzer",
     "user": "User",
     "role": "Role",
     "back": "Zurück",
@@ -936,6 +937,16 @@
       "moduleTypes": "Modultypen",
       "technicalReference": "Technische Referenz"
     },
+    "domains": {
+      "dashboard": "Instrumententafel",
+      "users": "Benutzer",
+      "assets": "Vermögenswerte",
+      "maintenance": "Wartung",
+      "failures": "Ausfälle",
+      "monitoring": "Überwachung",
+      "inventory": "Bestand",
+      "documents": "Dokumente"
+    },
     "systemStatus": {
       "online": "System online",
       "loading": "Wird geladen...",
@@ -1203,6 +1214,72 @@
       "deleted": "Stoerungsloesung erfolgreich geloescht",
       "saveFailed": "Speichern der Stoerungsloesung fehlgeschlagen",
       "deleteFailed": "Loeschen der Stoerungsloesung fehlgeschlagen"
+    }
+  },
+  "documents": {
+    "title": "Dokumentenverwaltung",
+    "heading": "Dokumente",
+    "description": "Technische Dokumente und Handbuecher fuer Maschinen verwalten",
+    "pageTitle": "Technische Dokumente",
+    "searchPlaceholder": "Dokumente nach Name, Typ, Maschine oder Tags suchen...",
+    "filterAllMachines": "Alle Maschinen",
+    "actions": {
+      "add": "Dokument hochladen",
+      "view": "Ansehen",
+      "edit": "Bearbeiten",
+      "delete": "Loeschen"
+    },
+    "table": {
+      "documentId": "Dokument-ID",
+      "fileName": "Dateiname",
+      "type": "Typ",
+      "machine": "Maschine",
+      "uploadedBy": "Hochgeladen von",
+      "dateAdded": "Hinzugefuegt am"
+    },
+    "empty": {
+      "search": "Keine Dokumente entsprechen Ihrer Suche.",
+      "default": "Keine Dokumente verfuegbar."
+    },
+    "modal": {
+      "uploadTitle": "Dokument hochladen",
+      "editTitle": "Dokument bearbeiten",
+      "viewTitle": "Dokument anzeigen"
+    },
+    "form": {
+      "file": "PDF-Datei auswaehlen",
+      "machine": "Maschine",
+      "type": "Dokumenttyp",
+      "description": "Beschreibung",
+      "tags": "Tags (durch Kommas getrennt)",
+      "uploadedBy": "Hochgeladen von"
+    },
+    "placeholders": {
+      "selectMachine": "Maschine auswaehlen...",
+      "type": "z. B. Handbuch, Spezifikation, Wartungsleitfaden",
+      "description": "Dokumentbeschreibung eingeben...",
+      "tags": "z. B. praeventiv, elektrisch, Motor",
+      "uploadedBy": "Geben Sie Ihren Namen oder Benutzernamen ein..."
+    },
+    "buttons": {
+      "upload": "Dokument hochladen",
+      "update": "Dokument aktualisieren",
+      "cancel": "Abbrechen",
+      "save": "Speichern"
+    },
+    "viewer": {
+      "title": "Dokumentenanzeige"
+    },
+    "notifications": {
+      "fileRequired": "Bitte waehlen Sie eine PDF-Datei aus",
+      "machineRequired": "Bitte waehlen Sie eine Maschine aus",
+      "typeRequired": "Bitte geben Sie den Dokumenttyp ein",
+      "created": "Dokument erfolgreich hochgeladen",
+      "updated": "Dokument erfolgreich aktualisiert",
+      "deleted": "Dokument erfolgreich geloescht",
+      "saveFailed": "Dokument konnte nicht gespeichert werden",
+      "deleteFailed": "Dokument konnte nicht geloescht werden",
+      "confirmDelete": "Sind Sie sicher, dass Sie dieses Dokument loeschen moechten? Diese Aktion kann nicht rueckgaengig gemacht werden."
     }
   }
 }

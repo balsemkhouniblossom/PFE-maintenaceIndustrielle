@@ -93,6 +93,7 @@
     "delete": "حذف",
     "edit": "تعديل",
     "add": "إضافة",
+    "defaultUserName": "مستخدم",
     "user": "User",
     "role": "Role",
     "back": "رجوع",
@@ -839,6 +840,16 @@
       "technicalReference": "المرجع التقني",
       "systemModules": "الوحدات النظامية"
     },
+    "domains": {
+      "dashboard": "لوحة التحكم",
+      "users": "المستخدمون",
+      "assets": "الأصول",
+      "maintenance": "الصيانة",
+      "failures": "الأعطال",
+      "monitoring": "المراقبة",
+      "inventory": "المخزون",
+      "documents": "المستندات"
+    },
     "systemStatus": {
       "online": "النظام متصل",
       "loading": "جارٍ التحميل...",
@@ -1106,6 +1117,72 @@
       "deleted": "تم حذف حل العطل بنجاح",
       "saveFailed": "فشل حفظ حل العطل",
       "deleteFailed": "فشل حذف حل العطل"
+    }
+  },
+  "documents": {
+    "title": "إدارة الوثائق",
+    "heading": "الوثائق",
+    "description": "إدارة الوثائق التقنية والأدلة الخاصة بالآلات",
+    "pageTitle": "الوثائق التقنية",
+    "searchPlaceholder": "ابحث عن الوثائق حسب الاسم أو النوع أو الآلة أو العلامات...",
+    "filterAllMachines": "جميع الآلات",
+    "actions": {
+      "add": "تحميل وثيقة",
+      "view": "عرض",
+      "edit": "تعديل",
+      "delete": "حذف"
+    },
+    "table": {
+      "documentId": "معرف الوثيقة",
+      "fileName": "اسم الملف",
+      "type": "النوع",
+      "machine": "الآلة",
+      "uploadedBy": "تم التحميل بواسطة",
+      "dateAdded": "تاريخ الإضافة"
+    },
+    "empty": {
+      "search": "لا توجد وثائق مطابقة للبحث.",
+      "default": "لا توجد وثائق متاحة."
+    },
+    "modal": {
+      "uploadTitle": "تحميل وثيقة",
+      "editTitle": "تعديل الوثيقة",
+      "viewTitle": "عرض الوثيقة"
+    },
+    "form": {
+      "file": "اختر ملف PDF",
+      "machine": "الآلة",
+      "type": "نوع الوثيقة",
+      "description": "الوصف",
+      "tags": "العلامات (مفصولة بفواصل)",
+      "uploadedBy": "تم التحميل بواسطة"
+    },
+    "placeholders": {
+      "selectMachine": "اختر آلة...",
+      "type": "مثال: دليل، مواصفات، دليل الصيانة",
+      "description": "أدخل وصف الوثيقة...",
+      "tags": "مثال: وقاية، كهربائي، محرك",
+      "uploadedBy": "أدخل اسمك أو اسم المستخدم..."
+    },
+    "buttons": {
+      "upload": "تحميل وثيقة",
+      "update": "تحديث الوثيقة",
+      "cancel": "إلغاء",
+      "save": "حفظ"
+    },
+    "viewer": {
+      "title": "عارض الوثائق"
+    },
+    "notifications": {
+      "fileRequired": "يرجى اختيار ملف PDF",
+      "machineRequired": "يرجى اختيار آلة",
+      "typeRequired": "يرجى إدخال نوع الوثيقة",
+      "created": "تم تحميل الوثيقة بنجاح",
+      "updated": "تم تحديث الوثيقة بنجاح",
+      "deleted": "تم حذف الوثيقة بنجاح",
+      "saveFailed": "فشل حفظ الوثيقة",
+      "deleteFailed": "فشل حذف الوثيقة",
+      "confirmDelete": "هل أنت متأكد من حذف هذه الوثيقة؟ لا يمكن التراجع عن هذا الإجراء."
     }
   }
 }

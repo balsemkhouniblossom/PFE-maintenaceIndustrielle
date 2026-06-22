@@ -280,6 +280,7 @@
     "delete": "Eliminar",
     "edit": "Editar",
     "add": "Agregar",
+    "defaultUserName": "Usuario",
     "user": "User",
     "role": "Role",
     "back": "Atrás",
@@ -758,6 +759,16 @@
     }
   },
   "sidebar": {
+    "domains": {
+      "dashboard": "Panel de control",
+      "users": "Usuarios",
+      "assets": "Activos",
+      "maintenance": "Mantenimiento",
+      "failures": "Fallas",
+      "monitoring": "Supervisión",
+      "inventory": "Inventario",
+      "documents": "Documentos"
+    },
     "systemStatus": {
       "online": "Sistema en línea",
       "loading": "Cargando...",
@@ -1020,6 +1031,72 @@
       "deleted": "Solucion de averia eliminada correctamente",
       "saveFailed": "Error al guardar la solucion de averia",
       "deleteFailed": "Error al eliminar la solucion de averia"
+    }
+  },
+  "documents": {
+    "title": "Gestion de documentos",
+    "heading": "Documentos",
+    "description": "Gestionar documentos tecnicos y manuales de las maquinas",
+    "pageTitle": "Documentos tecnicos",
+    "searchPlaceholder": "Buscar documentos por nombre, tipo, maquina o etiquetas...",
+    "filterAllMachines": "Todas las maquinas",
+    "actions": {
+      "add": "Subir documento",
+      "view": "Ver",
+      "edit": "Editar",
+      "delete": "Eliminar"
+    },
+    "table": {
+      "documentId": "ID del documento",
+      "fileName": "Nombre del archivo",
+      "type": "Tipo",
+      "machine": "Maquina",
+      "uploadedBy": "Subido por",
+      "dateAdded": "Fecha de alta"
+    },
+    "empty": {
+      "search": "Ningun documento coincide con tu busqueda.",
+      "default": "No hay documentos disponibles."
+    },
+    "modal": {
+      "uploadTitle": "Subir documento",
+      "editTitle": "Editar documento",
+      "viewTitle": "Ver documento"
+    },
+    "form": {
+      "file": "Seleccionar archivo PDF",
+      "machine": "Maquina",
+      "type": "Tipo de documento",
+      "description": "Descripcion",
+      "tags": "Etiquetas (separadas por comas)",
+      "uploadedBy": "Subido por"
+    },
+    "placeholders": {
+      "selectMachine": "Selecciona una maquina...",
+      "type": "p. ej., Manual, Especificacion, Guia de mantenimiento",
+      "description": "Introduce la descripcion del documento...",
+      "tags": "p. ej., preventivo, electrico, motor",
+      "uploadedBy": "Introduce tu nombre o nombre de usuario..."
+    },
+    "buttons": {
+      "upload": "Subir documento",
+      "update": "Actualizar documento",
+      "cancel": "Cancelar",
+      "save": "Guardar"
+    },
+    "viewer": {
+      "title": "Visor de documentos"
+    },
+    "notifications": {
+      "fileRequired": "Selecciona un archivo PDF",
+      "machineRequired": "Selecciona una maquina",
+      "typeRequired": "Introduce el tipo de documento",
+      "created": "Documento subido correctamente",
+      "updated": "Documento actualizado correctamente",
+      "deleted": "Documento eliminado correctamente",
+      "saveFailed": "Error al guardar el documento",
+      "deleteFailed": "Error al eliminar el documento",
+      "confirmDelete": "¿Seguro que deseas eliminar este documento? Esta accion no se puede deshacer."
     }
   }
 }

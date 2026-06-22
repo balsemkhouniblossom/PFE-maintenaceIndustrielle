@@ -59,6 +59,7 @@
     "delete": "Supprimer",
     "edit": "Modifier",
     "add": "Ajouter",
+    "defaultUserName": "Utilisateur",
     "user": "Utilisateur",
     "role": "Rôle",
     "back": "Retour",
@@ -971,6 +972,16 @@
       "iotMonitoring": "Surveillance IoT",
       "systemModules": "Modules système"
     },
+    "domains": {
+      "dashboard": "Tableau de bord",
+      "users": "Utilisateurs",
+      "assets": "Actifs",
+      "maintenance": "Maintenance",
+      "failures": "Pannes",
+      "monitoring": "Surveillance",
+      "inventory": "Inventaire",
+      "documents": "Documents"
+    },
     "systemStatus": {
       "online": "Système en ligne",
       "loading": "Chargement...",
@@ -1238,6 +1249,72 @@
       "deleted": "Solution de panne supprimee avec succes",
       "saveFailed": "Echec de l'enregistrement de la solution de panne",
       "deleteFailed": "Echec de la suppression de la solution de panne"
+    }
+  },
+  "documents": {
+    "title": "Gestion des documents",
+    "heading": "Documents",
+    "description": "Gerer les documents techniques et les manuels des machines",
+    "pageTitle": "Documents techniques",
+    "searchPlaceholder": "Rechercher des documents par nom, type, machine ou etiquettes...",
+    "filterAllMachines": "Toutes les machines",
+    "actions": {
+      "add": "Televerser un document",
+      "view": "Voir",
+      "edit": "Modifier",
+      "delete": "Supprimer"
+    },
+    "table": {
+      "documentId": "ID document",
+      "fileName": "Nom du fichier",
+      "type": "Type",
+      "machine": "Machine",
+      "uploadedBy": "Televerse par",
+      "dateAdded": "Date d'ajout"
+    },
+    "empty": {
+      "search": "Aucun document ne correspond a votre recherche.",
+      "default": "Aucun document disponible."
+    },
+    "modal": {
+      "uploadTitle": "Televerser un document",
+      "editTitle": "Modifier le document",
+      "viewTitle": "Voir le document"
+    },
+    "form": {
+      "file": "Selectionner un fichier PDF",
+      "machine": "Machine",
+      "type": "Type de document",
+      "description": "Description",
+      "tags": "Etiquettes (separees par des virgules)",
+      "uploadedBy": "Televerse par"
+    },
+    "placeholders": {
+      "selectMachine": "Selectionner une machine...",
+      "type": "ex. Manuel, Specification, Guide de maintenance",
+      "description": "Saisir la description du document...",
+      "tags": "ex. preventif, electrique, moteur",
+      "uploadedBy": "Saisissez votre nom ou nom d'utilisateur..."
+    },
+    "buttons": {
+      "upload": "Televerser le document",
+      "update": "Mettre a jour le document",
+      "cancel": "Annuler",
+      "save": "Enregistrer"
+    },
+    "viewer": {
+      "title": "Visionneuse de documents"
+    },
+    "notifications": {
+      "fileRequired": "Veuillez selectionner un fichier PDF",
+      "machineRequired": "Veuillez selectionner une machine",
+      "typeRequired": "Veuillez saisir le type de document",
+      "created": "Document televerse avec succes",
+      "updated": "Document mis a jour avec succes",
+      "deleted": "Document supprime avec succes",
+      "saveFailed": "Echec de l'enregistrement du document",
+      "deleteFailed": "Echec de la suppression du document",
+      "confirmDelete": "Voulez-vous vraiment supprimer ce document ? Cette action est irreversible."
     }
   }
 }

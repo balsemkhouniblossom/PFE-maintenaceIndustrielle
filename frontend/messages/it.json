@@ -261,6 +261,7 @@
     "delete": "Elimina",
     "edit": "Modifica",
     "add": "Aggiungi",
+    "defaultUserName": "Utente",
     "user": "User",
     "role": "Role",
     "back": "Indietro",
@@ -739,6 +740,16 @@
     }
   },
   "sidebar": {
+    "domains": {
+      "dashboard": "Pannello di controllo",
+      "users": "Utenti",
+      "assets": "Asset",
+      "maintenance": "Manutenzione",
+      "failures": "Guasti",
+      "monitoring": "Monitoraggio",
+      "inventory": "Inventario",
+      "documents": "Documenti"
+    },
     "systemStatus": {
       "online": "Sistema online",
       "loading": "Caricamento in corso...",
@@ -1001,6 +1012,72 @@
       "deleted": "Soluzione guasto eliminata con successo",
       "saveFailed": "Salvataggio della soluzione guasto non riuscito",
       "deleteFailed": "Eliminazione della soluzione guasto non riuscita"
+    }
+  },
+  "documents": {
+    "title": "Gestione documenti",
+    "heading": "Documenti",
+    "description": "Gestisci i documenti tecnici e i manuali delle macchine",
+    "pageTitle": "Documenti tecnici",
+    "searchPlaceholder": "Cerca documenti per nome, tipo, macchina o tag...",
+    "filterAllMachines": "Tutte le macchine",
+    "actions": {
+      "add": "Carica documento",
+      "view": "Visualizza",
+      "edit": "Modifica",
+      "delete": "Elimina"
+    },
+    "table": {
+      "documentId": "ID documento",
+      "fileName": "Nome file",
+      "type": "Tipo",
+      "machine": "Macchina",
+      "uploadedBy": "Caricato da",
+      "dateAdded": "Data di aggiunta"
+    },
+    "empty": {
+      "search": "Nessun documento corrisponde alla ricerca.",
+      "default": "Nessun documento disponibile."
+    },
+    "modal": {
+      "uploadTitle": "Carica documento",
+      "editTitle": "Modifica documento",
+      "viewTitle": "Visualizza documento"
+    },
+    "form": {
+      "file": "Seleziona file PDF",
+      "machine": "Macchina",
+      "type": "Tipo di documento",
+      "description": "Descrizione",
+      "tags": "Tag (separati da virgole)",
+      "uploadedBy": "Caricato da"
+    },
+    "placeholders": {
+      "selectMachine": "Seleziona una macchina...",
+      "type": "es. Manuale, Specifica, Guida di manutenzione",
+      "description": "Inserisci la descrizione del documento...",
+      "tags": "es. preventivo, elettrico, motore",
+      "uploadedBy": "Inserisci il tuo nome o nome utente..."
+    },
+    "buttons": {
+      "upload": "Carica documento",
+      "update": "Aggiorna documento",
+      "cancel": "Annulla",
+      "save": "Salva"
+    },
+    "viewer": {
+      "title": "Visualizzatore documenti"
+    },
+    "notifications": {
+      "fileRequired": "Seleziona un file PDF",
+      "machineRequired": "Seleziona una macchina",
+      "typeRequired": "Inserisci il tipo di documento",
+      "created": "Documento caricato con successo",
+      "updated": "Documento aggiornato con successo",
+      "deleted": "Documento eliminato con successo",
+      "saveFailed": "Salvataggio del documento non riuscito",
+      "deleteFailed": "Eliminazione del documento non riuscita",
+      "confirmDelete": "Sei sicuro di voler eliminare questo documento? Questa azione non puo essere annullata."
     }
   }
 }
