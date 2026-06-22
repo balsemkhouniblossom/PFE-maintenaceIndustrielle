@@ -201,7 +201,16 @@
       "all": "Todos",
       "returned": "Devuelto",
       "workOrder": "Orden de trabajo",
-      "download": "Descargar"
+      "download": "Descargar",
+      "notifications": {
+        "dataLoaded": "Datos cargados correctamente",
+        "loadFailed": "Error al cargar los datos",
+        "customActionAdded": "Accion personalizada agregada",
+        "customTaskAdded": "Tarea personalizada agregada",
+        "filterUpdated": "Filtro actualizado",
+        "submitSuccess": "Enviado para validacion",
+        "validationFailed": "Complete los campos requeridos"
+      }
     },
     "technician": {
       "title": "Panel del técnico",

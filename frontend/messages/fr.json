@@ -262,7 +262,16 @@
       "all": "Tous",
       "returned": "Retourne",
       "workOrder": "Ordre de travail",
-      "download": "Telecharger"
+      "download": "Telecharger",
+      "notifications": {
+        "dataLoaded": "Donnees chargees",
+        "loadFailed": "Echec du chargement des donnees",
+        "customActionAdded": "Action personnalisee ajoutee",
+        "customTaskAdded": "Tache personnalisee ajoutee",
+        "filterUpdated": "Filtre mis a jour",
+        "submitSuccess": "Soumis pour validation",
+        "validationFailed": "Veuillez completer les champs requis"
+      }
     },
     "technician": {
       "title": "Tableau de bord technicien",

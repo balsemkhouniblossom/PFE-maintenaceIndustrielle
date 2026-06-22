@@ -207,7 +207,16 @@
       "all": "Alle",
       "returned": "Zurueckgegeben",
       "workOrder": "Arbeitsauftrag",
-      "download": "Herunterladen"
+      "download": "Herunterladen",
+      "notifications": {
+        "dataLoaded": "Daten erfolgreich geladen",
+        "loadFailed": "Fehler beim Laden der Daten",
+        "customActionAdded": "Benutzerdefinierte Aktion hinzugefugt",
+        "customTaskAdded": "Benutzerdefinierte Aufgabe hinzugefugt",
+        "filterUpdated": "Filter aktualisiert",
+        "submitSuccess": "Zur Validierung gesendet",
+        "validationFailed": "Bitte erforderliche Felder ausfullen"
+      }
     },
     "technician": {
       "title": "Techniker-Dashboard",

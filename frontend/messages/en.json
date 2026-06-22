@@ -297,7 +297,16 @@
       "all": "All",
       "returned": "Returned",
       "workOrder": "Work order",
-      "download": "Download"
+      "download": "Download",
+      "notifications": {
+        "dataLoaded": "Data loaded successfully",
+        "loadFailed": "Failed to load data",
+        "customActionAdded": "Custom action added",
+        "customTaskAdded": "Custom task added",
+        "filterUpdated": "Filter updated",
+        "submitSuccess": "Submitted for validation",
+        "validationFailed": "Please complete required fields"
+      }
     },
     "technician": {
       "title": "Technician Dashboard",
@@ -642,7 +651,11 @@
       "pending": "Pending",
       "in_progress": "In Progress",
       "completed": "Completed",
-      "cancelled": "Cancelled"
+      "cancelled": "Cancelled",
+      "technician_required": "Technician required",
+      "returned": "Returned",
+      "waiting_validation": "Waiting validation",
+       "assigned": "Assigned"
     },
     "actions": {
       "update": "Update Work Order",

@@ -189,7 +189,16 @@
       "all": "Tutti",
       "returned": "Restituito",
       "workOrder": "Ordine di lavoro",
-      "download": "Scarica"
+      "download": "Scarica",
+      "notifications": {
+        "dataLoaded": "Dati caricati con successo",
+        "loadFailed": "Errore nel caricamento dei dati",
+        "customActionAdded": "Azione personalizzata aggiunta",
+        "customTaskAdded": "Attivita personalizzata aggiunta",
+        "filterUpdated": "Filtro aggiornato",
+        "submitSuccess": "Inviato per la validazione",
+        "validationFailed": "Compila i campi obbligatori"
+      }
     },
     "technician": {
       "title": "Dashboard tecnico",

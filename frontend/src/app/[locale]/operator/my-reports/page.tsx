@@ -40,10 +40,25 @@ export default function OperatorMyReportsPage() {
   const tCommon = useTranslations("common");
   const { user } = useAuth();
 
+  const [notification, setNotification] = useState<{
+    type: "success" | "error" | "info";
+    message: string;
+  } | null>(null);
+
   const [loading, setLoading] = useState(true);
   const [reports, setReports] = useState<InterventionReport[]>([]);
   const [workOrders, setWorkOrders] = useState<WorkOrder[]>([]);
   const [statusFilter, setStatusFilter] = useState("all");
+
+  function showNotification(type: "success" | "error" | "info", message: string): void {
+    setNotification({ type, message });
+    window.setTimeout(() => setNotification(null), 4000);
+  }
+
+  function handleStatusFilterChange(value: string): void {
+    setStatusFilter(value);
+    showNotification("info", t("notifications.filterUpdated"));
+  }
 
   useEffect(() => {
     async function loadData() {
@@ -56,8 +71,10 @@ export default function OperatorMyReportsPage() {
 
         setReports(reportsRes.data ?? []);
         setWorkOrders(workOrdersRes.data ?? []);
+        showNotification("success", t("notifications.dataLoaded"));
       } catch (error) {
         console.error("Failed to load my reports", error);
+        showNotification("error", t("notifications.loadFailed"));
       } finally {
         setLoading(false);
       }
@@ -83,6 +100,20 @@ export default function OperatorMyReportsPage() {
   return (
     <ProtectedRoute requiredRole="operator">
       <DashboardLayout title={t("myReports")}>
+        {notification ? (
+          <div
+            data-testid="my-reports-notification"
+            className={`mb-4 rounded-lg px-4 py-3 text-sm ${
+              notification.type === "success"
+                ? "bg-green-100 text-green-800 border border-green-200"
+                : notification.type === "error"
+                  ? "bg-red-100 text-red-800 border border-red-200"
+                  : "bg-blue-100 text-blue-800 border border-blue-200"
+            }`}
+          >
+            {notification.message}
+          </div>
+        ) : null}
         <div className="bento-grid">
           <div className="col-span-full panel">
             <div className="card-title mb-4">{t("myReports")}</div>
@@ -103,7 +134,8 @@ export default function OperatorMyReportsPage() {
                 <label className="block text-sm mb-2">{t("validation")}</label>
                 <select
                   value={statusFilter}
-                  onChange={(event) => setStatusFilter(event.target.value)}
+                  onChange={(event) => handleStatusFilterChange(event.target.value)}
+                  data-testid="my-reports-status-filter"
                   className="w-full border rounded-lg px-3 py-2"
                   title={t("validation")}
                   aria-label={t("validation")}
@@ -125,8 +157,8 @@ export default function OperatorMyReportsPage() {
               <div className="text-sm text-slate-500">{tCommon("table.noData")}</div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {myReports.map(({ report, workOrder }) => (
-                  <div key={report._id} className="border rounded-xl p-4">
+                {myReports.map(({ report, workOrder }, index) => (
+                  <div key={report._id} className="border rounded-xl p-4" data-testid={`my-report-card-${index}`}>
                     <div className="font-semibold">{report.report_id}</div>
                     <div className="text-sm text-slate-500">{t("workOrder")}: {workOrder?.ot_id ?? tCommon("notAvailable")}</div>
                     <div className="text-sm mt-2">{report.description_action || tCommon("notAvailable")}</div>
