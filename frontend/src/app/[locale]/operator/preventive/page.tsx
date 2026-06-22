@@ -109,6 +109,7 @@ export default function OperatorPreventivePage() {
   const [photo, setPhoto] = useState<File | null>(null);
   const [selectedLubrifiant, setSelectedLubrifiant] = useState("");
   const [lubrificationQty, setLubrificationQty] = useState("");
+  const [submitValidationReason, setSubmitValidationReason] = useState("");
 
   useEffect(() => {
     async function loadAll() {
@@ -227,11 +228,13 @@ export default function OperatorPreventivePage() {
 
   async function submitPreventiveMaintenance(): Promise<void> {
     if (!user?._id || !selectedMachine) {
+      setSubmitValidationReason("missing-user-or-machine");
       window.alert(t("validation"));
       return;
     }
 
     if (selectedTaskLabels.length === 0) {
+      setSubmitValidationReason("no-tasks-selected");
       window.alert(t("preventiveTasks"));
       return;
     }
@@ -239,6 +242,7 @@ export default function OperatorPreventivePage() {
     const planRef = preventivePlans[0]?._id;
     const moduleRef = modulesForMachine[0]?._id;
     if (!moduleRef) {
+      setSubmitValidationReason("missing-module-for-machine");
       window.alert(t("validation"));
       return;
     }
@@ -247,6 +251,7 @@ export default function OperatorPreventivePage() {
     const startIso = new Date(completionDate).toISOString();
     const conditionValue = condition === "custom" ? customCondition.trim() : condition;
 
+    setSubmitValidationReason("");
     setSubmitting(true);
     try {
       const workOrderPayload = {
@@ -298,6 +303,7 @@ export default function OperatorPreventivePage() {
       window.alert(t("waitingValidation"));
     } catch (error) {
       console.error("Failed to submit preventive maintenance", error);
+      setSubmitValidationReason("submit-failed");
       window.alert(tCommon("error"));
     } finally {
       setSubmitting(false);
@@ -329,6 +335,7 @@ export default function OperatorPreventivePage() {
                     setSelectedCategory(event.target.value);
                     setSelectedMachine("");
                   }}
+                  data-testid="preventive-category-select"
                   title={t("machineCategory")}
                   aria-label={t("machineCategory")}
                   className="w-full border rounded-lg px-3 py-2"
@@ -353,6 +360,7 @@ export default function OperatorPreventivePage() {
                 <select
                   value={selectedMachine}
                   onChange={(event) => setSelectedMachine(event.target.value)}
+                  data-testid="preventive-machine-select"
                   title={t("machine")}
                   aria-label={t("machine")}
                   className="w-full border rounded-lg px-3 py-2"
@@ -378,12 +386,13 @@ export default function OperatorPreventivePage() {
             <div className="card-title mb-3">{t("preventiveTasks")}</div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
               {allTaskItems.length === 0 && <div className="text-sm text-slate-500">{tCommon("table.noData")}</div>}
-              {allTaskItems.map((task) => (
+              {allTaskItems.map((task, index) => (
                 <label key={task} className="flex items-center gap-2 text-sm">
                   <input
                     type="checkbox"
                     checked={Boolean(checkedTasks[task])}
                     onChange={() => toggleTask(task)}
+                    data-testid={`preventive-task-checkbox-${index}`}
                   />
                   <span>{task}</span>
                 </label>
@@ -393,10 +402,15 @@ export default function OperatorPreventivePage() {
               <input
                 value={customTaskInput}
                 onChange={(event) => setCustomTaskInput(event.target.value)}
+                data-testid="preventive-custom-task-input"
                 className="flex-1 border rounded-lg px-3 py-2"
                 placeholder={t("comments")}
               />
-              <button onClick={addCustomTask} className="px-4 py-2 rounded-lg bg-slate-900 text-white">
+              <button
+                onClick={addCustomTask}
+                data-testid="preventive-add-custom-task"
+                className="px-4 py-2 rounded-lg bg-slate-900 text-white"
+              >
                 {tCommon("add")}
               </button>
             </div>
@@ -546,10 +560,16 @@ export default function OperatorPreventivePage() {
             <button
               disabled={submitting}
               onClick={() => void submitPreventiveMaintenance()}
+              data-testid="preventive-submit-button"
               className="w-full md:w-auto px-5 py-3 rounded-lg bg-emerald-600 hover:bg-emerald-700 disabled:opacity-60 text-white"
             >
               {submitting ? tCommon("saving") : t("generateReport")}
             </button>
+            {submitValidationReason ? (
+              <div data-testid="preventive-submit-validation" className="text-sm text-red-600 mt-3">
+                {submitValidationReason}
+              </div>
+            ) : null}
           </div>
         </div>
       </DashboardLayout>

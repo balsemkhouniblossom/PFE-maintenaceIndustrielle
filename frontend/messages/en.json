@@ -55,7 +55,8 @@
       "cancel": "Cancel",
       "saving": "Saving...",
       "create": "Create",
-      "update": "Update"
+      "update": "Update",
+      "search": "Search"
     },
     "status": {
       "pending": "Pending",

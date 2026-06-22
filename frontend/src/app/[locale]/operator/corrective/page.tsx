@@ -104,6 +104,7 @@ export default function OperatorCorrectivePage() {
 
   const [photo, setPhoto] = useState<File | null>(null);
   const [selectedParts, setSelectedParts] = useState<Record<string, string>>({});
+  const [submitValidationReason, setSubmitValidationReason] = useState("");
 
   useEffect(() => {
     async function loadAll() {
@@ -220,11 +221,13 @@ export default function OperatorCorrectivePage() {
 
   async function submitCorrectiveMaintenance(): Promise<void> {
     if (!user?._id || !selectedMachine || !selectedFault) {
+      setSubmitValidationReason("missing-user-machine-or-fault");
       window.alert(t("validation"));
       return;
     }
 
     if (selectedActionLabels.length === 0) {
+      setSubmitValidationReason("no-actions-selected");
       window.alert(t("actionsPerformed"));
       return;
     }
@@ -232,6 +235,7 @@ export default function OperatorCorrectivePage() {
     const nowIso = new Date().toISOString();
     const resultValue = result === "custom" ? customResult.trim() : result;
 
+    setSubmitValidationReason("");
     setSubmitting(true);
     try {
       const workOrderPayload = {
@@ -285,6 +289,7 @@ export default function OperatorCorrectivePage() {
       window.alert(t("waitingValidation"));
     } catch (error) {
       console.error("Failed to submit corrective maintenance", error);
+      setSubmitValidationReason("submit-failed");
       window.alert(tCommon("error"));
     } finally {
       setSubmitting(false);
@@ -316,6 +321,7 @@ export default function OperatorCorrectivePage() {
                     setSelectedCategory(event.target.value);
                     setSelectedMachine("");
                   }}
+                  data-testid="corrective-category-select"
                   title={t("machineCategory")}
                   aria-label={t("machineCategory")}
                   className="w-full border rounded-lg px-3 py-2"
@@ -334,6 +340,7 @@ export default function OperatorCorrectivePage() {
                 <select
                   value={selectedMachine}
                   onChange={(event) => setSelectedMachine(event.target.value)}
+                  data-testid="corrective-machine-select"
                   title={t("machine")}
                   aria-label={t("machine")}
                   className="w-full border rounded-lg px-3 py-2"
@@ -352,6 +359,7 @@ export default function OperatorCorrectivePage() {
                 <select
                   value={selectedPanne}
                   onChange={(event) => setSelectedPanne(event.target.value)}
+                  data-testid="corrective-fault-select"
                   title={t("fault")}
                   aria-label={t("fault")}
                   className="w-full border rounded-lg px-3 py-2"
@@ -374,12 +382,13 @@ export default function OperatorCorrectivePage() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
               {allTasks.length === 0 && <div className="text-sm text-slate-500">{tCommon("table.noData")}</div>}
-              {allTasks.map((task) => (
+              {allTasks.map((task, index) => (
                 <label key={task} className="flex items-center gap-2 text-sm">
                   <input
                     type="checkbox"
                     checked={Boolean(checkedActions[task])}
                     onChange={() => toggleTask(task)}
+                    data-testid={`corrective-task-checkbox-${index}`}
                   />
                   <span>{task}</span>
                 </label>
@@ -389,10 +398,15 @@ export default function OperatorCorrectivePage() {
               <input
                 value={customActionInput}
                 onChange={(event) => setCustomActionInput(event.target.value)}
+                data-testid="corrective-custom-action-input"
                 className="flex-1 border rounded-lg px-3 py-2"
                 placeholder={t("actionsPerformed")}
               />
-              <button onClick={addCustomAction} className="px-4 py-2 rounded-lg bg-slate-900 text-white">
+              <button
+                onClick={addCustomAction}
+                data-testid="corrective-add-custom-action"
+                className="px-4 py-2 rounded-lg bg-slate-900 text-white"
+              >
                 {tCommon("add")}
               </button>
             </div>
@@ -489,13 +503,21 @@ export default function OperatorCorrectivePage() {
             <input
               value={comments}
               onChange={(event) => setComments(event.target.value.slice(0, 180))}
+              data-testid="corrective-comments-input"
               className="w-full border rounded-lg px-3 py-2 mb-4"
               placeholder={t("comments")}
             />
 
+            {submitValidationReason ? (
+              <div data-testid="corrective-submit-validation" className="text-sm text-red-600 mb-3">
+                {submitValidationReason}
+              </div>
+            ) : null}
+
             <button
               disabled={submitting}
               onClick={() => void submitCorrectiveMaintenance()}
+              data-testid="corrective-submit-button"
               className="w-full md:w-auto px-5 py-3 rounded-lg bg-emerald-600 hover:bg-emerald-700 disabled:opacity-60 text-white"
             >
               {submitting ? tCommon("saving") : t("generateReport")}

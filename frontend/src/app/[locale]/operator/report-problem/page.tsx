@@ -63,6 +63,12 @@ export default function OperatorReportProblemPage() {
   const tCommon = useTranslations("common");
   const { user } = useAuth();
 
+  const [notification, setNotification] = useState<{
+    type: "success" | "error" | "info";
+    message: string;
+  } | null>(null);
+  const [submitValidationReason, setSubmitValidationReason] = useState("");
+
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
 
@@ -79,6 +85,11 @@ export default function OperatorReportProblemPage() {
   const [customAction, setCustomAction] = useState("");
   const [customActions, setCustomActions] = useState<string[]>([]);
   const [photo, setPhoto] = useState<File | null>(null);
+
+  function showNotification(type: "success" | "error" | "info", message: string): void {
+    setNotification({ type, message });
+    window.setTimeout(() => setNotification(null), 4000);
+  }
 
   useEffect(() => {
     async function loadData() {
@@ -97,8 +108,10 @@ export default function OperatorReportProblemPage() {
         setPannes(pannesRes.data ?? []);
         setSolutions(solutionsRes.data ?? []);
         setDocuments(documentsRes.data ?? []);
+        showNotification("success", t("notifications.dataLoaded"));
       } catch (error) {
         console.error("Failed to load report-problem data", error);
+        showNotification("error", t("notifications.loadFailed"));
       } finally {
         setLoading(false);
       }
@@ -145,9 +158,13 @@ export default function OperatorReportProblemPage() {
 
   function addCustomAction(): void {
     const value = customAction.trim();
-    if (!value) return;
+    if (!value) {
+      showNotification("error", t("notifications.validationFailed"));
+      return;
+    }
     if (!customActions.includes(value)) {
       setCustomActions((prev) => [...prev, value]);
+      showNotification("info", t("notifications.customActionAdded"));
     }
     setCheckedActions((prev) => ({ ...prev, [value]: true }));
     setCustomAction("");
@@ -169,18 +186,23 @@ export default function OperatorReportProblemPage() {
 
   async function submitReport(): Promise<void> {
     if (!user?._id || !selectedMachine || !selectedFault) {
+      setSubmitValidationReason("missing-user-machine-or-fault");
+      showNotification("error", t("notifications.validationFailed"));
       window.alert(t("validation"));
       return;
     }
 
     const selectedActions = actionList.filter((item) => checkedActions[item]);
     if (selectedActions.length === 0) {
+      setSubmitValidationReason("no-actions-selected");
+      showNotification("error", t("notifications.validationFailed"));
       window.alert(t("actionsPerformed"));
       return;
     }
 
     const nowIso = new Date().toISOString();
 
+    setSubmitValidationReason("");
     setSubmitting(true);
     try {
       const workOrderRes = await apiService.createWorkOrder({
@@ -214,9 +236,12 @@ export default function OperatorReportProblemPage() {
       });
 
       await uploadPhotoIfPresent(selectedMachine);
+      showNotification("success", t("notifications.submitSuccess"));
       window.alert(t("waitingValidation"));
     } catch (error) {
       console.error("Failed to submit report", error);
+      setSubmitValidationReason("submit-failed");
+      showNotification("error", t("notifications.loadFailed"));
       window.alert(tCommon("error"));
     } finally {
       setSubmitting(false);
@@ -226,6 +251,20 @@ export default function OperatorReportProblemPage() {
   return (
     <ProtectedRoute requiredRole="operator">
       <DashboardLayout title={t("reportProblem")}>
+        {notification ? (
+          <div
+            data-testid="report-problem-notification"
+            className={`mb-4 rounded-lg px-4 py-3 text-sm ${
+              notification.type === "success"
+                ? "bg-green-100 text-green-800 border border-green-200"
+                : notification.type === "error"
+                  ? "bg-red-100 text-red-800 border border-red-200"
+                  : "bg-blue-100 text-blue-800 border border-blue-200"
+            }`}
+          >
+            {notification.message}
+          </div>
+        ) : null}
         <div className="bento-grid">
           <div className="col-span-full panel">
             <div className="card-title mb-4">{t("reportProblem")}</div>
@@ -242,6 +281,7 @@ export default function OperatorReportProblemPage() {
                       setSelectedType(event.target.value);
                       setSelectedMachine("");
                     }}
+                    data-testid="report-problem-category-select"
                     className="w-full border rounded-lg px-3 py-2"
                     title={t("machineCategory")}
                     aria-label={t("machineCategory")}
@@ -260,6 +300,7 @@ export default function OperatorReportProblemPage() {
                   <select
                     value={selectedMachine}
                     onChange={(event) => setSelectedMachine(event.target.value)}
+                    data-testid="report-problem-machine-select"
                     className="w-full border rounded-lg px-3 py-2"
                     title={t("machine")}
                     aria-label={t("machine")}
@@ -278,6 +319,7 @@ export default function OperatorReportProblemPage() {
                   <select
                     value={selectedPanne}
                     onChange={(event) => setSelectedPanne(event.target.value)}
+                    data-testid="report-problem-fault-select"
                     className="w-full border rounded-lg px-3 py-2"
                     title={t("fault")}
                     aria-label={t("fault")}
@@ -303,12 +345,13 @@ export default function OperatorReportProblemPage() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
               {actionList.length === 0 && <div className="text-sm text-slate-500">{tCommon("table.noData")}</div>}
-              {actionList.map((action) => (
+              {actionList.map((action, index) => (
                 <label key={action} className="flex items-center gap-2 text-sm">
                   <input
                     type="checkbox"
                     checked={Boolean(checkedActions[action])}
                     onChange={() => toggleAction(action)}
+                    data-testid={`report-problem-action-checkbox-${index}`}
                   />
                   <span>{action}</span>
                 </label>
@@ -318,10 +361,15 @@ export default function OperatorReportProblemPage() {
               <input
                 value={customAction}
                 onChange={(event) => setCustomAction(event.target.value)}
+                data-testid="report-problem-custom-action-input"
                 className="flex-1 border rounded-lg px-3 py-2"
                 placeholder={t("actionsPerformed")}
               />
-              <button onClick={addCustomAction} className="px-4 py-2 rounded-lg bg-slate-900 text-white">
+              <button
+                onClick={addCustomAction}
+                data-testid="report-problem-add-custom-action"
+                className="px-4 py-2 rounded-lg bg-slate-900 text-white"
+              >
                 {tCommon("add")}
               </button>
             </div>
@@ -357,9 +405,15 @@ export default function OperatorReportProblemPage() {
           </div>
 
           <div className="col-span-full panel">
+            {submitValidationReason ? (
+              <div data-testid="report-problem-submit-validation" className="text-sm text-red-600 mb-3">
+                {submitValidationReason}
+              </div>
+            ) : null}
             <button
               disabled={submitting}
               onClick={() => void submitReport()}
+              data-testid="report-problem-submit-button"
               className="w-full md:w-auto px-5 py-3 rounded-lg bg-emerald-600 hover:bg-emerald-700 disabled:opacity-60 text-white"
             >
               {submitting ? tCommon("saving") : t("generateReport")}
