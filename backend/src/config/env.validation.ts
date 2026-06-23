@@ -33,11 +33,8 @@ function parsePort(value: string | undefined): number {
 }
 
 function parseCorsOrigins(value: string | undefined): string[] {
-    if (!value?.trim()) {
-        return value
-            .split(',')
-            .map((o) => o.trim())
-            .filter(Boolean);
+    if (!value || !value.trim()) {
+        return ['http://localhost:3000'];
     }
 
     return value
