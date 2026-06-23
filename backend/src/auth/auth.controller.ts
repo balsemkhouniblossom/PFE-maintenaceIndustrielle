@@ -13,6 +13,7 @@ import { LocalAuthGuard } from './local-auth.guard';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
+import { Role } from '../schemas/user.schema';
 import { JwtAuthGuard } from './jwt-auth.guard';
 
 @Controller('auth')
@@ -23,9 +24,9 @@ export class AuthController {
   @Post('login')
   @HttpCode(HttpStatus.OK)
   async login(@Request() req) {
-      if (!req.user) {
-    throw new UnauthorizedException('Authentication failed');
-  }
+    if (!req.user) {
+      throw new UnauthorizedException('Authentication failed');
+    }
     return this.authService.login(req.user);
   }
 
@@ -56,11 +57,11 @@ export class AuthController {
           role: user.role,
         },
       };
-    } catch (error) {
-      return {
-        message: 'Registration failed',
-        error: error.message,
-      };
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new UnauthorizedException(error.message);
+      }
+      throw new UnauthorizedException('Registration failed');
     }
   }
 
