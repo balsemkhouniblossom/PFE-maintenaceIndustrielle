@@ -155,7 +155,9 @@ export default function DocumentsPage() {
     });
   }, [documents, search, selectedMachine]);
 
-  const API_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+  const API_URL =
+    process.env.NEXT_PUBLIC_API_BASE_URL ||
+    'https://pfe-maintenaceindustrielle.onrender.com';
 
   function getFileUrl(path: string): string {
     return `${API_URL}${path}`;

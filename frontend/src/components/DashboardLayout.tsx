@@ -240,7 +240,7 @@ function DashboardLayoutBody({ children, title }: DashboardLayoutProps) {
               <div className="w-8 h-8 rounded-full overflow-hidden bg-blue-600 flex items-center justify-center">
                 {user?.photo ? (
                   <img
-                    src={`http://localhost:3001${user.photo}`}
+                    src={`${process.env.NEXT_PUBLIC_API_BASE_URL || 'https://pfe-maintenaceindustrielle.onrender.com'}${user.photo}`}
                     alt={user.nom_complet || 'User'}
                     className="w-full h-full object-cover"
                     onError={(e) => {
@@ -298,7 +298,7 @@ function DashboardLayoutBody({ children, title }: DashboardLayoutProps) {
                   <div className="w-8 h-8 rounded-full overflow-hidden bg-blue-600 flex items-center justify-center">
                     {user?.photo ? (
                       <img
-                        src={`http://localhost:3001${user.photo}`}
+                        src={`${process.env.NEXT_PUBLIC_API_BASE_URL || 'https://pfe-maintenaceindustrielle.onrender.com'}${user.photo}`}
                         alt={user.nom_complet || 'User'}
                         className="w-full h-full object-cover"
                         onError={(e) => {

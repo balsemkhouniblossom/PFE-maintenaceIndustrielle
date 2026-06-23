@@ -50,8 +50,8 @@ export default function UsersPage() {
   // placeholder modal (no create/edit implemented yet)
   //const [showModal, setShowModal] = useState(false);
   const BACKEND_URL =
-    process.env.NEXT_PUBLIC_BACKEND_URL ||
-    'http://localhost:3001';
+    process.env.NEXT_PUBLIC_API_BASE_URL ||
+    'https://pfe-maintenaceindustrielle.onrender.com';
   const emptyForm = {
     user_id: '',
     nom_complet: '',

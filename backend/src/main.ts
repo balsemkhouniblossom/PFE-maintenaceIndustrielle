@@ -49,6 +49,9 @@ async function bootstrap() {
 
   await app.listen(env.port);
   logger.log(`Backend running in ${env.nodeEnv} mode on port ${env.port}`);
+  logger.log(`API URL: https://pfe-maintenaceindustrielle.onrender.com (or http://localhost:${env.port} locally)`);
+  logger.log(`CORS origins: ${env.corsOrigins.join(', ')}`);
+  logger.log(`Health check available at: /health`);
 
   const shutdownSignals: NodeJS.Signals[] = ['SIGINT', 'SIGTERM'];
   shutdownSignals.forEach((signal) => {

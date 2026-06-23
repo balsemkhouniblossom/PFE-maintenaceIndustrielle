@@ -1,7 +1,17 @@
 import axios from 'axios';
 
 const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL || '/api';
+  process.env.NEXT_PUBLIC_API_BASE_URL ||
+  'https://pfe-maintenaceindustrielle.onrender.com';
+
+if (typeof window === 'undefined') {
+  // Server-side startup log (visible in Vercel Function logs)
+  console.log(`[API] Base URL resolved to: ${API_BASE_URL}`);
+} else if (process.env.NODE_ENV !== 'production') {
+  // Client-side dev log only — avoids leaking config in production browser console
+  console.log(`[API] Base URL resolved to: ${API_BASE_URL}`);
+}
+
 const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {

@@ -34,7 +34,10 @@ function parsePort(value: string | undefined): number {
 
 function parseCorsOrigins(value: string | undefined): string[] {
     if (!value || !value.trim()) {
-        return ['http://localhost:3000'];
+        return [
+            'http://localhost:3000',
+            'https://pfe-maintenace-industrielle.vercel.app',
+        ];
     }
 
     return value

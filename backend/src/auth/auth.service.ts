@@ -130,7 +130,9 @@ export class AuthService {
         reset_password_expires: resetExpires,
       } as any);
 
-      const appUrl = process.env.APP_URL || 'http://localhost:3000';
+      const appUrl =
+        process.env.APP_URL ||
+        'https://pfe-maintenace-industrielle.vercel.app';
       const locale = process.env.DEFAULT_LOCALE || 'en';
       const resetLink = `${appUrl}/${locale}/auth/reset-password?token=${resetToken}`;
 
