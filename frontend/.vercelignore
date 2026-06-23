@@ -1,0 +1,6 @@
+backend
+dist
+node_modules
+*.bson
+*.json.bak
+*.log
