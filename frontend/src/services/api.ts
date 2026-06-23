@@ -38,6 +38,15 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
+    if (error.code === 'ERR_NETWORK' || !error.response) {
+      console.error('[API] Network/CORS error', {
+        baseURL: API_BASE_URL,
+        url: error.config?.url,
+        method: error.config?.method,
+        message: error.message,
+      });
+    }
+
     const status = error.response?.status;
     const requestUrl = String(error.config?.url || '');
     const isAuthEndpoint = /\/auth\/(login|register|forgot-password|reset-password)/.test(requestUrl);

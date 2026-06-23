@@ -1,9 +1,10 @@
 type RuntimeMode = 'development' | 'test' | 'production';
+type CorsOrigin = string | RegExp;
 
 type EnvValidationResult = {
     nodeEnv: RuntimeMode;
     port: number;
-    corsOrigins: string[];
+    corsOrigins: CorsOrigin[];
 };
 
 function parseNodeEnv(input: string | undefined): RuntimeMode {
@@ -32,18 +33,28 @@ function parsePort(value: string | undefined): number {
     return parsed;
 }
 
-function parseCorsOrigins(value: string | undefined): string[] {
+function wildcardToRegex(originPattern: string): RegExp {
+    const escaped = originPattern
+        .replace(/[.+?^${}()|[\]\\]/g, '\\$&')
+        .replace(/\*/g, '.*');
+
+    return new RegExp(`^${escaped}$`);
+}
+
+function parseCorsOrigins(value: string | undefined): CorsOrigin[] {
     if (!value || !value.trim()) {
         return [
             'http://localhost:3000',
             'https://pfe-maintenace-industrielle.vercel.app',
+            /^https:\/\/pfe-maintenace-industrielle-[a-z0-9-]+\.vercel\.app$/,
         ];
     }
 
     return value
         .split(',')
         .map((origin) => origin.trim())
-        .filter(Boolean);
+        .filter(Boolean)
+        .map((origin) => (origin.includes('*') ? wildcardToRegex(origin) : origin));
 }
 
 export function validateEnvironment(): EnvValidationResult {
