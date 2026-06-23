@@ -4,7 +4,7 @@ import { AppModule } from './app.module';
 import * as express from 'express';
 import { join } from 'path';
 import helmet from 'helmet';
-import * as hpp from 'hpp';
+import hpp = require('hpp');
 import * as compression from 'compression';
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 import { validateEnvironment } from './config/env.validation';
@@ -41,9 +41,9 @@ async function bootstrap() {
   );
 
   app.use(
-  '/files/uploads',
-  express.static(join(__dirname, '..', 'uploads')),
-);
+    '/files/uploads',
+    express.static(join(__dirname, '..', 'uploads')),
+  );
 
   app.enableShutdownHooks();
 
