@@ -2,8 +2,7 @@
 const fs = require('fs');
 const path = require('path');
 function read(p){ return JSON.parse(fs.readFileSync(p,'utf8')); }
-const scriptDir = path.dirname(module.filename);
-const base = path.join(scriptDir,'..');
+const base = path.join(process.cwd());
 const messagesDir = path.join(base,'messages');
 const en = read(path.join(messagesDir,'en.json'));
 const arPath = path.join(messagesDir,'ar.json');

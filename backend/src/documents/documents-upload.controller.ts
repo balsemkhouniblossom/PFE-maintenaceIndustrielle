@@ -6,7 +6,7 @@ import {
     Body,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
+import { memoryStorage } from 'multer';
 import { extname } from 'path';
 import { DocumentsService } from './documents.service';
 import { BadRequestException } from '@nestjs/common';
@@ -60,14 +60,7 @@ export class DocumentsUploadController {
     @Post('upload')
     @UseInterceptors(
         FileInterceptor('file', {
-            storage: diskStorage({
-                destination: './uploads',
-                filename: (req, file, cb) => {
-                    const uniqueName =
-                        Date.now() + '-' + Math.round(Math.random() * 1e9);
-                    cb(null, uniqueName + extname(file.originalname));
-                },
-            }),
+            storage: memoryStorage(),
         }),
     )
     async uploadFile(
@@ -83,11 +76,13 @@ export class DocumentsUploadController {
             throw new BadRequestException('Invalid machine_id');
         }
 
+        const storedFileName = `${Date.now()}-${Math.round(Math.random() * 1e9)}${extname(file.originalname)}`;
+
         return this.documentsService.create({
             document_id: body.document_id,
             machine_id: body.machine_id,
             type_document: body.type_document,
-            file_path: fileUrl,
+            file_path: `/uploads/${storedFileName}`,
             file_name: file.originalname,
             description: body.description,
             tags: this.parseTags(body.tags),

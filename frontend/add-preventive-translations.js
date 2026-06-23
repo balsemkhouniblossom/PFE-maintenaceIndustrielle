@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const scriptDir = path.dirname(module.filename);
+const scriptDir = process.cwd();
 
 const preventiveTranslations = {
   en: {

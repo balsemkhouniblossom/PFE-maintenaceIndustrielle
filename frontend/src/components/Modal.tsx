@@ -33,95 +33,34 @@ export function Modal({ isOpen, onClose, title, children, size = 'md' }: ModalPr
   if (!isOpen) return null;
 
   const sizeStyles = {
-    sm: { maxWidth: '400px' },
-    md: { maxWidth: '600px' },
-    lg: { maxWidth: '800px' },
-    xl: { maxWidth: '1000px' },
+    sm: 'max-w-[400px]',
+    md: 'max-w-[600px]',
+    lg: 'max-w-[800px]',
+    xl: 'max-w-[1000px]',
   };
 
   return (
-    <div style={{
-      position: 'fixed',
-      inset: 0,
-      zIndex: 50,
-      overflowY: 'auto'
-    }}>
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        minHeight: '100vh',
-        padding: '16px',
-        textAlign: 'center'
-      }}>
+    <div className="fixed inset-0 z-50 overflow-y-auto">
+      <div className="flex min-h-screen items-center justify-center p-4 text-center">
         <div
-          style={{
-            position: 'fixed',
-            inset: 0,
-            background: 'rgba(0, 0, 0, 0.5)',
-            transition: 'opacity 0.3s'
-          }}
+          className="fixed inset-0 bg-black/50 transition-opacity"
           onClick={onClose}
         />
 
         <div
-          className="panel"
-          style={{
-            ...sizeStyles[size],
-            width: '100%',
-            margin: '32px 0',
-            position: 'relative',
-            zIndex: 10,
-            maxHeight: '90vh',
-            overflow: 'hidden'
-          }}
+          className={`panel ${sizeStyles[size]} w-full my-8`}
         >
-          <div
-            className="panel-header"
-            style={{
-              background: 'var(--primary)',
-              color: 'white',
-              padding: '8px 16px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              fontSize: '14px',
-              fontWeight: 'bold',
-              textTransform: 'uppercase',
-              letterSpacing: '0.5px'
-            }}
-          >
+          <div className="panel-header flex items-center justify-between bg-[var(--primary)] px-4 py-2 text-sm font-bold uppercase tracking-[0.5px] text-white">
             <span>{title}</span>
             <button
+              aria-label="Close modal"
               onClick={onClose}
-              style={{
-                background: 'transparent',
-                border: 'none',
-                color: 'white',
-                cursor: 'pointer',
-                padding: '4px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center'
-              }}
-              onMouseOver={(e) => {
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
-              }}
-              onMouseOut={(e) => {
-                e.currentTarget.style.background = 'transparent';
-              }}
+              className="flex items-center justify-center rounded-md p-1 text-white transition-colors hover:bg-white/10"
             >
-              <XMarkIcon style={{ width: '16px', height: '16px' }} />
+              <XMarkIcon className="h-4 w-4" />
             </button>
           </div>
-          <div
-            className="panel-content"
-            style={{
-              padding: '16px',
-              maxHeight: 'calc(90vh - 80px)',
-              overflowY: 'auto'
-            }}
-          >
+          <div className="panel-content max-h-[calc(90vh-80px)] overflow-y-auto p-4">
             {children}
           </div>
         </div>

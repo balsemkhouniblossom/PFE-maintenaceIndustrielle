@@ -44,7 +44,7 @@ export default async function LocaleLayout({
   children,
   params,
 }: Props) {
-  const { locale } = await params; // ✅ IMPORTANT FIX
+  const { locale } = await params;
 
   if (!locales.includes(locale as any)) {
     notFound();
@@ -53,7 +53,7 @@ export default async function LocaleLayout({
   const messages = await getMessages({ locale });
   const isRtl = isRtlLocale(locale);
   return (
-    <div dir={isRtl ? "rtl" : "ltr"} lang={locale}>
+    <div dir={isRtl ? "rtl" : "ltr"}>
       <NextIntlClientProvider locale={locale} messages={messages}>
         <AuthProvider>{children}</AuthProvider>
       </NextIntlClientProvider>

@@ -89,7 +89,7 @@ export default function RegisterPage() {
             <p className="text-lg text-slate-500">{t('advancedMaintenance')}</p>
           </div>
 
-          <div className="rounded-[32px] shadow-[0_20px_50px_rgba(0,0,0,0.08)] bg-white p-8">
+          <div className="rounded-4xl shadow-[0_20px_50px_rgba(0,0,0,0.08)] bg-white p-8">
             <div className="text-center mb-6">
               <h2 className="text-2xl font-semibold text-gray-900">{t('signUp')}</h2>
               <p className="text-sm text-gray-600 mt-1">{t('accessSystem')}</p>
@@ -252,7 +252,7 @@ export default function RegisterPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none shadow-lg hover:shadow-xl"
+                className="w-full bg-linear-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none shadow-lg hover:shadow-xl"
               >
                 {loading ? (
                   <div className="flex items-center justify-center">
@@ -277,13 +277,10 @@ export default function RegisterPage() {
         </div>
       </div>
 
-      <div className="hidden lg:flex lg:w-3/5 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-blue-800 via-blue-900 to-[#0F172A] relative overflow-hidden">
-        <div
-          className="absolute inset-0 bg-cover bg-center opacity-80"
-          style={{ backgroundImage: 'url(/BG.png)' }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-white via-transparent to-transparent" />
-        <div className="absolute bottom-0 start-0 right-0 h-2 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+      <div className="hidden lg:flex lg:w-3/5 bg-[radial-gradient(circle_at_center,var(--tw-gradient-stops))] from-blue-800 via-blue-900 to-[#0F172A] relative overflow-hidden">
+        <div className="absolute inset-0 hero-split-panel bg-cover bg-center opacity-80" />
+        <div className="absolute inset-0 bg-linear-to-r from-white via-transparent to-transparent" />
+        <div className="absolute bottom-0 inset-s-0 h-2 bg-linear-to-r from-transparent via-white/20 to-transparent" />
       </div>
     </div>
   );

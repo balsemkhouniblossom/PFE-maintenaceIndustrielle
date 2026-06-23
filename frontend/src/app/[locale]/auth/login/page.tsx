@@ -76,7 +76,7 @@ export default function LoginPage() {
             <p className="text-lg text-slate-500">{t('advancedMaintenance')}</p>
           </div>
 
-          <div className="rounded-[32px] shadow-[0_20px_50px_rgba(0,0,0,0.08)] bg-white p-8">
+          <div className="rounded-4xl shadow-[0_20px_50px_rgba(0,0,0,0.08)] bg-white p-8">
             <div className="text-center mb-6">
               <h2 className="text-2xl font-semibold text-gray-900">{t('signIn')}</h2>
               <p className="text-sm text-gray-600 mt-1">{t('accessSystem')}</p>

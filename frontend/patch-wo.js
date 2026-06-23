@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
 const fs = require('fs');
 const files = ['en.json', 'fr.json', 'ar.json'];
+const baseDir = process.cwd();
 
 const workOrdersEn = {
   "title": "Work Orders",
@@ -79,7 +80,7 @@ const workOrdersFr = { ...workOrdersEn, title: "Bons de Travail", heading: "Gest
 const workOrdersAr = { ...workOrdersEn, title: "????? ?????", heading: "????? ????? ?????" };
 
 files.forEach(f => {
-  const p = './messages/' + f;
+  const p = baseDir + '/messages/' + f;
   if (!fs.existsSync(p)) return;
   const data = JSON.parse(fs.readFileSync(p, 'utf8'));
   

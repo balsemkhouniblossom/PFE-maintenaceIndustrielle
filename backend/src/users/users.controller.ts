@@ -4,6 +4,7 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { FileUploadService } from '../file-upload.service';
+import { extname } from 'path';
 
 @Controller('users')
 export class UsersController {
@@ -32,10 +33,11 @@ export class UsersController {
     if (!file) {
       return { success: false, message: 'No file uploaded' };
     }
+    const storedPhotoName = `${Date.now()}-${Math.round(Math.random() * 1e9)}${extname(file.originalname)}`;
     // Return the file path that can be stored in the database
     return {
       success: true,
-      photoPath: `/files/uploads/avatars/${file.filename}`,
+      photoPath: `/files/uploads/avatars/${storedPhotoName}`,
       message: 'Photo uploaded successfully'
     };
   }

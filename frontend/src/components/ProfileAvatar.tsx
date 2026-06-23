@@ -19,6 +19,12 @@ const FALLBACK_BRAND_PALETTE = [
   { bg: '#f59e0b', fg: '#7c2d12' }
 ];
 
+const FALLBACK_BRAND_CLASSES = [
+  'avatar-fallback-blue',
+  'avatar-fallback-green',
+  'avatar-fallback-orange',
+];
+
 export default function ProfileAvatar({
   name = 'User',
   role,
@@ -43,6 +49,7 @@ export default function ProfileAvatar({
 
   const idx = (name?.length ?? 0) % FALLBACK_BRAND_PALETTE.length;
   const palette = FALLBACK_BRAND_PALETTE[idx];
+  const paletteClass = FALLBACK_BRAND_CLASSES[idx];
 
   // Crisp, no filters: avoid jagged edges by using a solid border mask.
   const crispBorderMaskClass = `absolute inset-0 rounded-full border-2 border-[#ffffff] pointer-events-none`;
@@ -65,7 +72,6 @@ export default function ProfileAvatar({
           alt={alt || name}
           className="object-cover w-full h-full block rounded-full"
           onError={() => setImgError(true)}
-          style={{ imageRendering: 'auto' }}
         />
         <span className={crispBorderMaskClass} />
       </div>
@@ -75,8 +81,7 @@ export default function ProfileAvatar({
 
   return (
     <div
-      className={baseClass}
-      style={{ backgroundColor: palette.bg, color: palette.fg }}
+      className={`${baseClass} ${paletteClass}`}
     >
       <span className={crispBorderMaskClass} />
       <span className="relative flex items-center justify-center w-full h-full font-medium">
