@@ -155,10 +155,11 @@ export default function DocumentsPage() {
     });
   }, [documents, search, selectedMachine]);
 
-  function getFileUrl(path: string): string {
-    return `http://localhost:3001${path}`;
-  }
+  const API_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
+  function getFileUrl(path: string): string {
+    return `${API_URL}${path}`;
+  }
   function validateUploadForm(): boolean {
     if (!file) {
       showNotification("error", t("notifications.fileRequired"));
@@ -284,11 +285,10 @@ export default function DocumentsPage() {
     <DashboardLayout title={t("title")}>
       {notification && (
         <div
-          className={`fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg flex items-center space-x-2 ${
-            notification.type === "success"
+          className={`fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg flex items-center space-x-2 ${notification.type === "success"
               ? "bg-green-100 text-green-800 border border-green-200"
               : "bg-red-100 text-red-800 border border-red-200"
-          }`}
+            }`}
         >
           {notification.type === "success" ? (
             <CheckCircleIcon className="w-5 h-5" />
