@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Montserrat, Source_Sans_3 } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/contexts/AuthContext";
+import GlobalApiErrorBanner from "@/components/GlobalApiErrorBanner";
 
 const montserrat = Montserrat({
   variable: "--font-montserrat",
@@ -30,7 +31,10 @@ export default function RootLayout({
   return (
     <html suppressHydrationWarning>
       <body>
-        <AuthProvider>{children}</AuthProvider>
+        <AuthProvider>
+          {children}
+          <GlobalApiErrorBanner />
+        </AuthProvider>
       </body>
     </html>
   );

@@ -45,6 +45,18 @@ api.interceptors.response.use(
         method: error.config?.method,
         message: error.message,
       });
+
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(
+          new CustomEvent('app:api-network-error', {
+            detail: {
+              message: error.message,
+              url: error.config?.url,
+              method: error.config?.method,
+            },
+          }),
+        );
+      }
     }
 
     const status = error.response?.status;
