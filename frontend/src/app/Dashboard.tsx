@@ -173,14 +173,6 @@ const tUsers = useTranslations('users');
   const role = user?.role ?? 'operator';
   const dashboardTitle = tAdmin('title');
 
-
-
-
-
-  if (role !== 'admin') {
-    return null;
-  }
-
   return (
     <ProtectedRoute requiredRole="admin">
       <DashboardLayout title={dashboardTitle}>

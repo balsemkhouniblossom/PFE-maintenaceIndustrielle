@@ -69,11 +69,45 @@ export default function ProtectedRoute({
     );
   }
 
-  if (!isAuthenticated) return null;
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center px-4">
+        <div className="max-w-md rounded-lg border border-slate-200 bg-white p-6 text-center shadow-sm">
+          <p className="text-lg font-semibold text-slate-800">Redirecting to login...</p>
+          <p className="mt-2 text-sm text-slate-600">
+            Your session is not available yet. If this takes too long, refresh the page.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   // Additional role check for rendering
-  if (requiredRole && user?.role !== requiredRole) return null;
-  if (allowedRoles && !allowedRoles.includes(user?.role || '')) return null;
+  if (requiredRole && user?.role !== requiredRole) {
+    return (
+      <div className="min-h-screen flex items-center justify-center px-4">
+        <div className="max-w-md rounded-lg border border-amber-200 bg-amber-50 p-6 text-center shadow-sm">
+          <p className="text-lg font-semibold text-amber-900">Access restricted</p>
+          <p className="mt-2 text-sm text-amber-800">
+            You do not have permission to view this page. Redirecting...
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (allowedRoles && !allowedRoles.includes(user?.role || '')) {
+    return (
+      <div className="min-h-screen flex items-center justify-center px-4">
+        <div className="max-w-md rounded-lg border border-amber-200 bg-amber-50 p-6 text-center shadow-sm">
+          <p className="text-lg font-semibold text-amber-900">Access restricted</p>
+          <p className="mt-2 text-sm text-amber-800">
+            You do not have permission to view this page. Redirecting...
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return <>{children}</>;
 }
