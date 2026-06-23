@@ -22,4 +22,3 @@ if (existsSync(envPath)) {
     }
   }
 }
-console.log('MONGODB_URI from load-env:', process.env.MONGODB_URI);

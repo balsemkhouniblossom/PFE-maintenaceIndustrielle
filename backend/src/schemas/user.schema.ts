@@ -23,6 +23,9 @@ export class User {
   @Prop({ required: true })
   password: string;
 
+  @Prop()
+  refresh_token_hash?: string;
+
   @Prop({ required: false })
   reset_password_token?: string;
 
@@ -55,3 +58,6 @@ export class User {
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
+UserSchema.index({ email: 1 }, { unique: true });
+UserSchema.index({ user_id: 1 }, { unique: true });
+UserSchema.index({ role: 1, is_active: 1 });

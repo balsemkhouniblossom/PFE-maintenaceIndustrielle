@@ -13,7 +13,7 @@ import { LocalAuthGuard } from './local-auth.guard';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
-import { Role } from '../schemas/user.schema';
+import { JwtAuthGuard } from './jwt-auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -26,8 +26,20 @@ export class AuthController {
       if (!req.user) {
     throw new UnauthorizedException('Authentication failed');
   }
-    console.log('LOGIN USER:', req.user); // 👈 ADD THIS
     return this.authService.login(req.user);
+  }
+
+  @Post('refresh')
+  @HttpCode(HttpStatus.OK)
+  refresh(@Body('refresh_token') refreshToken: string) {
+    return this.authService.refreshToken(refreshToken);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('logout')
+  @HttpCode(HttpStatus.OK)
+  logout(@Request() req) {
+    return this.authService.logout(req.user.userId);
   }
 
   @Post('register')

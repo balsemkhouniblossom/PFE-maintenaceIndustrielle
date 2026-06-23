@@ -40,3 +40,5 @@ export class MaintenancePlan {
 }
 
 export const MaintenancePlanSchema = SchemaFactory.createForClass(MaintenancePlan);
+MaintenancePlanSchema.index({ plan_id: 1 }, { unique: true });
+MaintenancePlanSchema.index({ module_id: 1, type_maintenance: 1 });

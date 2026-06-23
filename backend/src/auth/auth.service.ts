@@ -50,19 +50,62 @@ export class AuthService {
   }
 
   async login(user: any) {
+    const accessExpiresIn = process.env.JWT_EXPIRES_IN ?? process.env.JWT_ACCESS_EXPIRES_IN ?? '15m';
+    const refreshExpiresIn = process.env.JWT_REFRESH_EXPIRES_IN ?? '7d';
+
     const payload = {
       email: user.email,
       sub: user._id,
       role: user.role,
       user_id: user.user_id
     };
-    const accessToken = this.jwtService.sign(payload);
+    const accessToken = this.jwtService.sign(payload, {
+      secret: process.env.JWT_SECRET,
+      expiresIn: accessExpiresIn as any,
+    });
+    const refreshToken = this.jwtService.sign(payload, {
+      secret: process.env.JWT_REFRESH_SECRET,
+      expiresIn: refreshExpiresIn as any,
+    });
+
+    const refreshTokenHash = await bcrypt.hash(refreshToken, 10);
+    await this.usersService.update(user._id.toString(), {
+      refresh_token_hash: refreshTokenHash,
+    } as any);
 
     return {
       access_token: accessToken,
       token: accessToken,
+      refresh_token: refreshToken,
       user,
     };
+  }
+
+  async refreshToken(token: string) {
+    if (!token?.trim()) {
+      throw new UnauthorizedException('Missing refresh token');
+    }
+
+    let payload: any;
+    try {
+      payload = this.jwtService.verify(token, {
+        secret: process.env.JWT_REFRESH_SECRET,
+      });
+    } catch {
+      throw new UnauthorizedException('Invalid refresh token');
+    }
+
+    const user = await this.usersService.findOne(payload.sub);
+    if (!user?.refresh_token_hash) {
+      throw new UnauthorizedException('Invalid refresh token');
+    }
+
+    const isTokenValid = await bcrypt.compare(token, user.refresh_token_hash);
+    if (!isTokenValid) {
+      throw new UnauthorizedException('Invalid refresh token');
+    }
+
+    return this.login(user);
   }
 
   async register(userData: any) {
@@ -127,5 +170,13 @@ export class AuthService {
     return {
       message: 'Password has been reset successfully',
     };
+  }
+
+  async logout(userId: string) {
+    await this.usersService.update(userId, {
+      refresh_token_hash: null,
+    } as any);
+
+    return { message: 'Logged out successfully' };
   }
 }

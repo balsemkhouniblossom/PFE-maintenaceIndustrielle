@@ -1,4 +1,16 @@
-import { IsNotEmpty, IsString, IsEmail, IsBoolean, IsOptional, IsDateString } from 'class-validator';
+import {
+  IsBoolean,
+  IsDateString,
+  IsEmail,
+  IsEnum,
+  IsNotEmpty,
+  IsOptional,
+  IsPhoneNumber,
+  IsString,
+  Matches,
+  MinLength,
+} from 'class-validator';
+import { Role } from '../../schemas/user.schema';
 
 export class CreateUserDto {
   @IsString()
@@ -15,11 +27,15 @@ export class CreateUserDto {
 
   @IsString()
   @IsNotEmpty()
+  @MinLength(8)
+  @Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/, {
+    message: 'password must contain upper, lower, and numeric characters',
+  })
   password: string;
 
-  @IsString()
+  @IsEnum(Role)
   @IsNotEmpty()
-  role: string;
+  role: Role;
 
   @IsBoolean()
   @IsOptional()
@@ -33,8 +49,8 @@ export class CreateUserDto {
   @IsOptional()
   created_at?: string;
 
-  @IsString()
   @IsOptional()
+  @IsPhoneNumber(undefined)
   phone?: string;
 
   @IsString()

@@ -14,8 +14,10 @@ import { EmailModule } from '../email/email.module';
     EmailModule,
     PassportModule,
     JwtModule.register({
-      secret: process.env.JWT_SECRET || 'your-secret-key', // In production, use environment variable
-      signOptions: { expiresIn: '24h' },
+      secret: process.env.JWT_SECRET,
+      signOptions: {
+        expiresIn: (process.env.JWT_EXPIRES_IN ?? process.env.JWT_ACCESS_EXPIRES_IN ?? '15m') as any,
+      },
     }),
   ],
   controllers: [AuthController],

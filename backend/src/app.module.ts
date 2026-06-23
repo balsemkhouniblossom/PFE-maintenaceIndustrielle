@@ -1,7 +1,7 @@
 import './load-env';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -46,6 +46,11 @@ import { KpisModule } from './kpis/kpis.module';
 import { LubrifiantsModule } from './lubrifiants/lubrifiants.module';
 import { LubrificationLogsModule } from './lubrification-logs/lubrification-logs.module';
 import { OtPiecesModule } from './ot-pieces/ot-pieces.module';
+import { HealthModule } from './health/health.module';
+import { RequestLoggingMiddleware } from './common/middleware/request-logging.middleware';
+import { validateEnvironment } from './config/env.validation';
+
+const env = validateEnvironment();
 
 @Module({
   imports: [
@@ -55,13 +60,7 @@ import { OtPiecesModule } from './ot-pieces/ot-pieces.module';
       serveRoot: '/files',
     }),
 
-    MongooseModule.forRoot(
-      process.env.MONGODB_URI ??
-      // Local fallback: if your local MongoDB requires auth, you MUST provide MONGODB_URI.
-      // Otherwise, connect with a no-auth local instance.
-      'mongodb://localhost:27017/GMAO_IPROTEX',
-      {},
-    ),
+    MongooseModule.forRoot(env.nodeEnv === 'test' ? process.env.MONGODB_URI ?? 'mongodb://localhost:27017/GMAO_IPROTEX_TEST' : process.env.MONGODB_URI!, {}),
 
     MongooseModule.forFeature([
       { name: User.name, schema: UserSchema },
@@ -103,9 +102,14 @@ import { OtPiecesModule } from './ot-pieces/ot-pieces.module';
     LubrifiantsModule,
     LubrificationLogsModule,
     OtPiecesModule,
+    HealthModule,
 
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule { }
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(RequestLoggingMiddleware).forRoutes('*');
+  }
+}
