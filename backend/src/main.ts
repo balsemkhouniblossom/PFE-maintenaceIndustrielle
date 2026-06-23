@@ -4,8 +4,8 @@ import { AppModule } from './app.module';
 import * as express from 'express';
 import { join } from 'path';
 import helmet from 'helmet';
-import hpp = require('hpp');
-import * as compression from 'compression';
+import hpp from 'hpp';
+import compression from 'compression';
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 import { validateEnvironment } from './config/env.validation';
 
