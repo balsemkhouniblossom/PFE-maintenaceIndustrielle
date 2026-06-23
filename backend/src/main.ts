@@ -2,12 +2,14 @@ import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as express from 'express';
-import { join } from 'path';
+import { dirname, join } from 'path';
 import helmet from 'helmet';
 import hpp from 'hpp';
 import compression from 'compression';
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 import { validateEnvironment } from './config/env.validation';
+
+const currentDir = dirname(__filename);
 
 async function bootstrap() {
   const env = validateEnvironment();
@@ -37,12 +39,12 @@ async function bootstrap() {
   // ✅ IMPORTANT: correct static serving for PDFs
   app.use(
     '/uploads',
-    express.static(join(__dirname, '..', 'uploads')),
+    express.static(join(currentDir, '..', 'uploads')),
   );
 
   app.use(
     '/files/uploads',
-    express.static(join(__dirname, '..', 'uploads')),
+    express.static(join(currentDir, '..', 'uploads')),
   );
 
   app.enableShutdownHooks();

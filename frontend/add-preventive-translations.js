@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const scriptDir = path.dirname(module.filename);
 
 const preventiveTranslations = {
   en: {
@@ -143,7 +144,7 @@ const preventiveTranslations = {
 const locales = ['de', 'es', 'it'];
 
 locales.forEach((locale) => {
-  const filePath = path.join(__dirname, 'messages', `${locale}.json`);
+  const filePath = path.join(scriptDir, 'messages', `${locale}.json`);
   
   if (fs.existsSync(filePath)) {
     const content = JSON.parse(fs.readFileSync(filePath, 'utf8'));

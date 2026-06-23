@@ -1,7 +1,8 @@
 import { existsSync, readFileSync } from 'fs';
-import { resolve } from 'path';
+import { dirname, resolve } from 'path';
 
-const envPath = resolve(__dirname, '..', '..', '.env');
+const currentDir = dirname(__filename);
+const envPath = resolve(currentDir, '..', '..', '.env');
 
 if (existsSync(envPath)) {
   const envFile = readFileSync(envPath, 'utf8');

@@ -4,8 +4,9 @@ const path = require('path');
 
 function readJSON(p){ return JSON.parse(fs.readFileSync(p,'utf8')); }
 
-const srcDir = path.join(__dirname,'..','src');
-const messagesDir = path.join(__dirname,'..','messages');
+const scriptDir = path.dirname(module.filename);
+const srcDir = path.join(scriptDir,'..','src');
+const messagesDir = path.join(scriptDir,'..','messages');
 const locales = fs.readdirSync(messagesDir).filter(f => f.endsWith('.json'));
 const en = readJSON(path.join(messagesDir,'en.json'));
 const arPath = path.join(messagesDir,'ar.json');
@@ -92,6 +93,6 @@ for(const ns in missing){ out[ns]=Array.from(missing[ns]); }
 console.log(JSON.stringify(out, null, 2));
 
 // Also write a helper file to be used by next steps
-fs.writeFileSync(path.join(__dirname,'..','i18n-missing.json'), JSON.stringify(out, null, 2));
+fs.writeFileSync(path.join(scriptDir,'..','i18n-missing.json'), JSON.stringify(out, null, 2));
 
 console.log('Wrote i18n-missing.json');
