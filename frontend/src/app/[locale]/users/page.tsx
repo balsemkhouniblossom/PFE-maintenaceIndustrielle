@@ -12,6 +12,7 @@ import {
   PencilIcon,
   TrashIcon,
   PlusIcon,
+  CameraIcon,
   MagnifyingGlassIcon,
   ExclamationTriangleIcon,
   CheckCircleIcon,
@@ -146,10 +147,21 @@ export default function UsersPage() {
 
       const response = await apiService.uploadPhoto(uploadData);
 
+      const photoPath = response.data.photoPath || response.data.path || '';
+
       setFormData((prev) => ({
         ...prev,
-        photo: response.data.photoPath,
+        photo: photoPath,
       }));
+
+      if (editingUser) {
+        setEditingUser((prev) => (prev ? { ...prev, photo: photoPath } : prev));
+      }
+
+      if (photoPath && editingUser) {
+        await apiService.updateUser(editingUser._id, { photo: photoPath });
+        await refreshUsers();
+      }
 
       showNotification('success', tUsers('notifications.photoUploaded'));
     } catch (error) {
@@ -478,19 +490,23 @@ export default function UsersPage() {
           {/* PHOTO UPLOAD */}
           <div className="flex flex-col items-center gap-3">
 
-            <label className="cursor-pointer">
+            <label className="cursor-pointer relative group">
 
               {formData.photo ? (
                 <img
                   src={`${BACKEND_URL}${formData.photo}`}
                   alt={tUsers('form.profilePhoto')}
-                  className="w-24 h-24 rounded-full object-cover border"
+                  className="w-24 h-24 rounded-full object-cover border border-slate-300"
                 />
               ) : (
                 <div className="w-24 h-24 rounded-full bg-slate-200 flex items-center justify-center text-2xl font-bold text-slate-600">
                   {formData.nom_complet?.charAt(0).toUpperCase() || '?'}
                 </div>
               )}
+
+              <div className="absolute -bottom-1 -right-1 w-8 h-8 rounded-full bg-blue-600 text-white border-2 border-white flex items-center justify-center shadow-md group-hover:bg-blue-700 transition-colors">
+                <CameraIcon className="w-4 h-4" />
+              </div>
 
               <input
                 type="file"
