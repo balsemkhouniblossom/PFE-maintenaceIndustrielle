@@ -726,6 +726,7 @@
       "userId": "User ID",
       "email": "Email",
       "password": "Password",
+      "editPassword": "Leave empty to keep current password",
       "profilePhoto": "Profile Photo",
       "fullName": "Full Name",
       "phone": "Phone",

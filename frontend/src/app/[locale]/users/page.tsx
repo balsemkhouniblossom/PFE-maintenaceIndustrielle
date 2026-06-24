@@ -166,10 +166,19 @@ export default function UsersPage() {
 
     try {
       if (editingUser) {
-        const payload = { ...formData };
+        const payload = {
+          ...formData,
+          user_id: formData.user_id.trim() || undefined,
+          phone: formData.phone.trim() || undefined,
+          department: formData.department.trim() || undefined,
+        };
 
         if (!payload.password?.trim()) {
           delete (payload as Partial<typeof payload>).password;
+        }
+
+        if (payload.password) {
+          payload.password = payload.password.trim();
         }
 
         await apiService.updateUser(editingUser._id, payload);
@@ -177,7 +186,10 @@ export default function UsersPage() {
       } else {
         const payload = {
           ...formData,
-          
+          user_id: formData.user_id.trim() || undefined,
+          password: formData.password.trim(),
+          phone: formData.phone.trim() || undefined,
+          department: formData.department.trim() || undefined,
         };
         await apiService.createUser(payload);
          showNotification('success', tUsers('notifications.created'));
@@ -577,7 +589,7 @@ export default function UsersPage() {
                 className="input-field"
                 title="Password"
                 required={!editingUser}
-                placeholder={editingUser ? tUsers('form.editPassword') : 'Password'}
+                placeholder={editingUser ? tUsers('placeholders.editPassword') : 'Password'}
               />
             </div>
             <div>

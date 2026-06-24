@@ -825,6 +825,7 @@
       "userId": "Benutzer-ID",
       "email": "E-Mail",
       "password": "Passwort",
+      "editPassword": "Leer lassen, um das aktuelle Passwort zu behalten",
       "profilePhoto": "Profilfoto",
       "fullName": "Vollständiger Name",
       "phone": "Telefon",

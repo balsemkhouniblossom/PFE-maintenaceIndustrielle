@@ -701,6 +701,7 @@
     "form": {
       "email": "Email",
       "password": "Password",
+      "editPassword": "Lasciare vuoto per mantenere la password corrente",
       "profilePhoto": "Foto profilo",
       "fullName": "Nome completo",
       "phone": "Telefono",

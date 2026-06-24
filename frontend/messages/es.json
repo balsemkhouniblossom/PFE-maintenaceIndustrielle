@@ -719,6 +719,7 @@
     "form": {
       "email": "Correo electrónico",
       "password": "Contraseña",
+      "editPassword": "Dejar vacío para mantener la contraseña actual",
       "profilePhoto": "Foto de perfil",
       "fullName": "Nombre completo",
       "phone": "Teléfono",

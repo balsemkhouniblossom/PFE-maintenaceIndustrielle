@@ -680,6 +680,7 @@
       "userId": "ID utilisateur",
       "email": "E-mail",
       "password": "Mot de passe",
+      "editPassword": "Laisser vide pour conserver le mot de passe actuel",
       "profilePhoto": "Photo de profil",
       "fullName": "Nom complet",
       "phone": "Téléphone",
