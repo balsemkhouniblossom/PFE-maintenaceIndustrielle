@@ -66,6 +66,22 @@ describe('validateEnvironment', () => {
     expect(env.emailVerificationSecret).toBe(process.env.JWT_SECRET);
   });
 
+  it('allows production when frontend URL comes from RENDER_EXTERNAL_URL', () => {
+    process.env.NODE_ENV = 'production';
+    process.env.MONGODB_URI = 'mongodb://localhost:27017/gmao';
+    process.env.JWT_SECRET = 'a'.repeat(32);
+    process.env.JWT_REFRESH_SECRET = 'b'.repeat(32);
+    process.env.JWT_EXPIRES_IN = '15m';
+    process.env.JWT_REFRESH_EXPIRES_IN = '7d';
+    process.env.RENDER_EXTERNAL_URL = 'https://gmao-api.onrender.com';
+    delete process.env.FRONTEND_BASE_URL;
+    delete process.env.APP_URL;
+
+    const env = validateEnvironment();
+
+    expect(env.frontendBaseUrl).toBe('https://gmao-api.onrender.com');
+  });
+
   it('does not require strict env variables during tests', () => {
     process.env.NODE_ENV = 'test';
     delete process.env.MONGODB_URI;

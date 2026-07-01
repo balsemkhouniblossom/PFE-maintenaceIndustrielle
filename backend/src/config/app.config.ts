@@ -9,6 +9,7 @@ export class AppConfigService {
     return (
       this.configService.get<string>('FRONTEND_BASE_URL') ??
       this.configService.get<string>('APP_URL') ??
+      this.configService.get<string>('RENDER_EXTERNAL_URL') ??
       'http://localhost:3000'
     );
   }
