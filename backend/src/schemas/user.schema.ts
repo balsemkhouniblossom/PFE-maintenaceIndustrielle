@@ -44,6 +44,9 @@ export class User {
   @Prop({ type: Date })
   last_login?: Date;
 
+  @Prop({ type: [Date], default: [] })
+  login_history?: Date[];
+
   @Prop({ type: Date, default: Date.now })
   created_at: Date;
 

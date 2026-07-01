@@ -659,6 +659,7 @@
       "status": "Statut",
       "department": "Département",
       "createdAt": "Créé le",
+      "loginHistory": "Historique des connexions",
       "lastLogin": "Dernière connexion",
       "actions": "Actions"
     },
@@ -666,17 +667,20 @@
       "createUser": "Créer un utilisateur",
       "updateUser": "Mettre à jour l'utilisateur",
       "edit": "Modifier",
-      "delete": "Supprimer"
+      "delete": "Supprimer",
+      "viewDetails": "Voir les details"
     },
     "empty": {
       "search": "Aucun utilisateur ne correspond à votre recherche.",
-      "default": "Aucun utilisateur disponible."
+      "default": "Aucun utilisateur disponible.",
+      "loginHistory": "Aucun historique de connexion disponible."
     },
     "modal": {
       "edit": "Modifier l'utilisateur",
       "add": "Ajouter un nouvel utilisateur",
       "addTitle": "Ajouter un utilisateur",
-      "editTitle": "Modifier l'utilisateur"
+      "editTitle": "Modifier l'utilisateur",
+      "loginHistoryTitle": "Historique des connexions"
     },
     "form": {
       "userId": "ID utilisateur",

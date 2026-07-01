@@ -720,12 +720,14 @@
       "status": "Estado",
       "department": "Departamento",
       "createdAt": "Creado el",
+      "loginHistory": "Historial de inicio de sesión",
       "lastLogin": "Último inicio de sesión",
       "actions": "Acciones"
     },
     "actions": {
       "edit": "Editar",
       "delete": "Eliminar",
+      "viewDetails": "Ver detalles",
       "updateUser": "Actualizar usuario",
       "createUser": "Crear usuario"
     },
@@ -736,13 +738,15 @@
     },
     "empty": {
       "search": "No se encontraron usuarios que coincidan con su búsqueda.",
-      "default": "No hay usuarios disponibles."
+      "default": "No hay usuarios disponibles.",
+      "loginHistory": "No hay historial de inicio de sesión disponible."
     },
     "modal": {
       "edit": "Editar usuario",
       "add": "Agregar nuevo usuario",
       "editTitle": "Editar usuario",
-      "addTitle": "Agregar nuevo usuario"
+      "addTitle": "Agregar nuevo usuario",
+      "loginHistoryTitle": "Historial de inicio de sesión"
     },
     "form": {
       "userId": "ID de usuario",

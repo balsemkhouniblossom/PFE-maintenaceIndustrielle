@@ -123,6 +123,29 @@ export class UsersService {
       .exec();
   }
 
+  async recordSuccessfulLogin(
+    id: string,
+    loginAt: Date = new Date(),
+  ): Promise<UserDocument | null> {
+    return this.userModel
+      .findByIdAndUpdate(
+        id,
+        {
+          last_login: loginAt,
+          $push: {
+            login_history: {
+              $each: [loginAt],
+              $position: 0,
+              $slice: 10,
+            },
+          },
+        },
+        { new: true },
+      )
+      .select('-password -refresh_token_hash')
+      .exec();
+  }
+
   async setPasswordResetToken(
     id: string,
     resetToken: string,

@@ -715,12 +715,14 @@
       "status": "Status",
       "department": "Department",
       "createdAt": "Created At",
+      "loginHistory": "Login History",
       "lastLogin": "Last Login",
       "actions": "Actions"
     },
     "actions": {
       "edit": "Edit",
       "delete": "Delete",
+      "viewDetails": "View details",
       "updateUser": "Update User",
       "createUser": "Create User"
     },
@@ -731,13 +733,15 @@
     },
     "empty": {
       "search": "No users found matching your search.",
-      "default": "No users available."
+      "default": "No users available.",
+      "loginHistory": "No login history available."
     },
     "modal": {
       "edit": "Edit User",
       "add": "Add New User",
       "editTitle": "Edit User",
-      "addTitle": "Add New User"
+      "addTitle": "Add New User",
+      "loginHistoryTitle": "Login History"
     },
     "form": {
       "userId": "User ID",

@@ -702,12 +702,14 @@
       "status": "Stato",
       "department": "Dipartimento",
       "createdAt": "Creato il",
+      "loginHistory": "Cronologia accessi",
       "lastLogin": "Ultimo accesso",
       "actions": "Azioni"
     },
     "actions": {
       "edit": "Modifica",
       "delete": "Elimina",
+      "viewDetails": "Visualizza dettagli",
       "updateUser": "Aggiorna utente",
       "createUser": "Crea utente"
     },
@@ -718,13 +720,15 @@
     },
     "empty": {
       "search": "Nessun utente trovato che corrisponde alla ricerca.",
-      "default": "Nessun utente disponibile."
+      "default": "Nessun utente disponibile.",
+      "loginHistory": "Nessuna cronologia accessi disponibile."
     },
     "modal": {
       "edit": "Modifica utente",
       "add": "Aggiungi nuovo utente",
       "editTitle": "Modifica utente",
-      "addTitle": "Aggiungi nuovo utente"
+      "addTitle": "Aggiungi nuovo utente",
+      "loginHistoryTitle": "Cronologia accessi"
     },
     "form": {
       "userId": "ID utente",

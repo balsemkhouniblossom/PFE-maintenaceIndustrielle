@@ -1,18 +1,18 @@
 import { AsYouType, getCountryCallingCode, parsePhoneNumberFromString } from 'libphonenumber-js';
 
 export const PHONE_COUNTRY_OPTIONS = [
-  { country: 'TN', label: 'Tunisia', dialCode: '+216' },
-  { country: 'FR', label: 'France', dialCode: '+33' },
-  { country: 'DE', label: 'Germany', dialCode: '+49' },
-  { country: 'IT', label: 'Italy', dialCode: '+39' },
-  { country: 'ES', label: 'Spain', dialCode: '+34' },
-  { country: 'GB', label: 'United Kingdom', dialCode: '+44' },
-  { country: 'US', label: 'United States', dialCode: '+1' },
-  { country: 'CA', label: 'Canada', dialCode: '+1' },
-  { country: 'MA', label: 'Morocco', dialCode: '+212' },
-  { country: 'DZ', label: 'Algeria', dialCode: '+213' },
-  { country: 'BE', label: 'Belgium', dialCode: '+32' },
-  { country: 'CH', label: 'Switzerland', dialCode: '+41' },
+  { country: 'TN', label: 'Tunisia', dialCode: '+216', digitsHint: '8 digits' },
+  { country: 'FR', label: 'France', dialCode: '+33', digitsHint: '9 digits' },
+  { country: 'DE', label: 'Germany', dialCode: '+49', digitsHint: '10 to 11 digits' },
+  { country: 'IT', label: 'Italy', dialCode: '+39', digitsHint: '9 to 10 digits' },
+  { country: 'ES', label: 'Spain', dialCode: '+34', digitsHint: '9 digits' },
+  { country: 'GB', label: 'United Kingdom', dialCode: '+44', digitsHint: '10 digits' },
+  { country: 'US', label: 'United States', dialCode: '+1', digitsHint: '10 digits' },
+  { country: 'CA', label: 'Canada', dialCode: '+1', digitsHint: '10 digits' },
+  { country: 'MA', label: 'Morocco', dialCode: '+212', digitsHint: '9 digits' },
+  { country: 'DZ', label: 'Algeria', dialCode: '+213', digitsHint: '9 digits' },
+  { country: 'BE', label: 'Belgium', dialCode: '+32', digitsHint: '8 to 9 digits' },
+  { country: 'CH', label: 'Switzerland', dialCode: '+41', digitsHint: '9 digits' },
 ] as const;
 
 export type PhoneCountryCode = (typeof PHONE_COUNTRY_OPTIONS)[number]['country'];
@@ -26,13 +26,6 @@ export const DEFAULT_PHONE_COUNTRY: PhoneCountryCode = 'TN';
 
 function normalizeDigits(value: string): string {
   return value.replace(/\D/g, '');
-}
-
-function getFlagEmoji(country: PhoneCountryCode): string {
-  return country
-    .split('')
-    .map((char) => String.fromCodePoint(127397 + char.charCodeAt(0)))
-    .join('');
 }
 
 export function getPhoneCountryOption(country: PhoneCountryCode) {
@@ -91,6 +84,3 @@ export function parseInternationalPhoneValue(phone?: string | null): PhoneInputV
   };
 }
 
-export function countryFlagEmoji(country: PhoneCountryCode): string {
-  return getFlagEmoji(country);
-}

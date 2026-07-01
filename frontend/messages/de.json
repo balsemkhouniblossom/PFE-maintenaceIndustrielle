@@ -820,18 +820,28 @@
       "status": "Status",
       "department": "Abteilung",
       "createdAt": "Erstellt am",
+      "loginHistory": "Anmeldeverlauf",
       "lastLogin": "Letzte Anmeldung",
       "actions": "Aktionen"
     },
     "empty": {
       "search": "Keine Benutzer gefunden, die Ihrer Suche entsprechen.",
-      "default": "Keine Benutzer verfügbar."
+      "default": "Keine Benutzer verfügbar.",
+      "loginHistory": "Kein Anmeldeverlauf verfügbar."
     },
     "modal": {
       "edit": "Benutzer bearbeiten",
       "add": "Neuen Benutzer hinzufügen",
       "addTitle": "Benutzer hinzufügen",
-      "editTitle": "Benutzer bearbeiten"
+      "editTitle": "Benutzer bearbeiten",
+      "loginHistoryTitle": "Anmeldeverlauf"
+    },
+    "actions": {
+      "edit": "Bearbeiten",
+      "delete": "Löschen",
+      "viewDetails": "Details anzeigen",
+      "updateUser": "Benutzer aktualisieren",
+      "createUser": "Benutzer erstellen"
     },
     "form": {
       "userId": "Benutzer-ID",

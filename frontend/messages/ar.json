@@ -682,6 +682,7 @@
     "actions": {
       "edit": "تعديل",
       "delete": "حذف",
+      "viewDetails": "عرض التفاصيل",
       "createUser": "إنشاء مستخدم",
       "updateUser": "تحديث المستخدم"
     },
@@ -696,18 +697,21 @@
       "status": "الحالة",
       "department": "القسم",
       "createdAt": "تاريخ الإنشاء",
+      "loginHistory": "سجل تسجيل الدخول",
       "lastLogin": "آخر تسجيل دخول",
       "actions": "الإجراءات"
     },
     "empty": {
       "search": "لا يوجد مستخدمون يطابقون بحثك.",
-      "default": "لا يوجد مستخدمون متاحون."
+      "default": "لا يوجد مستخدمون متاحون.",
+      "loginHistory": "لا يوجد سجل لتسجيل الدخول."
     },
     "modal": {
       "edit": "تعديل المستخدم",
       "add": "إضافة مستخدم جديد",
       "addTitle": "إضافة مستخدم",
-      "editTitle": "تعديل المستخدم"
+      "editTitle": "تعديل المستخدم",
+      "loginHistoryTitle": "سجل تسجيل الدخول"
     },
     "form": {
       "profilePhoto": "الصورة الشخصية",

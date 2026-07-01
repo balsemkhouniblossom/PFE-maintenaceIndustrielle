@@ -42,6 +42,7 @@ export interface UserWithoutSensitiveData {
   role: string;
   is_active: boolean;
   last_login?: Date;
+  login_history?: Date[];
   created_at: Date;
   phone?: string;
   department?: string;
@@ -91,11 +92,11 @@ export class AuthService {
     if (!user.is_verified) {
       throw new UnauthorizedException('Please verify your email first');
     }
-    await this.usersService.update(user._id.toString(), {
-      last_login: new Date().toISOString(),
-    });
+    const updatedUser = await this.usersService.recordSuccessfulLogin(
+      user._id.toString(),
+    );
 
-    const userObj = user.toObject() as Record<string, unknown>;
+    const userObj = (updatedUser ?? user).toObject() as Record<string, unknown>;
     // Remove sensitive fields
     delete userObj.password;
     delete userObj.reset_password_token;

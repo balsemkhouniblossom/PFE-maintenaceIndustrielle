@@ -22,6 +22,7 @@ import {
   PencilIcon,
   TrashIcon,
   PlusIcon,
+  EyeIcon,
   CameraIcon,
   ExclamationTriangleIcon,
   CheckCircleIcon,
@@ -38,6 +39,7 @@ interface User {
   photo?: string;
   is_active?: boolean;
   last_login?: string;
+  login_history?: string[];
 }
 
 export default function UsersPage() {
@@ -61,6 +63,8 @@ export default function UsersPage() {
   } | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingUser, setEditingUser] = useState<User | null>(null);
+  const [historyUser, setHistoryUser] = useState<User | null>(null);
+  const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
   // placeholder modal (no create/edit implemented yet)
   //const [showModal, setShowModal] = useState(false);
   const emptyForm = {
@@ -271,7 +275,6 @@ export default function UsersPage() {
     }
   }
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     void loadUsers();
   }, [loadUsers]);
 
@@ -325,6 +328,11 @@ export default function UsersPage() {
         tUsers('notifications.deleteFailed', { default: 'Failed to delete user' })
       );
     }
+  }
+
+  function handleViewHistory(user: User) {
+    setHistoryUser(user);
+    setIsHistoryModalOpen(true);
   }
 
   if (loading) {
@@ -416,13 +424,14 @@ export default function UsersPage() {
                   <th>{tUsers('table.phone', { default: 'Phone' })}</th>
                   <th>{tUsers('table.status', { default: 'Status' })}</th>
                   <th>{tUsers('table.lastLogin', { default: 'Last Login' })}</th>
+                  <th>{tUsers('table.loginHistory', { default: 'Login History' })}</th>
                   <th>{tCommon('table.actions', { default: 'Actions' })}</th>
                 </tr>
               </thead>
               <tbody>
                 {visibleUsers.length === 0 ? (
                   <tr>
-                    <td colSpan={10} className="text-center py-8 text-gray-500">
+                    <td colSpan={11} className="text-center py-8 text-gray-500">
                       {searchTerm
                         ? tUsers('empty.search', { default: 'No users match your search.' })
                         : tUsers('empty.default', { default: 'No users found.' })}
@@ -479,7 +488,23 @@ export default function UsersPage() {
                       </td>
 
                       <td>
+                        {Array.isArray(u.login_history) && u.login_history.length > 0
+                          ? `${u.login_history.length}`
+                          : '-'}
+                      </td>
+
+                      <td>
                         <div className="flex space-x-2">
+                          <button
+                            type="button"
+                            aria-label={tUsers('actions.viewDetails', { default: 'View details' })}
+                            title={tUsers('actions.viewDetails', { default: 'View details' })}
+                            className="btn-secondary p-2"
+                            onClick={() => handleViewHistory(u)}
+                          >
+                            <EyeIcon className="w-4 h-4" />
+                          </button>
+
                           <button
                             type="button"
                             aria-label={tUsers('actions.edit')}
@@ -664,28 +689,30 @@ export default function UsersPage() {
                 <li>{tUsers('passwordRules.special', { default: 'One special character' })}</li>
               </ul>
             </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">
-                {tUsers('form.phone')}
-              </label>
-              <InternationalPhoneInput
-                name="phone"
-                value={formData.phone}
-                onChange={(phone) =>
-                  setFormData({
-                    ...formData,
-                    phone,
-                  })
-                }
-                placeholder={tUsers('validation.phoneHint', { default: 'Local number' })}
-              />
-              <p className="mt-1 text-xs text-slate-500">
-                {tUsers('validation.phoneHint', {
-                  default: 'Use international format, e.g. +21612345678',
-                })}
-              </p>
-            </div>
 
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-1">
+              {tUsers('form.phone')}
+            </label>
+            <InternationalPhoneInput
+              name="phone"
+              value={formData.phone}
+              onChange={(phone) =>
+                setFormData({
+                  ...formData,
+                  phone,
+                })
+              }
+              placeholder={tUsers('validation.phoneHint', { default: 'Local number' })}
+              className="w-full"
+            />
+            <p className="mt-1 text-xs text-slate-500">
+              {tUsers('validation.phoneHint', {
+                default: 'Use international format, e.g. +21612345678',
+              })}
+            </p>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
@@ -816,6 +843,53 @@ export default function UsersPage() {
 
           </div>
         </form>
+      </Modal>
+
+      <Modal
+        isOpen={isHistoryModalOpen}
+        onClose={() => {
+          setIsHistoryModalOpen(false);
+          setHistoryUser(null);
+        }}
+        title={tUsers('modal.loginHistoryTitle', { default: 'Login History' })}
+        size="md"
+      >
+        <div className="panel">
+          <div className="space-y-3">
+            <div>
+              <p className="text-xs uppercase tracking-wide text-slate-500">
+                {tUsers('table.name', { default: 'Name' })}
+              </p>
+              <p className="text-sm font-semibold text-slate-800">{historyUser?.nom_complet ?? '-'}</p>
+            </div>
+            <div>
+              <p className="text-xs uppercase tracking-wide text-slate-500">
+                {tUsers('table.email', { default: 'Email' })}
+              </p>
+              <p className="text-sm text-slate-700">{historyUser?.email ?? '-'}</p>
+            </div>
+            <div>
+              <p className="text-xs uppercase tracking-wide text-slate-500 mb-2">
+                {tUsers('table.loginHistory', { default: 'Login History' })}
+              </p>
+              {Array.isArray(historyUser?.login_history) && historyUser.login_history.length > 0 ? (
+                <div className="rounded-lg border border-slate-200 bg-slate-50 p-3 max-h-72 overflow-y-auto">
+                  <ul className="space-y-2 text-sm text-slate-700">
+                    {historyUser.login_history.map((entry, idx) => (
+                      <li key={`history-${historyUser._id}-${idx}`} className="rounded-md bg-white px-3 py-2 border border-slate-200">
+                        {new Date(entry).toLocaleString()}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ) : (
+                <div className="rounded-lg border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-500">
+                  {tUsers('empty.loginHistory', { default: 'No login history available.' })}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
       </Modal>
     </DashboardLayout>
   );
