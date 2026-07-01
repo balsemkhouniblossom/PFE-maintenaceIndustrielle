@@ -1,5 +1,15 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { LubrifiantsService } from './lubrifiants.service';
+import { normalizePagination } from '../common/pagination';
 
 @Controller('lubrifiants')
 export class LubrifiantsController {
@@ -11,8 +21,13 @@ export class LubrifiantsController {
   }
 
   @Get()
-  findAll() {
-    return this.lubrifiantsService.findAll();
+  findAll(@Query('page') page?: string, @Query('limit') limit?: string) {
+    const pagination = normalizePagination(page, limit);
+    return this.lubrifiantsService.findAll(
+      pagination.page,
+      pagination.limit,
+      pagination.skip,
+    );
   }
 
   @Get(':id')

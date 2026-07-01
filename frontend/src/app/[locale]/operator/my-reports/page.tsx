@@ -35,6 +35,21 @@ function refId(value: EntityRef | undefined): string {
   return typeof value === "string" ? value : value._id ?? "";
 }
 
+function normalizeApiItems<T>(payload: unknown): T[] {
+  if (Array.isArray(payload)) {
+    return payload as T[];
+  }
+
+  if (payload && typeof payload === "object") {
+    const maybeItems = (payload as { items?: unknown }).items;
+    if (Array.isArray(maybeItems)) {
+      return maybeItems as T[];
+    }
+  }
+
+  return [];
+}
+
 export default function OperatorMyReportsPage() {
   const t = useTranslations("dashboard.operator");
   const tCommon = useTranslations("common");
@@ -69,8 +84,8 @@ export default function OperatorMyReportsPage() {
           apiService.getWorkOrders(),
         ]);
 
-        setReports(reportsRes.data ?? []);
-        setWorkOrders(workOrdersRes.data ?? []);
+        setReports(normalizeApiItems<InterventionReport>(reportsRes.data));
+        setWorkOrders(normalizeApiItems<WorkOrder>(workOrdersRes.data));
         showNotification("success", t("notifications.dataLoaded"));
       } catch (error) {
         console.error("Failed to load my reports", error);

@@ -1,7 +1,17 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Query,
+} from '@nestjs/common';
 import { CapteursService } from './capteurs.service';
 import { CreateCapteurDto } from './dto/create-capteur.dto';
 import { UpdateCapteurDto } from './dto/update-capteur.dto';
+import { normalizePagination } from '../common/pagination';
 
 @Controller('capteurs')
 export class CapteursController {
@@ -13,8 +23,13 @@ export class CapteursController {
   }
 
   @Get()
-  findAll() {
-    return this.capteursService.findAll();
+  findAll(@Query('page') page?: string, @Query('limit') limit?: string) {
+    const pagination = normalizePagination(page, limit);
+    return this.capteursService.findAll(
+      pagination.page,
+      pagination.limit,
+      pagination.skip,
+    );
   }
 
   @Get(':id')

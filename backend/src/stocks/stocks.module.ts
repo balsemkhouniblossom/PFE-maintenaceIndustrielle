@@ -5,7 +5,9 @@ import { StocksController } from './stocks.controller';
 import { StocksService } from './stocks.service';
 
 @Module({
-  imports: [MongooseModule.forFeature([{ name: Stock.name, schema: StockSchema }])],
+  imports: [
+    MongooseModule.forFeature([{ name: Stock.name, schema: StockSchema }]),
+  ],
   controllers: [StocksController],
   providers: [StocksService],
   exports: [StocksService],

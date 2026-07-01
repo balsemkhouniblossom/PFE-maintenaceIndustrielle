@@ -12,13 +12,14 @@ import {
   PencilIcon,
   PlusIcon,
   TagIcon,
-  TrashIcon,
-  XMarkIcon,
+  TrashIcon
+
 } from "@heroicons/react/24/outline";
 import { useTranslations } from "next-intl";
 import DashboardLayout from "@/components/DashboardLayout";
 import { Modal } from "@/components/Modal";
 import { apiService } from "@/services/api";
+import { getApiBaseUrl } from "@/config/api-base-url";
 
 type MachineRef = string | { _id: string; machine_id?: string };
 
@@ -125,8 +126,32 @@ export default function DocumentsPage() {
         apiService.getDocuments(),
         apiService.getMachines(),
       ]);
-      setDocuments(docsRes.data || []);
-      setMachines(machinesRes.data || []);
+      console.log("Documents API response:", docsRes);
+      console.log("Documents API response.data:", docsRes.data);
+
+      setDocuments(
+        Array.isArray(docsRes.data)
+          ? docsRes.data
+          : Array.isArray(docsRes.data?.data)
+            ? docsRes.data.data
+            : Array.isArray(docsRes.data?.documents)
+              ? docsRes.data.documents
+              : Array.isArray(docsRes.data?.items)
+                ? docsRes.data.items
+                : []
+      );
+
+      setMachines(
+        Array.isArray(machinesRes.data)
+          ? machinesRes.data
+          : Array.isArray(machinesRes.data?.data)
+            ? machinesRes.data.data
+            : Array.isArray(machinesRes.data?.machines)
+              ? machinesRes.data.machines
+              : Array.isArray(machinesRes.data?.items)
+                ? machinesRes.data.items
+                : []
+      );
     } catch (error) {
       console.error("Error loading documents:", error);
       showNotification("error", t("notifications.saveFailed"));
@@ -138,7 +163,9 @@ export default function DocumentsPage() {
   const filteredDocuments = useMemo(() => {
     const term = search.trim().toLowerCase();
 
-    return documents.filter((doc) => {
+    const docs = Array.isArray(documents) ? documents : [];
+
+    return docs.filter((doc) => {
       const matchesSearch =
         !term ||
         (doc.document_id || "").toLowerCase().includes(term) ||
@@ -155,9 +182,7 @@ export default function DocumentsPage() {
     });
   }, [documents, search, selectedMachine]);
 
-  const API_URL =
-    process.env.NEXT_PUBLIC_API_BASE_URL ||
-    'https://pfe-maintenaceindustrielle.onrender.com';
+  const API_URL = getApiBaseUrl();
 
   function getFileUrl(path: string): string {
     return `${API_URL}${path}`;
@@ -288,8 +313,8 @@ export default function DocumentsPage() {
       {notification && (
         <div
           className={`fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg flex items-center space-x-2 ${notification.type === "success"
-              ? "bg-green-100 text-green-800 border border-green-200"
-              : "bg-red-100 text-red-800 border border-red-200"
+            ? "bg-green-100 text-green-800 border border-green-200"
+            : "bg-red-100 text-red-800 border border-red-200"
             }`}
         >
           {notification.type === "success" ? (

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useSearchParams, useRouter, useParams } from "next/navigation";
 import DashboardLayout from "@/components/DashboardLayout";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
@@ -31,7 +31,22 @@ interface MachineType {
     name: string;
 }
 
-export default function OperatorMachinesPage() {
+function normalizeApiItems<T>(payload: unknown): T[] {
+    if (Array.isArray(payload)) {
+        return payload as T[];
+    }
+
+    if (payload && typeof payload === "object") {
+        const maybeItems = (payload as { items?: unknown }).items;
+        if (Array.isArray(maybeItems)) {
+            return maybeItems as T[];
+        }
+    }
+
+    return [];
+}
+
+function OperatorMachinesPageContent() {
     const router = useRouter();
     const params = useParams<{ locale?: string }>();
     const searchParams = useSearchParams();
@@ -64,7 +79,10 @@ export default function OperatorMachinesPage() {
                 apiService.getMachineTypes(),
             ]);
 
-            const normalizedMachines = machinesRes.data.map((m: any) => ({
+            const machineItems = normalizeApiItems<any>(machinesRes.data);
+            const typeItems = normalizeApiItems<MachineType>(typesRes.data);
+
+            const normalizedMachines = machineItems.map((m: any) => ({
                 ...m,
                 type_id: normalizeMachineTypeId(m),
             }));
@@ -75,7 +93,7 @@ export default function OperatorMachinesPage() {
                 )
                 : normalizedMachines;
 
-            const selectedCategory = typesRes.data.find(
+            const selectedCategory = typeItems.find(
                 (t: MachineType) => String(t._id) === String(typeId)
             );
 
@@ -91,7 +109,7 @@ export default function OperatorMachinesPage() {
     if (loading) {
         return (
             <DashboardLayout title={tMachines("pageTitle")}>
-                <div className="flex justify-center items-center h-[400px]">
+                <div className="flex justify-center items-center h-100">
                     <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600"></div>
                 </div>
             </DashboardLayout>
@@ -214,5 +232,13 @@ export default function OperatorMachinesPage() {
                 </div>
             </DashboardLayout>
         </ProtectedRoute>
+    );
+}
+
+export default function OperatorMachinesPage() {
+    return (
+        <Suspense fallback={<div className="min-h-screen bg-white" />}>
+            <OperatorMachinesPageContent />
+        </Suspense>
     );
 }

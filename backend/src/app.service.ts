@@ -3,6 +3,7 @@ import { METHOD_METADATA, PATH_METADATA } from '@nestjs/common/constants';
 import { InjectConnection } from '@nestjs/mongoose';
 import { ModulesContainer, Reflector } from '@nestjs/core';
 import { Connection } from 'mongoose';
+import type { CollectionInfo } from 'mongodb';
 
 type EndpointItem = {
   method: string;
@@ -51,16 +52,27 @@ export class AppService {
           continue;
         }
 
-        const controllerPath = this.toPath(this.reflector.get(PATH_METADATA, metatype));
+        const controllerPath = this.toPath(
+          this.reflector.get<unknown>(PATH_METADATA, metatype),
+        );
         const prototype = metatype.prototype as Record<string, unknown>;
         const methodNames = Object.getOwnPropertyNames(prototype).filter(
-          (name) => name !== 'constructor' && typeof prototype[name] === 'function',
+          (name) =>
+            name !== 'constructor' && typeof prototype[name] === 'function',
         );
 
         for (const methodName of methodNames) {
-          const handler = prototype[methodName] as (...args: unknown[]) => unknown;
-          const methodPath = this.reflector.get(PATH_METADATA, handler);
-          const requestMethod = this.reflector.get<number>(METHOD_METADATA, handler);
+          const handler = prototype[methodName] as (
+            ...args: unknown[]
+          ) => unknown;
+          const methodPath = this.reflector.get<unknown>(
+            PATH_METADATA,
+            handler,
+          );
+          const requestMethod = this.reflector.get<number>(
+            METHOD_METADATA,
+            handler,
+          );
 
           if (requestMethod === undefined) {
             continue;
@@ -87,7 +99,9 @@ export class AppService {
     if (!this.connection) {
       return [];
     }
-    return Object.keys(this.connection.models).sort((a, b) => a.localeCompare(b));
+    return Object.keys(this.connection.models).sort((a, b) =>
+      a.localeCompare(b),
+    );
   }
 
   private async extractCollections(): Promise<string[]> {
@@ -96,7 +110,9 @@ export class AppService {
       if (!db) {
         return [];
       }
-      const collections = await db.listCollections({}, { nameOnly: true }).toArray();
+      const collections = await db
+        .listCollections<Pick<CollectionInfo, 'name'>>({}, { nameOnly: true })
+        .toArray();
       return collections
         .map((collection) => collection.name)
         .filter((name): name is string => Boolean(name))
@@ -106,14 +122,24 @@ export class AppService {
     }
   }
 
-  private toPath(pathValue: string | string[] | undefined): string {
+  private toPath(pathValue: unknown): string {
+    if (typeof pathValue === 'string') {
+      return pathValue;
+    }
+
+    if (Array.isArray(pathValue)) {
+      return (
+        pathValue.find(
+          (segment): segment is string => typeof segment === 'string',
+        ) ?? ''
+      );
+    }
+
     if (!pathValue) {
       return '';
     }
-    if (Array.isArray(pathValue)) {
-      return pathValue[0] ?? '';
-    }
-    return pathValue;
+
+    return '';
   }
 
   private joinPaths(controllerPath: string, methodPath: string): string {

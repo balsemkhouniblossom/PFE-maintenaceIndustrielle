@@ -1,13 +1,14 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import DashboardLayout from "@/components/DashboardLayout";
 import DynamicSearchControls from "@/components/DynamicSearchControls";
 import { Modal } from "@/components/Modal";
 import ProfileAvatar from "@/components/ProfileAvatar";
+import Pagination from "@/components/Pagination";
 import { apiService } from "@/services/api";
 import { ALL_FIELDS_TOKEN, getSearchableFields, matchesDynamicSearch } from "@/services/dynamicSearch";
-import { PencilIcon, TrashIcon, PlusIcon, MagnifyingGlassIcon, ExclamationTriangleIcon, CheckCircleIcon } from "@heroicons/react/24/outline";
+import { PencilIcon, TrashIcon, PlusIcon, CheckCircleIcon, ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 
@@ -41,6 +42,10 @@ export default function WorkOrdersPage() {
   const tCommon = useTranslations("common");
   const router = useRouter();
   const [workOrders, setWorkOrders] = useState<WorkOrder[]>([]);
+  const [page, setPage] = useState(1);
+  const [limit] = useState(10);
+  const [totalItems, setTotalItems] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
   const [machines, setMachines] = useState<Machine[]>([]);
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
@@ -63,27 +68,29 @@ export default function WorkOrdersPage() {
   });
   const selectedTechnician = users.find((user) => user._id === formData.technician_id);
 
-  async function loadData() {
+  const loadData = useCallback(async () => {
     try {
       const [workOrdersRes, machinesRes, usersRes] = await Promise.all([
-        apiService.getWorkOrders(),
+        apiService.getWorkOrders({ page, limit }),
         apiService.getMachines(),
         apiService.getUsers(),
       ]);
-      setWorkOrders(workOrdersRes.data);
-      setMachines(machinesRes.data);
-      setUsers(usersRes.data);
+      setTotalItems(workOrdersRes.data.totalItems || 0);
+      setTotalPages(workOrdersRes.data.totalPages || 1);
+      setUsers(usersRes.data.items || []);
+      setMachines(machinesRes.data.items || []);
+      setWorkOrders(workOrdersRes.data.items || []);
     } catch (error) {
       console.error('Error loading data:', error);
     } finally {
       setLoading(false);
     }
-  }
+  }, [page, limit]);
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     loadData();
-  }, []);
+  }, [loadData]);
 
   useEffect(() => {
     const handleWorkOrdersChanged = () => {
@@ -99,14 +106,16 @@ export default function WorkOrdersPage() {
     };
   }, []);
 
-  const loadWorkOrders = async () => {
+  const loadWorkOrders = useCallback(async () => {
     try {
-      const response = await apiService.getWorkOrders();
-      setWorkOrders(response.data);
+      const response = await apiService.getWorkOrders({ page, limit });
+      setWorkOrders(response.data.items || []);
+      setTotalItems(response.data.totalItems || 0);
+      setTotalPages(response.data.totalPages || 1);
     } catch (error) {
       console.error('Error loading work orders:', error);
     }
-  };
+  }, [page, limit]);
 
   const searchableWorkOrders = useMemo(
     () =>
@@ -277,7 +286,7 @@ export default function WorkOrdersPage() {
               </div>
               <div className="flex items-center space-x-4">
                 <div className="text-right">
-                  <div className="text-3xl font-bold text-blue-600">{workOrders.length}</div>
+                  <div className="text-3xl font-bold text-blue-600">{totalItems}</div>
                   <div className="text-sm text-slate-500">{tWorkOrders("totalWorkOrders")}</div>
                 </div>
                 <button
@@ -355,16 +364,16 @@ export default function WorkOrdersPage() {
                       </td>
                       <td>
                         <span className={`px-2 py-1 rounded-full text-xs font-semibold ${wo.status === 'completed' ? 'bg-green-100 text-green-800' :
-                            wo.status === 'in_progress' ? 'bg-blue-100 text-blue-800' :
-                              'bg-yellow-100 text-yellow-800'
+                          wo.status === 'in_progress' ? 'bg-blue-100 text-blue-800' :
+                            'bg-yellow-100 text-yellow-800'
                           }`}>
                           {tWorkOrders(`status.${wo.status}`)}
                         </span>
                       </td>
                       <td>
                         <span className={`px-2 py-1 rounded-full text-xs font-semibold ${wo.priorite === 'high' ? 'bg-red-100 text-red-800' :
-                            wo.priorite === 'medium' ? 'bg-yellow-100 text-yellow-800' :
-                              'bg-green-100 text-green-800'
+                          wo.priorite === 'medium' ? 'bg-yellow-100 text-yellow-800' :
+                            'bg-green-100 text-green-800'
                           }`}>
                           {tWorkOrders(`priority.${wo.priorite || "low"}`)}
                         </span>
@@ -395,6 +404,15 @@ export default function WorkOrdersPage() {
                 )}
               </tbody>
             </table>
+            <div className="col-span-full">
+              <Pagination
+                page={page}
+                totalPages={totalPages}
+                totalItems={totalItems}
+                limit={limit}
+                onPageChange={setPage}
+              />
+            </div>
           </div>
         </div>
       </div>

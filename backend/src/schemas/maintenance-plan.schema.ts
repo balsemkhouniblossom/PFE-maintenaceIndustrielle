@@ -39,6 +39,6 @@ export class MaintenancePlan {
   frequence_label?: string;
 }
 
-export const MaintenancePlanSchema = SchemaFactory.createForClass(MaintenancePlan);
-MaintenancePlanSchema.index({ plan_id: 1 }, { unique: true });
+export const MaintenancePlanSchema =
+  SchemaFactory.createForClass(MaintenancePlan);
 MaintenancePlanSchema.index({ module_id: 1, type_maintenance: 1 });

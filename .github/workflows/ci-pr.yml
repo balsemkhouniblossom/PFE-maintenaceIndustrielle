@@ -32,7 +32,7 @@ jobs:
         run: cd backend && npm run test -- --runInBand --coverage
         env:
           NODE_ENV: test
-          MONGODB_URI: mongodb://localhost:27017/GMAO_IPROTEX_TEST
+          MONGODB_URI: mongodb+srv://gmao_admin:9AoAanEemKGtduUx@gmao-cluster.wcdif2o.mongodb.net/
 
       - name: Upload backend coverage
         uses: codecov/codecov-action@v3
@@ -60,7 +60,7 @@ jobs:
       - name: Build frontend
         run: cd frontend && npm run build
         env:
-          NEXT_PUBLIC_API_URL: https://pfe-maintenaceindustrielle.onrender.com
+          NEXT_PUBLIC_API_BASE_URL: https://pfe-maintenaceindustrielle.onrender.com
 
   security:
     runs-on: ubuntu-latest

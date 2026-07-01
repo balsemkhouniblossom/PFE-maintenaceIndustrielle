@@ -5,7 +5,11 @@ import { CataloguesController } from './catalogues.controller';
 import { Catalogue, CatalogueSchema } from '../schemas/catalogue.schema';
 
 @Module({
-  imports: [MongooseModule.forFeature([{ name: Catalogue.name, schema: CatalogueSchema }])],
+  imports: [
+    MongooseModule.forFeature([
+      { name: Catalogue.name, schema: CatalogueSchema },
+    ]),
+  ],
   controllers: [CataloguesController],
   providers: [CataloguesService],
   exports: [CataloguesService],

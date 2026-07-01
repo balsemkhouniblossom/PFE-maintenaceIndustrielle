@@ -5,7 +5,11 @@ import { LubrifiantsController } from './lubrifiants.controller';
 import { LubrifiantsService } from './lubrifiants.service';
 
 @Module({
-  imports: [MongooseModule.forFeature([{ name: Lubrifiant.name, schema: LubrifiantSchema }])],
+  imports: [
+    MongooseModule.forFeature([
+      { name: Lubrifiant.name, schema: LubrifiantSchema },
+    ]),
+  ],
   controllers: [LubrifiantsController],
   providers: [LubrifiantsService],
   exports: [LubrifiantsService],

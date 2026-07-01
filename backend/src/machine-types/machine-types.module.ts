@@ -5,8 +5,12 @@ import { MachineTypesController } from './machine-types.controller';
 import { MachineType, MachineTypeSchema } from '../schemas/machine-type.schema';
 import { CounterModule } from '../counters/counter.module'; // 👈 ADD
 @Module({
-  imports: [MongooseModule.forFeature([{ name: MachineType.name, schema: MachineTypeSchema }]),
-CounterModule,],
+  imports: [
+    MongooseModule.forFeature([
+      { name: MachineType.name, schema: MachineTypeSchema },
+    ]),
+    CounterModule,
+  ],
   controllers: [MachineTypesController],
   providers: [MachineTypesService],
   exports: [MachineTypesService],

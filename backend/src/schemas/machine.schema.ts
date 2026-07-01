@@ -37,6 +37,5 @@ export class Machine {
 }
 
 export const MachineSchema = SchemaFactory.createForClass(Machine);
-MachineSchema.index({ machine_id: 1 }, { unique: true });
 MachineSchema.index({ type_id: 1, status: 1 });
 MachineSchema.index({ serial_no: 1 });

@@ -5,7 +5,11 @@ import { WorkOrdersController } from './work-orders.controller';
 import { WorkOrder, WorkOrderSchema } from '../schemas/work-order.schema';
 
 @Module({
-  imports: [MongooseModule.forFeature([{ name: WorkOrder.name, schema: WorkOrderSchema }])],
+  imports: [
+    MongooseModule.forFeature([
+      { name: WorkOrder.name, schema: WorkOrderSchema },
+    ]),
+  ],
   controllers: [WorkOrdersController],
   providers: [WorkOrdersService],
   exports: [WorkOrdersService],

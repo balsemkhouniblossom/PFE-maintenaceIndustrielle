@@ -254,15 +254,14 @@
     "heading": "إدارة المستشعرات",
     "description": "مراقبة وإدارة مستشعرات IoT وأجهزة الرصد",
     "totalSensors": "إجمالي المستشعرات",
-      "active": "نشط",
-      "na": "غير متاح",
-      "table": {
-        "sensorId": "معرّف المستشعر",
-        "name": "الاسم",
-        "type": "النوع",
-        "machine": "الآلة",
-        "status": "الحالة"
-      }
+    "active": "نشط",
+    "na": "غير متاح",
+    "table": {
+      "sensorId": "معرّف المستشعر",
+      "name": "الاسم",
+      "type": "النوع",
+      "machine": "الآلة",
+      "status": "الحالة"
     }
   },
   "machines": {
@@ -339,7 +338,7 @@
       "cancel": "إلغاء",
       "update": "تحديث",
       "create": "إنشاء",
-      "saving": "جارٍ الحفظ..."
+      "saving": "جارٍ الحفظ...",
       "tasksFinishedToday": "المهام المنجزة اليوم",
       "pendingTasks": "المهام المعلقة",
       "awaitingAction": "بانتظار الإجراء",

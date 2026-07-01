@@ -11,10 +11,11 @@ import {
 import { DocumentsService } from './documents.service';
 import { CreateDocumentDto } from './dto/create-document.dto';
 import { UpdateDocumentDto } from './dto/update-document.dto';
+import { normalizePagination } from '../common/pagination';
 
 @Controller('documents')
 export class DocumentsController {
-  constructor(private readonly documentsService: DocumentsService) { }
+  constructor(private readonly documentsService: DocumentsService) {}
 
   @Post()
   create(@Body() dto: CreateDocumentDto) {
@@ -22,8 +23,13 @@ export class DocumentsController {
   }
 
   @Get()
-  findAll() {
-    return this.documentsService.findAll();
+  findAll(@Query('page') page?: string, @Query('limit') limit?: string) {
+    const pagination = normalizePagination(page, limit);
+    return this.documentsService.findAll(
+      pagination.page,
+      pagination.limit,
+      pagination.skip,
+    );
   }
 
   @Get('machine/:machineId')

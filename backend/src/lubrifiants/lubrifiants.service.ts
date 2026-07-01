@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Lubrifiant, LubrifiantDocument } from '../schemas/lubrifiant.schema';
+import { PaginatedResponse, toPaginatedResponse } from '../common/pagination';
 
 @Injectable()
 export class LubrifiantsService {
@@ -14,8 +15,17 @@ export class LubrifiantsService {
     return new this.lubrifiantModel(payload).save();
   }
 
-  findAll() {
-    return this.lubrifiantModel.find().exec();
+  async findAll(
+    page: number,
+    limit: number,
+    skip: number,
+  ): Promise<PaginatedResponse<Lubrifiant>> {
+    const [items, totalItems] = await Promise.all([
+      this.lubrifiantModel.find().skip(skip).limit(limit).exec(),
+      this.lubrifiantModel.countDocuments().exec(),
+    ]);
+
+    return toPaginatedResponse(items, totalItems, page, limit);
   }
 
   findOne(id: string) {
@@ -23,7 +33,9 @@ export class LubrifiantsService {
   }
 
   update(id: string, payload: Record<string, unknown>) {
-    return this.lubrifiantModel.findByIdAndUpdate(id, payload, { new: true }).exec();
+    return this.lubrifiantModel
+      .findByIdAndUpdate(id, payload, { new: true })
+      .exec();
   }
 
   remove(id: string) {

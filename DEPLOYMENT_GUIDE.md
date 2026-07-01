@@ -2,7 +2,9 @@
 
 ## Overview
 
-This guide covers deploying GMAO (Gestion de Maintenance Assistée par Ordinateur) to a production environment using Docker, Docker Compose, MongoDB, Redis, and Nginx.
+This guide covers deploying GMAO (Gestion de Maintenance Assistée par
+Ordinateur) to a production environment using Docker, Docker Compose, MongoDB,
+Redis, and Nginx.
 
 ## Prerequisites
 
@@ -14,7 +16,7 @@ This guide covers deploying GMAO (Gestion de Maintenance Assistée par Ordinateu
 
 ## Architecture
 
-```
+```text
 Client (Browser/App)
     ↓ HTTPS (443)
 Nginx (Reverse Proxy, Rate Limiting, Security Headers)
@@ -55,7 +57,7 @@ openssl rand -base64 24  # Use for REDIS_PASSWORD
 
 ### 3. Prepare SSL Certificates
 
-**Option A: Let's Encrypt (Recommended)**
+### Option A: Let's Encrypt (Recommended)
 
 ```bash
 # Install certbot
@@ -71,16 +73,18 @@ sudo cp /etc/letsencrypt/live/yourdomain.com/privkey.pem ssl/key.pem
 sudo chown $(id -u):$(id -g) ssl/*
 ```
 
-**Option B: Self-Signed Certificate (Development Only)**
+### Option B: Self-Signed Certificate (Development Only)
 
 ```bash
 mkdir -p ssl
-openssl req -x509 -newkey rsa:4096 -keyout ssl/key.pem -out ssl/cert.pem -days 365 -nodes
+openssl req -x509 -newkey rsa:4096 -keyout ssl/key.pem \
+  -out ssl/cert.pem -days 365 -nodes
 ```
 
 ### 4. Configure Nginx
 
 The `nginx.conf` is pre-configured with:
+
 - TLS 1.2+ enforcement
 - Rate limiting (login: 5req/min, API: 60req/min)
 - Security headers (HSTS, CSP, X-Frame-Options, etc.)
@@ -400,5 +404,6 @@ docker-compose up -d
 ## Contact & Issues
 
 For issues, questions, or security concerns:
+
 - Report via GitHub Issues
-- Security issues: security@yourdomain.com (do not use public issues)
+- Security issues: <security@yourdomain.com> (do not use public issues)

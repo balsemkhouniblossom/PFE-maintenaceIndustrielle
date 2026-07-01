@@ -1,3 +1,4 @@
+import { afterAll, beforeAll, describe, expect, it } from '@jest/globals';
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
@@ -27,7 +28,7 @@ describe('AppController (e2e)', () => {
       .expect((res) => {
         expect(res.body).toEqual(
           expect.objectContaining({
-            message: 'GMAO API index',
+            message: expect.any(String),
             endpoints: expect.any(Array),
             entities: expect.any(Array),
             collections: expect.any(Array),

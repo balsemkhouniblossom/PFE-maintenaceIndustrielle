@@ -1,8 +1,7 @@
 import axios from 'axios';
+import { getApiBaseUrl } from '@/config/api-base-url';
 
-const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL ||
-  'https://pfe-maintenaceindustrielle.onrender.com';
+const API_BASE_URL = getApiBaseUrl();
 
 if (typeof window === 'undefined') {
   // Server-side startup log (visible in Vercel Function logs)
@@ -83,11 +82,22 @@ api.interceptors.response.use(
 export default api;
 
 type AnyObject = Record<string, unknown>;
+type PaginationParams = { page?: number; limit?: number };
+
+function withPagination(params?: PaginationParams) {
+  if (!params) return {};
+  return {
+    params: {
+      page: params.page,
+      limit: params.limit,
+    },
+  };
+}
 
 // Generic CRUD operations
 export const apiService = {
   // Users
-  getUsers: () => api.get('/users'),
+  getUsers: (params?: PaginationParams) => api.get('/users', withPagination(params)),
   createUser: (data: AnyObject) => api.post('/users', data),
   updateUser: (id: string, data: AnyObject) => api.patch(`/users/${id}`, data),
   deleteUser: (id: string) => api.delete(`/users/${id}`),
@@ -108,107 +118,112 @@ export const apiService = {
     });
   },
 
+  getUsersTotal: () => api.get('/users/total'),
 
   // Machines
-  getMachines: () => api.get('/machines'),
+  getMachines: (params?: PaginationParams) => api.get('/machines', withPagination(params)),
   createMachine: (data: AnyObject) => api.post('/machines', data),
   updateMachine: (id: string, data: AnyObject) => api.patch(`/machines/${id}`, data),
   deleteMachine: (id: string) => api.delete(`/machines/${id}`),
 
   // Machine Types
-  getMachineTypes: () => api.get('/machine-types'),
+  getMachineTypes: (params?: PaginationParams) => api.get('/machine-types', withPagination(params)),
   createMachineType: (data: AnyObject) => api.post('/machine-types', data),
   updateMachineType: (id: string, data: AnyObject) => api.patch(`/machine-types/${id}`, data),
   deleteMachineType: (id: string) => api.delete(`/machine-types/${id}`),
 
   // Module Types
-  getModuleTypes: () => api.get('/module-types'),
+  getModuleTypes: (params?: PaginationParams) => api.get('/module-types', withPagination(params)),
   createModuleType: (data: AnyObject) => api.post('/module-types', data),
   updateModuleType: (id: string, data: AnyObject) => api.patch(`/module-types/${id}`, data),
   deleteModuleType: (id: string) => api.delete(`/module-types/${id}`),
 
   // Modules
-  getModules: () => api.get('/modules'),
+  getModules: (params?: PaginationParams) => api.get('/modules', withPagination(params)),
   createModule: (data: AnyObject) => api.post('/modules', data),
   updateModule: (id: string, data: AnyObject) => api.patch(`/modules/${id}`, data),
   deleteModule: (id: string) => api.delete(`/modules/${id}`),
 
   // Maintenance Plans
-  getMaintenancePlans: () => api.get('/maintenance-plans'),
+  getMaintenancePlans: (params?: PaginationParams) => api.get('/maintenance-plans', withPagination(params)),
   createMaintenancePlan: (data: AnyObject) => api.post('/maintenance-plans', data),
   updateMaintenancePlan: (id: string, data: AnyObject) => api.patch(`/maintenance-plans/${id}`, data),
   deleteMaintenancePlan: (id: string) => api.delete(`/maintenance-plans/${id}`),
 
   // Catalogues
-  getCatalogues: () => api.get('/catalogues'),
+  getCatalogues: (params?: PaginationParams) => api.get('/catalogues', withPagination(params)),
   createCatalogue: (data: AnyObject) => api.post('/catalogues', data),
   updateCatalogue: (id: string, data: AnyObject) => api.patch(`/catalogues/${id}`, data),
   deleteCatalogue: (id: string) => api.delete(`/catalogues/${id}`),
 
   // Stocks
-  getStocks: () => api.get('/stocks'),
+  getStocks: (params?: PaginationParams) => api.get('/stocks', withPagination(params)),
   createStock: (data: AnyObject) => api.post('/stocks', data),
   updateStock: (id: string, data: AnyObject) => api.patch(`/stocks/${id}`, data),
   deleteStock: (id: string) => api.delete(`/stocks/${id}`),
 
   // OT Pieces
-  getOtPieces: () => api.get('/ot-pieces'),
+  getOtPieces: (params?: PaginationParams) => api.get('/ot-pieces', withPagination(params)),
   createOtPiece: (data: AnyObject) => api.post('/ot-pieces', data),
   updateOtPiece: (id: string, data: AnyObject) => api.patch(`/ot-pieces/${id}`, data),
   deleteOtPiece: (id: string) => api.delete(`/ot-pieces/${id}`),
 
   // Lubrifiants and logs
-  getLubrifiants: () => api.get('/lubrifiants'),
+  getLubrifiants: (params?: PaginationParams) => api.get('/lubrifiants', withPagination(params)),
   createLubrifiant: (data: AnyObject) => api.post('/lubrifiants', data),
   updateLubrifiant: (id: string, data: AnyObject) => api.patch(`/lubrifiants/${id}`, data),
   deleteLubrifiant: (id: string) => api.delete(`/lubrifiants/${id}`),
-  getLubrificationLogs: () => api.get('/lubrification-logs'),
+  getLubrificationLogs: (params?: PaginationParams) => api.get('/lubrification-logs', withPagination(params)),
   createLubrificationLog: (data: AnyObject) => api.post('/lubrification-logs', data),
   updateLubrificationLog: (id: string, data: AnyObject) => api.patch(`/lubrification-logs/${id}`, data),
   deleteLubrificationLog: (id: string) => api.delete(`/lubrification-logs/${id}`),
 
   // KPI
-  getKpis: () => api.get('/kpis'),
+  getKpis: (params?: PaginationParams) => api.get('/kpis', withPagination(params)),
   createKpi: (data: AnyObject) => api.post('/kpis', data),
   updateKpi: (id: string, data: AnyObject) => api.patch(`/kpis/${id}`, data),
   deleteKpi: (id: string) => api.delete(`/kpis/${id}`),
 
+  // Machines total count (non-paginated)
+  getMachinesTotal: () => api.get('/machines/total'),
+
   // Work Orders
-  getWorkOrders: () => api.get('/work-orders'),
+  getWorkOrders: (params?: PaginationParams) => api.get('/work-orders', withPagination(params)),
+
   createWorkOrder: (data: AnyObject) => api.post('/work-orders', data),
   updateWorkOrder: (id: string, data: AnyObject) => api.patch(`/work-orders/${id}`, data),
   deleteWorkOrder: (id: string) => api.delete(`/work-orders/${id}`),
   getWorkOrderStatistics: () => api.get('/work-orders/statistics'),
 
   // Capteurs (Sensors)
-  getCapteurs: () => api.get('/capteurs'),
+  getCapteurs: (params?: PaginationParams) => api.get('/capteurs', withPagination(params)),
   createCapteur: (data: AnyObject) => api.post('/capteurs', data),
   updateCapteur: (id: string, data: AnyObject) => api.patch(`/capteurs/${id}`, data),
   deleteCapteur: (id: string) => api.delete(`/capteurs/${id}`),
 
   // Intervention Reports
-  getInterventionReports: () => api.get('/intervention-reports'),
+  getInterventionReports: (params?: PaginationParams) => api.get('/intervention-reports', withPagination(params)),
   createInterventionReport: (data: AnyObject) => api.post('/intervention-reports', data),
   updateInterventionReport: (id: string, data: AnyObject) => api.patch(`/intervention-reports/${id}`, data),
   deleteInterventionReport: (id: string) => api.delete(`/intervention-reports/${id}`),
 
   // Pannes
-  getPannes: () => api.get('/pannes'),
+  getPannes: (params?: PaginationParams) => api.get('/pannes', withPagination(params)),
   createPanne: (data: AnyObject) => api.post('/pannes', data),
   updatePanne: (id: string, data: AnyObject) => api.patch(`/pannes/${id}`, data),
   deletePanne: (id: string) => api.delete(`/pannes/${id}`),
 
   // Panne Solutions
-  getPanneSolutions: () => api.get('/panne-solutions'),
+  getPanneSolutions: (params?: PaginationParams) => api.get('/panne-solutions', withPagination(params)),
   createPanneSolution: (data: AnyObject) => api.post('/panne-solutions', data),
   updatePanneSolution: (id: string, data: AnyObject) => api.patch(`/panne-solutions/${id}`, data),
   deletePanneSolution: (id: string) => api.delete(`/panne-solutions/${id}`),
 
-  getDocuments: () => api.get('/documents'),
+  getDocuments: (params?: PaginationParams) => api.get('/documents', withPagination(params)),
 
   getDocument: (id: string) => api.get(`/documents/${id}`),
 
-  createDocument: (data: any) => api.post('/documents', data),
+  createDocument: (data: AnyObject) => api.post('/documents', data),
 
   updateDocument: (id: string, data: AnyObject) => api.put(`/documents/${id}`, data),
 

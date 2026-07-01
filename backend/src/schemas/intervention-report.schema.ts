@@ -33,7 +33,7 @@ export class InterventionReport {
   validation_responsable?: string;
 }
 
-export const InterventionReportSchema = SchemaFactory.createForClass(InterventionReport);
-InterventionReportSchema.index({ report_id: 1 }, { unique: true });
+export const InterventionReportSchema =
+  SchemaFactory.createForClass(InterventionReport);
 InterventionReportSchema.index({ ot_id: 1 });
 InterventionReportSchema.index({ technician_id: 1, date_debut: -1 });

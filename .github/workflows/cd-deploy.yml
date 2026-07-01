@@ -60,4 +60,4 @@ jobs:
                   npm install --legacy-peer-deps
                   npm run build
               env:
-                  NEXT_PUBLIC_API_URL: ${{ secrets.PROD_API_URL }}
+                  NEXT_PUBLIC_API_BASE_URL: ${{ secrets.PROD_API_URL }}

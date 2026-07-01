@@ -1,7 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Module as ModuleEntity, ModuleDocument } from '../schemas/module.schema';
+import {
+  Module as ModuleEntity,
+  ModuleDocument,
+} from '../schemas/module.schema';
+import { PaginatedResponse, toPaginatedResponse } from '../common/pagination';
 
 @Injectable()
 export class ModulesService {
@@ -14,13 +18,24 @@ export class ModulesService {
     return new this.moduleModel(payload).save();
   }
 
-  findAll() {
-    return this.moduleModel
-      .find()
-      .populate('machine_id')
-      .populate('mod_type_id')
-      .populate('parent_module_id')
-      .exec();
+  async findAll(
+    page: number,
+    limit: number,
+    skip: number,
+  ): Promise<PaginatedResponse<ModuleEntity>> {
+    const [items, totalItems] = await Promise.all([
+      this.moduleModel
+        .find()
+        .skip(skip)
+        .limit(limit)
+        .populate('machine_id')
+        .populate('mod_type_id')
+        .populate('parent_module_id')
+        .exec(),
+      this.moduleModel.countDocuments().exec(),
+    ]);
+
+    return toPaginatedResponse(items, totalItems, page, limit);
   }
 
   findOne(id: string) {
@@ -33,7 +48,9 @@ export class ModulesService {
   }
 
   update(id: string, payload: Record<string, unknown>) {
-    return this.moduleModel.findByIdAndUpdate(id, payload, { new: true }).exec();
+    return this.moduleModel
+      .findByIdAndUpdate(id, payload, { new: true })
+      .exec();
   }
 
   remove(id: string) {

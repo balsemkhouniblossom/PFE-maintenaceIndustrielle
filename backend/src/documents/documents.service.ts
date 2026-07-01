@@ -4,23 +4,33 @@ import { Model } from 'mongoose';
 import { DocumentEntity, DocumentDocument } from '../schemas/document.schema';
 import { CreateDocumentDto } from './dto/create-document.dto';
 import { UpdateDocumentDto } from './dto/update-document.dto';
+import { PaginatedResponse, toPaginatedResponse } from '../common/pagination';
 
 @Injectable()
 export class DocumentsService {
   constructor(
     @InjectModel(DocumentEntity.name)
     private documentModel: Model<DocumentDocument>,
-  ) { }
+  ) {}
 
   async create(dto: CreateDocumentDto) {
     const created = new this.documentModel(dto);
     return created.save();
   }
 
-  async findAll() {
-    return this.documentModel.find().exec();
+  async findAll(
+    page: number,
+    limit: number,
+    skip: number,
+  ): Promise<PaginatedResponse<DocumentEntity>> {
+    const [items, totalItems] = await Promise.all([
+      this.documentModel.find().skip(skip).limit(limit).exec(),
+      this.documentModel.countDocuments().exec(),
+    ]);
+
+    return toPaginatedResponse(items, totalItems, page, limit);
   }
-  
+
   async findOne(id: string) {
     const doc = await this.documentModel.findById(id).populate('machine_id');
     if (!doc) throw new NotFoundException('Document not found');

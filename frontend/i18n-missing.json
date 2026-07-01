@@ -1,43 +1,82 @@
 {
-  "capteurs": [
-    "T",
-    ",",
-    " "
+  "common": [
+    "actions.actions"
+  ],
+  "auth": [
+    "token",
+    "saving",
+    "capteurs:changed"
+  ],
+  "catalogues": [
+    "catalogues:changed"
+  ],
+  "documents": [
+    "@/app/[locale]/documents/PdfViewer",
+    ","
+  ],
+  "interventionReports": [
+    "intervention-reports:changed",
+    "machines:changed",
+    "T"
+  ],
+  "maintenancePlans": [
+    ","
   ],
   "dashboard.operator": [
-    "overview",
-    "quickActions.viewWorkOrders",
-    "recentActivity.empty"
+    "type",
+    "view",
+    "intent",
+    "custom"
   ],
-  "health": [
-    "maintenanceSystems",
-    "operational"
+  "operatorMachines": [
+    "pageTitle",
+    "allMachines",
+    "categoryDescription",
+    "allMachinesDescription",
+    "noMachinesFound",
+    "manufacturer",
+    "reportIssue",
+    "details"
   ],
-  "common": [
-    "time.justNow",
-    "actions",
-    "notAvailable",
-    "saving"
+  "panneSolutions": [
+    "panne-solutions:changed"
   ],
-  "dashboard.admin": [
-    "databaseSummary.title",
-    "databaseSummary.machineTypes",
-    "databaseSummary.catalogueItems",
-    "databaseSummary.sensors",
-    "quickAccess.types"
+  "pannes": [
+    "pannes:changed"
   ],
-  "dashboard.technician": [
-    "overview",
-    "recentActivity.empty"
+  "preventiveTaskChecklist": [
+    "users:changed",
+    "work-orders:changed",
+    "T",
+    "/"
   ],
-  "language": [
+  "common.table": [
+    "/",
+    "../../messages/en.json",
+    "../../messages/fr.json",
+    "../../messages/ar.json",
+    "../../messages/es.json",
+    "../../messages/de.json",
+    "../../messages/it.json",
     "/users",
     "/machines",
     "/machine-types",
     "/module-types",
+    "/modules",
+    "/maintenance-plans",
     "/catalogues",
+    "/stocks",
+    "/ot-pieces",
+    "/lubrifiants",
+    "/lubrification-logs",
+    "/kpis",
     "/work-orders",
     "/work-orders/statistics",
-    "/capteurs"
+    "/capteurs",
+    "/intervention-reports",
+    "/pannes",
+    "/panne-solutions",
+    "/documents",
+    "."
   ]
 }

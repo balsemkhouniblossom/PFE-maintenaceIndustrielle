@@ -30,6 +30,9 @@ export default function OtPiecesPage() {
   const tCommon = useTranslations("common");
   const [loading, setLoading] = useState(true);
   const [items, setItems] = useState<OtPiece[]>([]);
+  useEffect(() => {
+    console.log("Items state updated:", items);
+  }, [items]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedSearchField, setSelectedSearchField] = useState(ALL_FIELDS_TOKEN);
 
@@ -37,7 +40,13 @@ export default function OtPiecesPage() {
     async function load() {
       try {
         const res = await apiService.getOtPieces();
-        setItems(res.data ?? []);
+
+        console.log("Response:", res);
+        console.log("Items:", res.data.items);
+        console.log("Is array:", Array.isArray(res.data.items));
+
+        setItems(res.data.items);
+        console.log("Length from API:", res.data.items.length);
       } finally {
         setLoading(false);
       }
@@ -48,7 +57,7 @@ export default function OtPiecesPage() {
 
   const searchableItems = useMemo(
     () =>
-      items.map((item) => ({
+      (Array.isArray(items) ? items : []).map((item) => ({
         ...item,
         work_order_label: workOrderLabel(item.ot_id),
         part_label: partLabel(item.part_id),

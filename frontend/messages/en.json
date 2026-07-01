@@ -41,6 +41,18 @@
     "registrationFailed": "Registration failed. Please try again.",
     "passwordsDoNotMatch": "Passwords do not match.",
     "passwordMinLength": "Password must be at least 6 characters long.",
+    "passwordWeak": "Password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number, and one special character.",
+    "invalidInternationalPhone": "Please enter a valid international phone number (e.g. +21612345678)",
+    "phoneHint": "Use international format, e.g. +21612345678",
+    "phoneExample": "+21612345678",
+    "passwordRequirements": {
+      "title": "Password must contain:",
+      "minLength": "At least 8 characters",
+      "uppercase": "One uppercase letter",
+      "lowercase": "One lowercase letter",
+      "number": "One number",
+      "special": "One special character"
+    },
     "forgotPasswordTitle": "Forgot Password",
     "forgotPasswordDescription": "Enter your email to reset your password.",
     "sendResetLink": "Send reset link",
@@ -48,10 +60,15 @@
     "resetPasswordTitle": "Reset Password",
     "resetPasswordDescription": "Set a new password to continue.",
     "resetPassword": "Reset Password",
+    "saving": "Saving...",
     "sending": "Sending..."
   },
   "common": {
+    "allFields": "All fields",
     "actions": {
+      "actions": "Actions",
+      "edit": "Edit",
+      "delete": "Delete",
       "cancel": "Cancel",
       "saving": "Saving...",
       "create": "Create",
@@ -95,7 +112,7 @@
     "table": {
       "actions": "Actions",
       "noData": "No data available",
-       "allFields": "All Fields"
+      "allFields": "All Fields"
     },
     "systemOnline": "System online",
     "percentageChangeFromLastMonth": {
@@ -659,7 +676,7 @@
       "technician_required": "Technician required",
       "returned": "Returned",
       "waiting_validation": "Waiting validation",
-       "assigned": "Assigned"
+      "assigned": "Assigned"
     },
     "actions": {
       "update": "Update Work Order",
@@ -760,13 +777,31 @@
       "passwordMin": "Password must be at least 6 characters long",
       "fullNameRequired": "Full name is required",
       "photoUploaded": "Photo uploaded successfully",
-      "photoUploadFailed": "Failed to upload photo"
+      "photoUploadFailed": "Failed to upload photo",
+      "confirmDelete": "Are you sure you want to delete this user?"
     },
     "button": {
       "cancel": "Cancel",
       "update": "Update",
       "create": "Create",
       "saving": "Saving..."
+    },
+    "validation": {
+      "nameRequired": "Name is required",
+      "emailRequired": "Email is required",
+      "passwordRequired": "Password is required",
+      "weakPassword": "Password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number, and one special character.",
+      "invalidPhone": "Please enter a valid international phone number (e.g. +21612345678)",
+      "phoneHint": "Use international format, e.g. +21612345678",
+      "phoneExample": "+21612345678"
+    },
+    "passwordRules": {
+      "title": "Password must contain:",
+      "minLength": "At least 8 characters",
+      "uppercase": "One uppercase letter",
+      "lowercase": "One lowercase letter",
+      "number": "One number",
+      "special": "One special character"
     }
   },
   "catalogues": {

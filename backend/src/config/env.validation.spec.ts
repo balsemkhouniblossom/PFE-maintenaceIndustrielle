@@ -18,8 +18,17 @@ describe('validateEnvironment', () => {
     process.env.MONGODB_URI = 'mongodb://localhost:27017/gmao';
     process.env.JWT_SECRET = 'a'.repeat(32);
     process.env.JWT_REFRESH_SECRET = 'b'.repeat(32);
+    process.env.EMAIL_VERIFICATION_SECRET = 'c'.repeat(32);
     process.env.JWT_EXPIRES_IN = '15m';
     process.env.JWT_REFRESH_EXPIRES_IN = '7d';
+    process.env.API_URL = 'https://api.example.com';
+    process.env.APP_URL = 'https://app.example.com';
+    process.env.SMTP_HOST = 'smtp.example.com';
+    process.env.SMTP_USER = 'smtp-user';
+    process.env.SMTP_PASS = 'smtp-pass';
+    process.env.EMAIL_FROM = 'noreply@example.com';
+    process.env.ENABLE_LEGACY_EMAIL_TOKENS = 'true';
+    process.env.ENABLE_EVENT_BASED_EMAILS = 'false';
 
     const env = validateEnvironment();
 
@@ -29,6 +38,8 @@ describe('validateEnvironment', () => {
       'http://localhost:3000',
       'https://app.example.com',
     ]);
+    expect(env.enableLegacyEmailTokens).toBe(true);
+    expect(env.enableEventBasedEmails).toBe(false);
   });
 
   it('throws on missing required production variables', () => {

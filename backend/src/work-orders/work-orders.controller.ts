@@ -1,7 +1,17 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { WorkOrdersService } from './work-orders.service';
 import { CreateWorkOrderDto } from './dto/create-work-order.dto';
 import { UpdateWorkOrderDto } from './dto/update-work-order.dto';
+import { normalizePagination } from '../common/pagination';
 
 @Controller('work-orders')
 export class WorkOrdersController {
@@ -13,8 +23,13 @@ export class WorkOrdersController {
   }
 
   @Get()
-  findAll() {
-    return this.workOrdersService.findAll();
+  findAll(@Query('page') page?: string, @Query('limit') limit?: string) {
+    const pagination = normalizePagination(page, limit);
+    return this.workOrdersService.findAll(
+      pagination.page,
+      pagination.limit,
+      pagination.skip,
+    );
   }
 
   @Get('statistics')
@@ -28,7 +43,10 @@ export class WorkOrdersController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateWorkOrderDto: UpdateWorkOrderDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateWorkOrderDto: UpdateWorkOrderDto,
+  ) {
     return this.workOrdersService.update(id, updateWorkOrderDto);
   }
 

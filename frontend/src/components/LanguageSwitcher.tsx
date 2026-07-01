@@ -1,6 +1,6 @@
 'use client';
 
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { locales, type AppLocale } from '@/i18n/config';
 
 const languageLabels: Record<AppLocale, string> = {
@@ -15,7 +15,6 @@ const languageLabels: Record<AppLocale, string> = {
 export default function LanguageSwitcher() {
   const pathname = usePathname();
   const router = useRouter();
-  const searchParams = useSearchParams();
 
   const segments = pathname.split('/').filter(Boolean);
   const currentLocale = locales.includes(segments[0] as AppLocale)
@@ -31,7 +30,7 @@ export default function LanguageSwitcher() {
       nextSegments.unshift(locale);
     }
 
-    const queryString = searchParams.toString();
+    const queryString = typeof window !== 'undefined' ? window.location.search.replace(/^\?/, '') : '';
     const nextPath = `/${nextSegments.join('/')}${queryString ? `?${queryString}` : ''}`;
 
     document.cookie = `NEXT_LOCALE=${locale}; path=/; max-age=31536000; SameSite=Lax`;

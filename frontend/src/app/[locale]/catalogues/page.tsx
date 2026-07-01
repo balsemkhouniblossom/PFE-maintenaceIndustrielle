@@ -6,7 +6,6 @@ import { useTranslations } from 'next-intl';
 import {
   CheckCircleIcon,
   ExclamationTriangleIcon,
-  MagnifyingGlassIcon,
   PencilIcon,
   PlusIcon,
   TrashIcon,
@@ -16,6 +15,7 @@ import DynamicSearchControls from '@/components/DynamicSearchControls';
 import { Modal } from '@/components/Modal';
 import { apiService } from '@/services/api';
 import { ALL_FIELDS_TOKEN, getSearchableFields, matchesDynamicSearch } from '@/services/dynamicSearch';
+import Pagination from '@/components/Pagination';
 
 interface Catalogue {
   _id: string;
@@ -28,6 +28,7 @@ interface Catalogue {
 
 export default function CataloguesPage() {
   const t = useTranslations('catalogues');
+  const common = useTranslations('common');
   const router = useRouter();
 
   const [catalogues, setCatalogues] = useState<Catalogue[]>([]);
@@ -36,6 +37,11 @@ export default function CataloguesPage() {
   const [editingCatalogue, setEditingCatalogue] = useState<Catalogue | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [page, setPage] = useState(1);
+  const [limit] = useState(10);
+
+  const [totalItems, setTotalItems] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
   const [selectedSearchField, setSelectedSearchField] = useState(ALL_FIELDS_TOKEN);
   const [notification, setNotification] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
   const [formData, setFormData] = useState({
@@ -48,8 +54,21 @@ export default function CataloguesPage() {
 
   async function loadCatalogues() {
     try {
-      const response = await apiService.getCatalogues();
-      setCatalogues(response.data);
+      setLoading(true);
+
+      const response = await apiService.getCatalogues({
+        page,
+        limit,
+      });
+
+      console.log("Catalogues response:", response.data);
+
+      setCatalogues(response.data.items ?? []);
+
+      // ✅ ADD THESE TWO LINES (IMPORTANT)
+      setTotalItems(response.data.totalItems ?? 0);
+      setTotalPages(response.data.totalPages ?? 1);
+
     } catch (error) {
       console.error('Error loading catalogues:', error);
     } finally {
@@ -71,7 +90,12 @@ export default function CataloguesPage() {
   const searchableFields = useMemo(() => getSearchableFields(catalogues), [catalogues]);
 
   const filteredCatalogues = useMemo(
-    () => catalogues.filter((catalogue) => matchesDynamicSearch(catalogue, searchTerm, selectedSearchField)),
+    () =>
+      Array.isArray(catalogues)
+        ? catalogues.filter((catalogue) =>
+          matchesDynamicSearch(catalogue, searchTerm, selectedSearchField),
+        )
+        : [],
     [catalogues, searchTerm, selectedSearchField],
   );
 
@@ -176,9 +200,11 @@ export default function CataloguesPage() {
   }
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     loadCatalogues();
-  }, []);
+  }, [page]);
+
+
+
 
   useEffect(() => {
     const handleCataloguesChanged = () => {
@@ -208,11 +234,10 @@ export default function CataloguesPage() {
     <DashboardLayout title={t('title')}>
       {notification && (
         <div
-          className={`fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg flex items-center space-x-2 ${
-            notification.type === 'success'
-              ? 'bg-green-100 text-green-800 border border-green-200'
-              : 'bg-red-100 text-red-800 border border-red-200'
-          }`}
+          className={`fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg flex items-center space-x-2 ${notification.type === 'success'
+            ? 'bg-green-100 text-green-800 border border-green-200'
+            : 'bg-red-100 text-red-800 border border-red-200'
+            }`}
         >
           {notification.type === 'success' ? (
             <CheckCircleIcon className="w-5 h-5" />
@@ -262,12 +287,19 @@ export default function CataloguesPage() {
               selectClassName="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               inputClassName="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent w-full"
               selectedField={selectedSearchField}
-              onSelectedFieldChange={setSelectedSearchField}
               searchableFields={searchableFields}
-              allFieldsLabel={t('common.allFields', { default: 'All fields' })}
+              allFieldsLabel={common('allFields')}
               searchTerm={searchTerm}
-              onSearchTermChange={setSearchTerm}
               searchPlaceholder={t('search.placeholder')}
+              onSearchTermChange={(value) => {
+                setSearchTerm(value);
+                setPage(1);
+              }}
+
+              onSelectedFieldChange={(value) => {
+                setSelectedSearchField(value);
+                setPage(1);
+              }}
             />
           </div>
 
@@ -321,6 +353,13 @@ export default function CataloguesPage() {
                 )}
               </tbody>
             </table>
+            <Pagination
+              page={page}
+              totalPages={totalPages}
+              totalItems={totalItems}
+              limit={limit}
+              onPageChange={setPage}
+            />
           </div>
         </div>
       </div>

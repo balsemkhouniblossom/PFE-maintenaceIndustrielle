@@ -6,7 +6,6 @@ import { useTranslations } from 'next-intl';
 import {
   CheckCircleIcon,
   ExclamationTriangleIcon,
-  MagnifyingGlassIcon,
   PencilIcon,
   PlusIcon,
   TrashIcon,
@@ -17,6 +16,7 @@ import { Modal } from '@/components/Modal';
 import { apiService } from '@/services/api';
 import { useAuth } from '@/contexts/AuthContext';
 import { ALL_FIELDS_TOKEN, getSearchableFields, matchesDynamicSearch } from '@/services/dynamicSearch';
+import Pagination from '@/components/Pagination';
 
 interface Panne {
   _id: string;
@@ -36,6 +36,10 @@ export default function PannesPage() {
   const isOperator = user?.role === 'operator';
 
   const [pannes, setPannes] = useState<Panne[]>([]);
+  const [page, setPage] = useState(1);
+  const [limit] = useState(10);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalItems, setTotalItems] = useState(0);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedSearchField, setSelectedSearchField] = useState(ALL_FIELDS_TOKEN);
@@ -57,19 +61,31 @@ export default function PannesPage() {
     gravite: false,
   });
 
-  async function loadData() {
+  async function loadData(pageNumber = 1) {
     try {
-      const response = await apiService.getPannes();
-      setPannes(response.data || []);
+      const response = await apiService.getPannes({
+        page: pageNumber,
+        limit,
+      });
+
+      const data = response.data;
+
+      setPannes(data?.items || []);
+      setPage(data?.page || 1);
+      setTotalPages(data?.totalPages || 1);
+      setTotalItems(data?.totalItems || 0);
     } catch (error) {
       console.error('Error loading pannes:', error);
+      setPannes([]);
     } finally {
       setLoading(false);
     }
   }
-
+  function handlePageChange(newPage: number) {
+    loadData(newPage);
+  }
   async function refreshPannes() {
-    await loadData();
+    await loadData(page);
     router.refresh();
     window.dispatchEvent(new Event('pannes:changed'));
   }
@@ -220,7 +236,7 @@ export default function PannesPage() {
   }
 
   useEffect(() => {
-    loadData();
+    loadData(1);
   }, []);
 
   useEffect(() => {
@@ -251,11 +267,10 @@ export default function PannesPage() {
     <DashboardLayout title={t('title')}>
       {notification && (
         <div
-          className={`fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg flex items-center space-x-2 ${
-            notification.type === 'success'
-              ? 'bg-green-100 text-green-800 border border-green-200'
-              : 'bg-red-100 text-red-800 border border-red-200'
-          }`}
+          className={`fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg flex items-center space-x-2 ${notification.type === 'success'
+            ? 'bg-green-100 text-green-800 border border-green-200'
+            : 'bg-red-100 text-red-800 border border-red-200'
+            }`}
         >
           {notification.type === 'success' ? (
             <CheckCircleIcon className="w-5 h-5" />
@@ -279,7 +294,7 @@ export default function PannesPage() {
               </div>
               <div className="flex items-center space-x-4">
                 <div className="text-end">
-                  <div className="text-3xl font-bold text-blue-600">{pannes.length}</div>
+                  <div className="text-3xl font-bold text-blue-600">{totalItems}</div>
                   <div className="text-sm text-slate-500">{t('totalPannes')}</div>
                 </div>
                 <button onClick={openCreateModal} className="btn-primary flex items-center space-x-2">
@@ -351,6 +366,15 @@ export default function PannesPage() {
                 )}
               </tbody>
             </table>
+            <div className="mt-4">
+              <Pagination
+                page={page}
+                totalPages={totalPages}
+                totalItems={totalItems}
+                limit={limit}
+                onPageChange={handlePageChange}
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -579,8 +603,8 @@ export default function PannesPage() {
               {submitting
                 ? tCommon('saving')
                 : editingPanne
-                ? tCommon('actions.update')
-                : tCommon('actions.create')}
+                  ? tCommon('actions.update')
+                  : tCommon('actions.create')}
             </button>
           </div>
         </form>

@@ -9,6 +9,7 @@ import { ALL_FIELDS_TOKEN, getSearchableFields, matchesDynamicSearch } from '@/s
 import { useRouter } from 'next/navigation';
 import { CheckCircleIcon, ExclamationTriangleIcon, MagnifyingGlassIcon, PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { useTranslations } from 'next-intl';
+import Pagination from '@/components/Pagination';
 
 interface Capteur {
   _id: string;
@@ -32,6 +33,10 @@ export default function CapteursPage() {
   const router = useRouter();
   const [capteurs, setCapteurs] = useState<Capteur[]>([]);
   const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalItems, setTotalItems] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedSearchField, setSelectedSearchField] = useState(ALL_FIELDS_TOKEN);
   const [showModal, setShowModal] = useState(false);
@@ -55,8 +60,17 @@ export default function CapteursPage() {
 
   async function loadCapteurs() {
     try {
-      const response = await apiService.getCapteurs();
-      setCapteurs(response.data);
+      const response = await apiService.getCapteurs({
+        page,
+        limit,
+      });
+      const data = response.data;
+
+      setCapteurs(data.items ?? []);
+      setTotalPages(data.totalPages ?? 1);
+      setTotalItems(data.totalItems ?? 0);
+      setPage(data.page ?? 1);
+      setLimit(data.limit ?? 10);
     } catch (error) {
       console.error('Error loading capteurs:', error);
     } finally {
@@ -77,10 +91,13 @@ export default function CapteursPage() {
 
   const searchableFields = useMemo(() => getSearchableFields(capteurs), [capteurs]);
 
-  const filteredCapteurs = useMemo(
-    () => capteurs.filter((capteur) => matchesDynamicSearch(capteur, searchTerm, selectedSearchField)),
-    [capteurs, searchTerm, selectedSearchField],
-  );
+  const filteredCapteurs = useMemo(() => {
+    const list = Array.isArray(capteurs) ? capteurs : [];
+
+    return list.filter((capteur) =>
+      matchesDynamicSearch(capteur, searchTerm, selectedSearchField)
+    );
+  }, [capteurs, searchTerm, selectedSearchField]);
 
   function resetForm() {
     setFormData({
@@ -203,9 +220,8 @@ export default function CapteursPage() {
   }
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     loadCapteurs();
-  }, []);
+  }, [page, limit]);
 
   useEffect(() => {
     const handleCapteursChanged = () => {
@@ -323,71 +339,78 @@ export default function CapteursPage() {
                 ) : (
                   filteredCapteurs.map((capteur) => (
                     <Fragment key={capteur._id}>
-                    <tr>
-                      <td className="hidden md:table-cell font-medium">{capteur._id || tCapteurs('na')}</td>
-                      <td>{capteur.capteur_id || tCapteurs('na')}</td>
-                      <td>{capteur.code_capteur || tCapteurs('na')}</td>
-                      <td>{capteur.type_capteur || tCapteurs('na')}</td>
-                      <td>{capteur.module_id || tCapteurs('na')}</td>
-                      <td className="hidden md:table-cell">{capteur.unite_mesure || tCapteurs('na')}</td>
-                      <td className="hidden md:table-cell max-w-60 truncate" title={capteur.mqtt_topic || ''}>{capteur.mqtt_topic || tCapteurs('na')}</td>
-                      <td className="hidden md:table-cell">{capteur.seuil_avertissement ?? tCapteurs('na')}</td>
-                      <td className="hidden md:table-cell">{capteur.seuil_critique ?? tCapteurs('na')}</td>
-                      <td className="hidden md:table-cell">{capteur.frequence_echantillonnage ?? tCapteurs('na')}</td>
-                      <td className="hidden md:table-cell">{capteur.firmware_version || tCapteurs('na')}</td>
-                      <td className="hidden md:table-cell">
-                        {capteur.last_seen_at
-                          ? new Date(capteur.last_seen_at).toLocaleString()
-                          : tCapteurs('na')}
-                      </td>
-                      <td>
-                        <span className={`px-2 py-1 rounded-full text-xs font-semibold ${capteur.is_active !== false
-                          ? 'bg-green-100 text-green-800'
-                          : 'bg-red-100 text-red-800'
-                          }`}>
-                          {capteur.is_active !== false ? tCapteurs('active') : tCapteurs('inactive')}
-                        </span>
-                      </td>
-                      <td>
-                        <div className="flex space-x-2">
-                          <button
-                            onClick={() => openEditModal(capteur)}
-                            className="btn-secondary p-2"
-                            title={tCommon('edit')}
-                          >
-                            <PencilIcon className="w-4 h-4" />
-                          </button>
-                          <button
-                            onClick={() => handleDelete(capteur._id)}
-                            className="btn-danger p-2"
-                            title={tCommon('delete')}
-                          >
-                            <TrashIcon className="w-4 h-4" />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr className="md:hidden">
-                      <td colSpan={14} className="pb-4 pt-0">
-                        <div className="rounded-lg border border-slate-200 bg-slate-50 p-3 text-sm text-slate-700">
-                          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-                            <div><span className="font-medium">{tCapteurs('table.databaseId')}:</span> {capteur._id || tCapteurs('na')}</div>
-                            <div><span className="font-medium">{tCapteurs('table.unit')}:</span> {capteur.unite_mesure || tCapteurs('na')}</div>
-                            <div className="sm:col-span-2"><span className="font-medium">{tCapteurs('table.mqttTopic')}:</span> {capteur.mqtt_topic || tCapteurs('na')}</div>
-                            <div><span className="font-medium">{tCapteurs('table.warningThreshold')}:</span> {capteur.seuil_avertissement ?? tCapteurs('na')}</div>
-                            <div><span className="font-medium">{tCapteurs('table.criticalThreshold')}:</span> {capteur.seuil_critique ?? tCapteurs('na')}</div>
-                            <div><span className="font-medium">{tCapteurs('table.samplingFrequency')}:</span> {capteur.frequence_echantillonnage ?? tCapteurs('na')}</div>
-                            <div><span className="font-medium">{tCapteurs('table.firmwareVersion')}:</span> {capteur.firmware_version || tCapteurs('na')}</div>
-                            <div className="sm:col-span-2"><span className="font-medium">{tCapteurs('table.lastSeen')}:</span> {capteur.last_seen_at ? new Date(capteur.last_seen_at).toLocaleString() : tCapteurs('na')}</div>
+                      <tr>
+                        <td className="hidden md:table-cell font-medium">{capteur._id || tCapteurs('na')}</td>
+                        <td>{capteur.capteur_id || tCapteurs('na')}</td>
+                        <td>{capteur.code_capteur || tCapteurs('na')}</td>
+                        <td>{capteur.type_capteur || tCapteurs('na')}</td>
+                        <td>{capteur.module_id || tCapteurs('na')}</td>
+                        <td className="hidden md:table-cell">{capteur.unite_mesure || tCapteurs('na')}</td>
+                        <td className="hidden md:table-cell max-w-60 truncate" title={capteur.mqtt_topic || ''}>{capteur.mqtt_topic || tCapteurs('na')}</td>
+                        <td className="hidden md:table-cell">{capteur.seuil_avertissement ?? tCapteurs('na')}</td>
+                        <td className="hidden md:table-cell">{capteur.seuil_critique ?? tCapteurs('na')}</td>
+                        <td className="hidden md:table-cell">{capteur.frequence_echantillonnage ?? tCapteurs('na')}</td>
+                        <td className="hidden md:table-cell">{capteur.firmware_version || tCapteurs('na')}</td>
+                        <td className="hidden md:table-cell">
+                          {capteur.last_seen_at
+                            ? new Date(capteur.last_seen_at).toLocaleString()
+                            : tCapteurs('na')}
+                        </td>
+                        <td>
+                          <span className={`px-2 py-1 rounded-full text-xs font-semibold ${capteur.is_active !== false
+                            ? 'bg-green-100 text-green-800'
+                            : 'bg-red-100 text-red-800'
+                            }`}>
+                            {capteur.is_active !== false ? tCapteurs('active') : tCapteurs('inactive')}
+                          </span>
+                        </td>
+                        <td>
+                          <div className="flex space-x-2">
+                            <button
+                              onClick={() => openEditModal(capteur)}
+                              className="btn-secondary p-2"
+                              title={tCommon('edit')}
+                            >
+                              <PencilIcon className="w-4 h-4" />
+                            </button>
+                            <button
+                              onClick={() => handleDelete(capteur._id)}
+                              className="btn-danger p-2"
+                              title={tCommon('delete')}
+                            >
+                              <TrashIcon className="w-4 h-4" />
+                            </button>
                           </div>
-                        </div>
-                      </td>
-                    </tr>
+                        </td>
+                      </tr>
+                      <tr className="md:hidden">
+                        <td colSpan={14} className="pb-4 pt-0">
+                          <div className="rounded-lg border border-slate-200 bg-slate-50 p-3 text-sm text-slate-700">
+                            <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                              <div><span className="font-medium">{tCapteurs('table.databaseId')}:</span> {capteur._id || tCapteurs('na')}</div>
+                              <div><span className="font-medium">{tCapteurs('table.unit')}:</span> {capteur.unite_mesure || tCapteurs('na')}</div>
+                              <div className="sm:col-span-2"><span className="font-medium">{tCapteurs('table.mqttTopic')}:</span> {capteur.mqtt_topic || tCapteurs('na')}</div>
+                              <div><span className="font-medium">{tCapteurs('table.warningThreshold')}:</span> {capteur.seuil_avertissement ?? tCapteurs('na')}</div>
+                              <div><span className="font-medium">{tCapteurs('table.criticalThreshold')}:</span> {capteur.seuil_critique ?? tCapteurs('na')}</div>
+                              <div><span className="font-medium">{tCapteurs('table.samplingFrequency')}:</span> {capteur.frequence_echantillonnage ?? tCapteurs('na')}</div>
+                              <div><span className="font-medium">{tCapteurs('table.firmwareVersion')}:</span> {capteur.firmware_version || tCapteurs('na')}</div>
+                              <div className="sm:col-span-2"><span className="font-medium">{tCapteurs('table.lastSeen')}:</span> {capteur.last_seen_at ? new Date(capteur.last_seen_at).toLocaleString() : tCapteurs('na')}</div>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
                     </Fragment>
                   ))
                 )}
               </tbody>
             </table>
+            <Pagination
+              page={page}
+              totalPages={totalPages}
+              totalItems={totalItems}
+              limit={limit}
+              onPageChange={(newPage) => setPage(newPage)}
+            />
           </div>
         </div>
       </div>

@@ -29,9 +29,14 @@ export class AllExceptionsFilter implements ExceptionFilter {
     const message =
       typeof exceptionResponse === 'string'
         ? exceptionResponse
-        : (exceptionResponse as { message?: unknown })?.message ?? 'Internal server error';
+        : ((exceptionResponse as { message?: unknown })?.message ??
+          'Internal server error');
 
-    const messageText = Array.isArray(message) ? message.join(', ') : String(message);
+    const messageText = Array.isArray(message)
+      ? message.join(', ')
+      : typeof message === 'string'
+        ? message
+        : JSON.stringify(message);
 
     this.logger.error(
       `${request.method} ${request.url} -> ${status} (${messageText})`,

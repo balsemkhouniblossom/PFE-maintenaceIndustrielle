@@ -58,6 +58,21 @@ function uniqueId(prefix: string): string {
   return `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 8).toUpperCase()}`;
 }
 
+function normalizeApiItems<T>(payload: unknown): T[] {
+  if (Array.isArray(payload)) {
+    return payload as T[];
+  }
+
+  if (payload && typeof payload === "object") {
+    const maybeItems = (payload as { items?: unknown }).items;
+    if (Array.isArray(maybeItems)) {
+      return maybeItems as T[];
+    }
+  }
+
+  return [];
+}
+
 export default function OperatorReportProblemPage() {
   const t = useTranslations("dashboard.operator");
   const tCommon = useTranslations("common");
@@ -103,11 +118,11 @@ export default function OperatorReportProblemPage() {
           apiService.getDocuments(),
         ]);
 
-        setMachineTypes(machineTypesRes.data ?? []);
-        setMachines(machinesRes.data ?? []);
-        setPannes(pannesRes.data ?? []);
-        setSolutions(solutionsRes.data ?? []);
-        setDocuments(documentsRes.data ?? []);
+        setMachineTypes(normalizeApiItems<MachineType>(machineTypesRes.data));
+        setMachines(normalizeApiItems<Machine>(machinesRes.data));
+        setPannes(normalizeApiItems<Panne>(pannesRes.data));
+        setSolutions(normalizeApiItems<PanneSolution>(solutionsRes.data));
+        setDocuments(normalizeApiItems<DocumentEntity>(documentsRes.data));
         showNotification("success", t("notifications.dataLoaded"));
       } catch (error) {
         console.error("Failed to load report-problem data", error);

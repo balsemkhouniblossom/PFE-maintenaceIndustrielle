@@ -1,12 +1,11 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import {
   CheckCircleIcon,
   ExclamationTriangleIcon,
-  MagnifyingGlassIcon,
   PencilIcon,
   PlusIcon,
   TrashIcon,
@@ -14,6 +13,7 @@ import {
 import DashboardLayout from '@/components/DashboardLayout';
 import DynamicSearchControls from '@/components/DynamicSearchControls';
 import { Modal } from '@/components/Modal';
+import Pagination from '@/components/Pagination';
 import { apiService } from '@/services/api';
 import { ALL_FIELDS_TOKEN, getSearchableFields, matchesDynamicSearch } from '@/services/dynamicSearch';
 
@@ -73,6 +73,10 @@ export default function InterventionReportsPage() {
   const [reports, setReports] = useState<InterventionReport[]>([]);
   const [workOrders, setWorkOrders] = useState<WorkOrderItem[]>([]);
   const [technicians, setTechnicians] = useState<UserItem[]>([]);
+  const [page, setPage] = useState(1);
+  const [limit] = useState(10);
+  const [totalItems, setTotalItems] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedSearchField, setSelectedSearchField] = useState(ALL_FIELDS_TOKEN);
@@ -92,23 +96,49 @@ export default function InterventionReportsPage() {
     validation_responsable: '',
   });
 
-  async function loadData() {
+  const loadData = useCallback(async () => {
     try {
       const [reportsRes, workOrdersRes, usersRes] = await Promise.all([
-        apiService.getInterventionReports(),
+        apiService.getInterventionReports({ page, limit }),
         apiService.getWorkOrders(),
         apiService.getUsers(),
       ]);
 
-      setReports(reportsRes.data || []);
-      setWorkOrders(workOrdersRes.data || []);
-      setTechnicians((usersRes.data || []).filter((user: UserItem) => user.role === 'technician'));
+      setReports(reportsRes.data.items || []);
+      setTotalItems(reportsRes.data.totalItems || 0);
+      setTotalPages(reportsRes.data.totalPages || 1);
+      const workOrdersRaw = workOrdersRes.data;
+
+      const workOrdersData = Array.isArray(workOrdersRaw)
+        ? workOrdersRaw
+        : Array.isArray(workOrdersRaw?.items)
+          ? workOrdersRaw.items
+          : Array.isArray(workOrdersRaw?.data)
+            ? workOrdersRaw.data
+            : [];
+
+      setWorkOrders(workOrdersData); const usersRaw = usersRes.data;
+
+      // normalize users into an array no matter backend shape
+      const usersData = Array.isArray(usersRaw)
+        ? usersRaw
+        : Array.isArray(usersRaw?.items)
+          ? usersRaw.items
+          : Array.isArray(usersRaw?.data)
+            ? usersRaw.data
+            : Array.isArray(usersRaw?.users)
+              ? usersRaw.users
+              : [];
+
+      setTechnicians(
+        usersData.filter((user: UserItem) => user.role === 'technician')
+      );
     } catch (error) {
       console.error('Error loading intervention reports:', error);
     } finally {
       setLoading(false);
     }
-  }
+  }, [page, limit]);
 
   async function refreshReports() {
     await loadData();
@@ -252,7 +282,7 @@ export default function InterventionReportsPage() {
 
   useEffect(() => {
     loadData();
-  }, []);
+  }, [loadData]);
 
   useEffect(() => {
     const handleChanged = () => {
@@ -282,11 +312,10 @@ export default function InterventionReportsPage() {
     <DashboardLayout title={t('title')}>
       {notification && (
         <div
-          className={`fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg flex items-center space-x-2 ${
-            notification.type === 'success'
-              ? 'bg-green-100 text-green-800 border border-green-200'
-              : 'bg-red-100 text-red-800 border border-red-200'
-          }`}
+          className={`fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg flex items-center space-x-2 ${notification.type === 'success'
+            ? 'bg-green-100 text-green-800 border border-green-200'
+            : 'bg-red-100 text-red-800 border border-red-200'
+            }`}
         >
           {notification.type === 'success' ? (
             <CheckCircleIcon className="w-5 h-5" />
@@ -310,7 +339,7 @@ export default function InterventionReportsPage() {
               </div>
               <div className="flex items-center space-x-4">
                 <div className="text-end">
-                  <div className="text-3xl font-bold text-blue-600">{reports.length}</div>
+                  <div className="text-3xl font-bold text-blue-600">{totalItems}</div>
                   <div className="text-sm text-slate-500">{t('totalReports')}</div>
                 </div>
                 <button onClick={openCreateModal} className="btn-primary flex items-center space-x-2">
@@ -386,6 +415,15 @@ export default function InterventionReportsPage() {
                 )}
               </tbody>
             </table>
+          </div>
+          <div className="mt-6">
+            <Pagination
+              page={page}
+              totalPages={totalPages}
+              totalItems={totalItems}
+              limit={limit}
+              onPageChange={setPage}
+            />
           </div>
         </div>
       </div>

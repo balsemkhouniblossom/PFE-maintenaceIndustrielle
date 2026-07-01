@@ -5,7 +5,11 @@ import { OtPiecesController } from './ot-pieces.controller';
 import { OtPiecesService } from './ot-pieces.service';
 
 @Module({
-  imports: [MongooseModule.forFeature([{ name: OTPieces.name, schema: OTPiecesSchema }])],
+  imports: [
+    MongooseModule.forFeature([
+      { name: OTPieces.name, schema: OTPiecesSchema },
+    ]),
+  ],
   controllers: [OtPiecesController],
   providers: [OtPiecesService],
   exports: [OtPiecesService],

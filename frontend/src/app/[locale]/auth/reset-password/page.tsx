@@ -1,13 +1,13 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { Suspense, useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useSearchParams, useParams, useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import api from '@/services/api';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 
-export default function ResetPasswordPage() {
+function ResetPasswordPageContent() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
@@ -146,5 +146,13 @@ export default function ResetPasswordPage() {
         <div className="absolute inset-0 bg-linear-to-r from-white via-transparent to-transparent" />
       </div>
     </div>
+  );
+}
+
+export default function ResetPasswordPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-white" />}>
+      <ResetPasswordPageContent />
+    </Suspense>
   );
 }

@@ -1,5 +1,15 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { OtPiecesService } from './ot-pieces.service';
+import { normalizePagination } from '../common/pagination';
 
 @Controller('ot-pieces')
 export class OtPiecesController {
@@ -11,8 +21,13 @@ export class OtPiecesController {
   }
 
   @Get()
-  findAll() {
-    return this.otPiecesService.findAll();
+  findAll(@Query('page') page?: string, @Query('limit') limit?: string) {
+    const pagination = normalizePagination(page, limit);
+    return this.otPiecesService.findAll(
+      pagination.page,
+      pagination.limit,
+      pagination.skip,
+    );
   }
 
   @Get(':id')

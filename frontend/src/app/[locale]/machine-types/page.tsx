@@ -10,10 +10,10 @@ import {
   PencilIcon,
   TrashIcon,
   PlusIcon,
-  MagnifyingGlassIcon,
   CheckCircleIcon,
   ExclamationTriangleIcon,
 } from '@heroicons/react/24/outline';
+import Pagination from '@/components/Pagination';
 
 interface MachineType {
   _id: string;
@@ -31,6 +31,11 @@ export default function MachineTypesPage() {
   const [submitting, setSubmitting] = useState(false);
 
   const [searchTerm, setSearchTerm] = useState('');
+  const [page, setPage] = useState(1);
+  const [limit] = useState(10);
+
+  const [totalItems, setTotalItems] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
   const [selectedSearchField, setSelectedSearchField] = useState(ALL_FIELDS_TOKEN);
   const [notification, setNotification] = useState<{
     type: 'success' | 'error';
@@ -43,13 +48,21 @@ export default function MachineTypesPage() {
   });
 
   useEffect(() => {
-    load();
-  }, []);
+    setPage(1);
+  }, [searchTerm, selectedSearchField]);
 
+  useEffect(() => {
+    load();
+  }, [page]);
   async function load() {
     try {
-      const res = await apiService.getMachineTypes();
-      setMachineTypes(res.data);
+      const res = await apiService.getMachineTypes({
+        page,
+        limit,
+      });
+      setMachineTypes(res.data.items ?? []);
+      setTotalItems(res.data.totalItems ?? 0);
+      setTotalPages(res.data.totalPages ?? 1);
     } catch (err) {
       console.error(err);
     } finally {
@@ -86,10 +99,7 @@ export default function MachineTypesPage() {
 
   const searchableFields = useMemo(() => getSearchableFields(machineTypes), [machineTypes]);
 
-  const filtered = useMemo(
-    () => machineTypes.filter((machineType) => matchesDynamicSearch(machineType, searchTerm, selectedSearchField)),
-    [machineTypes, searchTerm, selectedSearchField],
-  );
+  const filtered = useMemo(() => machineTypes, [machineTypes]);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
@@ -214,6 +224,13 @@ export default function MachineTypesPage() {
             )}
           </tbody>
         </table>
+        <Pagination
+          page={page}
+          totalPages={totalPages}
+          totalItems={totalItems}
+          limit={limit}
+          onPageChange={setPage}
+        />
       </div>
 
       {/* MODAL */}

@@ -1,19 +1,28 @@
 'use client';
 import React from 'react';
 import { Modal } from '@/components/Modal';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import DashboardLayout from '@/components/DashboardLayout';
 import DynamicSearchControls from '@/components/DynamicSearchControls';
+import InternationalPhoneInput from '@/components/InternationalPhoneInput';
+import Pagination from '@/components/Pagination';
+import ProfileAvatar from '@/components/ProfileAvatar';
 import { apiService } from '@/services/api';
 import { ALL_FIELDS_TOKEN, getSearchableFields, matchesDynamicSearch } from '@/services/dynamicSearch';
+import {
+  buildInternationalPhone,
+  DEFAULT_PHONE_COUNTRY,
+  parseInternationalPhoneValue,
+  validateNationalPhone,
+} from '@/services/phoneNumber';
+import { validatePasswordPolicy } from '@/services/userValidation';
 import { useRouter } from 'next/navigation';
 import {
   PencilIcon,
   TrashIcon,
   PlusIcon,
   CameraIcon,
-  MagnifyingGlassIcon,
   ExclamationTriangleIcon,
   CheckCircleIcon,
 } from '@heroicons/react/24/outline';
@@ -37,6 +46,10 @@ export default function UsersPage() {
   const router = useRouter();
 
   const [users, setUsers] = useState<User[]>([]);
+  const [page, setPage] = useState(1);
+  const [limit] = useState(10);
+  const [totalItems, setTotalItems] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedSearchField, setSelectedSearchField] = useState(ALL_FIELDS_TOKEN);
@@ -50,9 +63,6 @@ export default function UsersPage() {
   const [editingUser, setEditingUser] = useState<User | null>(null);
   // placeholder modal (no create/edit implemented yet)
   //const [showModal, setShowModal] = useState(false);
-  const BACKEND_URL =
-    process.env.NEXT_PUBLIC_API_BASE_URL ||
-    'https://pfe-maintenaceindustrielle.onrender.com';
   const emptyForm = {
     user_id: '',
     nom_complet: '',
@@ -60,7 +70,10 @@ export default function UsersPage() {
     password: '',
     role: 'operator',
     department: '',
-    phone: '',
+    phone: {
+      country: DEFAULT_PHONE_COUNTRY,
+      nationalNumber: '',
+    },
     photo: '',
     is_active: true,
   };
@@ -85,11 +98,26 @@ export default function UsersPage() {
 
   }
 
-  async function refreshUsers() {
+  const loadUsers = useCallback(async () => {
+    setLoading(true);
+    try {
+      const res = await apiService.getUsers({ page, limit });
+      setUsers(res.data.items || []);
+      setTotalItems(res.data.totalItems || 0);
+      setTotalPages(res.data.totalPages || 1);
+    } catch (error) {
+      console.error('Error loading users:', error);
+      showNotification('error', tUsers('notifications.loadFailed'));
+    } finally {
+      setLoading(false);
+    }
+  }, [page, limit, tUsers]);
+
+  const refreshUsers = useCallback(async () => {
     await loadUsers();
     router.refresh();
     window.dispatchEvent(new Event('users:changed'));
-  }
+  }, [loadUsers, router]);
 
   function handleAdd() {
     resetForm();
@@ -105,10 +133,33 @@ export default function UsersPage() {
       showNotification('error', tUsers('validation.emailRequired'));
       return false;
     }
-    if (!editingUser && !formData.password.trim()) {
-      showNotification('error', 'Password is required');
+
+    if (!validateNationalPhone(formData.phone.country, formData.phone.nationalNumber)) {
+      showNotification(
+        'error',
+        tUsers('validation.invalidPhone', {
+          default: 'Please enter a valid international phone number (e.g. +21612345678)',
+        }),
+      );
       return false;
     }
+
+    if (!editingUser && !formData.password.trim()) {
+      showNotification('error', tUsers('validation.passwordRequired', { default: 'Password is required' }));
+      return false;
+    }
+
+    if (formData.password.trim() && !validatePasswordPolicy(formData.password.trim())) {
+      showNotification(
+        'error',
+        tUsers('validation.weakPassword', {
+          default:
+            'Password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number, and one special character.',
+        }),
+      );
+      return false;
+    }
+
     return true;
   }
 
@@ -125,7 +176,7 @@ export default function UsersPage() {
       password: '',
       role: user.role || 'operator',
       department: existingDepartment,
-      phone: user.phone || '',
+      phone: parseInternationalPhoneValue(user.phone),
       photo: user.photo || '',
       is_active: user.is_active ?? true,
     });
@@ -178,10 +229,11 @@ export default function UsersPage() {
 
     try {
       if (editingUser) {
+        const phone = buildInternationalPhone(formData.phone.country, formData.phone.nationalNumber);
         const payload = {
           ...formData,
           user_id: formData.user_id.trim() || undefined,
-          phone: formData.phone.trim() || undefined,
+          phone: phone || undefined,
           department: formData.department.trim() || undefined,
         };
 
@@ -196,15 +248,16 @@ export default function UsersPage() {
         await apiService.updateUser(editingUser._id, payload);
         showNotification('success', tUsers('notifications.updated'));
       } else {
+        const phone = buildInternationalPhone(formData.phone.country, formData.phone.nationalNumber);
         const payload = {
           ...formData,
           user_id: formData.user_id.trim() || undefined,
           password: formData.password.trim(),
-          phone: formData.phone.trim() || undefined,
+          phone: phone || undefined,
           department: formData.department.trim() || undefined,
         };
         await apiService.createUser(payload);
-         showNotification('success', tUsers('notifications.created'));
+        showNotification('success', tUsers('notifications.created'));
       }
 
       setIsModalOpen(false);
@@ -217,23 +270,10 @@ export default function UsersPage() {
       setSubmitting(false);
     }
   }
-  async function loadUsers() {
-    setLoading(true);
-    try {
-      const res = await apiService.getUsers();
-      setUsers(res.data);
-    } catch (error) {
-      console.error('Error loading users:', error);
-      showNotification('error', tUsers('notifications.loadFailed'));
-    } finally {
-      setLoading(false);
-    }
-  }
-
   useEffect(() => {
-    loadUsers();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    void loadUsers();
+  }, [loadUsers]);
 
   useEffect(() => {
     const handleUsersChanged = () => {
@@ -247,17 +287,20 @@ export default function UsersPage() {
       window.removeEventListener('users:changed', handleUsersChanged);
       window.removeEventListener('focus', handleUsersChanged);
     };
-  }, []);
+  }, [loadUsers]);
 
-  const searchableFields = useMemo(
-    () => getSearchableFields(users, { exclude: ['photo'] }),
-    [users],
-  );
+  const searchableFields = useMemo(() => {
+    if (!Array.isArray(users) || users.length === 0) return [];
+
+    return getSearchableFields(users, { exclude: ['photo'] });
+  }, [users]);
 
   const filteredUsers = useMemo(
     () => users.filter((u) => matchesDynamicSearch(u, searchTerm, selectedSearchField)),
     [users, searchTerm, selectedSearchField],
   );
+
+  const visibleUsers = filteredUsers;
 
   async function handleDelete(userId?: string) {
     if (!userId) return;
@@ -330,7 +373,7 @@ export default function UsersPage() {
 
               <div className="flex items-center space-x-4">
                 <div className="text-right">
-                  <div className="text-3xl font-bold text-blue-600">{filteredUsers.length}</div>
+                  <div className="text-3xl font-bold text-blue-600">{totalItems}</div>
                   <div className="text-sm text-slate-500">
                     {tUsers('totalUsers', { default: 'Total users' })}
                   </div>
@@ -377,7 +420,7 @@ export default function UsersPage() {
                 </tr>
               </thead>
               <tbody>
-                {filteredUsers.length === 0 ? (
+                {visibleUsers.length === 0 ? (
                   <tr>
                     <td colSpan={10} className="text-center py-8 text-gray-500">
                       {searchTerm
@@ -386,20 +429,15 @@ export default function UsersPage() {
                     </td>
                   </tr>
                 ) : (
-                  filteredUsers.map((u) => (
+                  visibleUsers.map((u) => (
                     <tr key={u._id}>
                       <td>
-                        {u.photo ? (
-                          <img
-                            src={`${BACKEND_URL}${u.photo}`}
-                            alt={u.nom_complet}
-                            className="w-10 h-10 rounded-full object-cover"
-                          />
-                        ) : (
-                          <div className="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center">
-                            {u.nom_complet?.charAt(0).toUpperCase()}
-                          </div>
-                        )}
+                        <ProfileAvatar
+                          name={u.nom_complet}
+                          photo={u.photo}
+                          alt={u.nom_complet || tCommon('defaultUserName')}
+                          size="sm"
+                        />
                       </td>
 
                       <td>{u.user_id ?? '-'}</td>
@@ -470,6 +508,16 @@ export default function UsersPage() {
             </table>
           </div>
         </div>
+
+        <div className="col-span-full">
+          <Pagination
+            page={page}
+            totalPages={totalPages}
+            totalItems={totalItems}
+            limit={limit}
+            onPageChange={setPage}
+          />
+        </div>
       </div>
       <Modal isOpen={isModalOpen}
         onClose={() => {
@@ -491,18 +539,13 @@ export default function UsersPage() {
           <div className="flex flex-col items-center gap-3">
 
             <label className="cursor-pointer relative group">
-
-              {formData.photo ? (
-                <img
-                  src={`${BACKEND_URL}${formData.photo}`}
-                  alt={tUsers('form.profilePhoto')}
-                  className="w-24 h-24 rounded-full object-cover border border-slate-300"
-                />
-              ) : (
-                <div className="w-24 h-24 rounded-full bg-slate-200 flex items-center justify-center text-2xl font-bold text-slate-600">
-                  {formData.nom_complet?.charAt(0).toUpperCase() || '?'}
-                </div>
-              )}
+              <ProfileAvatar
+                name={formData.nom_complet}
+                photo={formData.photo}
+                alt={tUsers('form.profilePhoto')}
+                size="lg"
+                className="border border-slate-300"
+              />
 
               <div className="absolute -bottom-1 -right-1 w-8 h-8 rounded-full bg-blue-600 text-white border-2 border-white flex items-center justify-center shadow-md group-hover:bg-blue-700 transition-colors">
                 <CameraIcon className="w-4 h-4" />
@@ -512,6 +555,7 @@ export default function UsersPage() {
                 type="file"
                 accept="image/*"
                 className="hidden"
+                aria-label={tUsers('form.profilePhoto')}
                 onChange={handlePhotoUpload}
               />
             </label>
@@ -590,7 +634,7 @@ export default function UsersPage() {
 
             <div>
               <label className="block text-sm font-medium mb-1">
-                Password
+                {tUsers('form.password', { default: 'Password' })}
               </label>
 
               <input
@@ -603,28 +647,43 @@ export default function UsersPage() {
                   })
                 }
                 className="input-field"
-                title="Password"
+                title={tUsers('form.password', { default: 'Password' })}
                 required={!editingUser}
-                placeholder={editingUser ? tUsers('placeholders.editPassword') : 'Password'}
+                placeholder={editingUser ? tUsers('placeholders.editPassword') : tUsers('placeholders.password')}
               />
+              <p className="mt-2 text-xs text-slate-500">
+                {tUsers('passwordRules.title', {
+                  default: 'Password must contain:',
+                })}
+              </p>
+              <ul className="mt-1 text-xs text-slate-500 list-disc list-inside">
+                <li>{tUsers('passwordRules.minLength', { default: 'At least 8 characters' })}</li>
+                <li>{tUsers('passwordRules.uppercase', { default: 'One uppercase letter' })}</li>
+                <li>{tUsers('passwordRules.lowercase', { default: 'One lowercase letter' })}</li>
+                <li>{tUsers('passwordRules.number', { default: 'One number' })}</li>
+                <li>{tUsers('passwordRules.special', { default: 'One special character' })}</li>
+              </ul>
             </div>
             <div>
               <label className="block text-sm font-medium mb-1">
                 {tUsers('form.phone')}
               </label>
-              <input
-                type="text"
+              <InternationalPhoneInput
+                name="phone"
                 value={formData.phone}
-                onChange={(e) =>
+                onChange={(phone) =>
                   setFormData({
                     ...formData,
-                    phone: e.target.value,
+                    phone,
                   })
                 }
-                className="input-field"
-                title={tUsers('form.phone')}
-                placeholder={tUsers('form.phone')}
+                placeholder={tUsers('validation.phoneHint', { default: 'Local number' })}
               />
+              <p className="mt-1 text-xs text-slate-500">
+                {tUsers('validation.phoneHint', {
+                  default: 'Use international format, e.g. +21612345678',
+                })}
+              </p>
             </div>
 
           </div>

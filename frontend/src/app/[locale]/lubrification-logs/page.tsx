@@ -40,7 +40,12 @@ export default function LubrificationLogsPage() {
     async function load() {
       try {
         const res = await apiService.getLubrificationLogs();
-        setItems(res.data ?? []);
+
+        console.log("API Response:", res);
+        console.log("API Response data:", res.data);
+        console.log("Is res.data array?", Array.isArray(res.data));
+
+        setItems(Array.isArray(res.data) ? res.data : []);
       } finally {
         setLoading(false);
       }
@@ -49,15 +54,15 @@ export default function LubrificationLogsPage() {
     void load();
   }, []);
 
-  const searchableItems = useMemo(
-    () =>
-      items.map((item) => ({
-        ...item,
-        machine_label: machineLabel(item.machine_id),
-        lubrifiant_label: lubrifiantLabel(item.lubrifiant_id),
-      })),
-    [items],
-  );
+  const searchableItems = useMemo(() => {
+    const list = Array.isArray(items) ? items : [];
+
+    return list.map((item) => ({
+      ...item,
+      machine_label: machineLabel(item.machine_id),
+      lubrifiant_label: lubrifiantLabel(item.lubrifiant_id),
+    }));
+  }, [items]);
 
   const searchableFields = useMemo(() => getSearchableFields(searchableItems), [searchableItems]);
   const filteredItems = useMemo(

@@ -34,6 +34,5 @@ export class DocumentEntity {
 }
 
 export const DocumentSchema = SchemaFactory.createForClass(DocumentEntity);
-DocumentSchema.index({ document_id: 1 }, { unique: true });
 DocumentSchema.index({ machine_id: 1, type_document: 1 });
 DocumentSchema.index({ date_ajout: -1 });

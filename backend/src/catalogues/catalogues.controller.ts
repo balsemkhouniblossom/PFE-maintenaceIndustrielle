@@ -1,4 +1,15 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Query,
+} from '@nestjs/common';
+
+import { normalizePagination } from '../common/pagination';
 import { CataloguesService } from './catalogues.service';
 import { CreateCatalogueDto } from './dto/create-catalogue.dto';
 import { UpdateCatalogueDto } from './dto/update-catalogue.dto';
@@ -13,8 +24,14 @@ export class CataloguesController {
   }
 
   @Get()
-  findAll() {
-    return this.cataloguesService.findAll();
+  findAll(@Query('page') page?: string, @Query('limit') limit?: string) {
+    const pagination = normalizePagination(page, limit);
+
+    return this.cataloguesService.findAll(
+      pagination.page,
+      pagination.limit,
+      pagination.skip,
+    );
   }
 
   @Get(':id')
@@ -23,7 +40,10 @@ export class CataloguesController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCatalogueDto: UpdateCatalogueDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateCatalogueDto: UpdateCatalogueDto,
+  ) {
     return this.cataloguesService.update(id, updateCatalogueDto);
   }
 

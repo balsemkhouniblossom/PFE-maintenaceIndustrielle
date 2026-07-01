@@ -41,6 +41,18 @@
     "registrationFailed": "El registro falló. Inténtelo de nuevo.",
     "passwordsDoNotMatch": "Las contraseñas no coinciden.",
     "passwordMinLength": "La contraseña debe tener al menos 6 caracteres.",
+    "passwordWeak": "La contraseña debe tener al menos 8 caracteres e incluir mayúscula, minúscula, número y carácter especial.",
+    "invalidInternationalPhone": "Ingrese un número internacional válido (ej.: +21612345678)",
+    "phoneHint": "Use formato internacional, por ejemplo +21612345678",
+    "phoneExample": "+21612345678",
+    "passwordRequirements": {
+      "title": "La contraseña debe contener:",
+      "minLength": "Al menos 8 caracteres",
+      "uppercase": "Una letra mayúscula",
+      "lowercase": "Una letra minúscula",
+      "number": "Un número",
+      "special": "Un carácter especial"
+    },
     "forgotPasswordTitle": "Olvidé mi contraseña",
     "forgotPasswordDescription": "Ingrese su correo para restablecer su contraseña.",
     "sendResetLink": "Enviar enlace",
@@ -692,6 +704,8 @@
     "pageTitle": "Gestión de usuarios",
     "heading": "Gestión de usuarios",
     "totalUsers": "Total de usuarios",
+    "subtitle": "Gestionar usuarios del sistema",
+    "placeholder": "Texto de ejemplo",
     "addUser": "Agregar usuario",
     "allUsers": "Todos los usuarios",
     "searchPlaceholder": "Buscar usuarios...",
@@ -699,6 +713,7 @@
       "photo": "Foto",
       "userId": "ID de usuario",
       "fullName": "Nombre completo",
+      "name": "Nombre",
       "email": "Correo electrónico",
       "phone": "Teléfono",
       "role": "Rol",
@@ -708,15 +723,29 @@
       "lastLogin": "Último inicio de sesión",
       "actions": "Acciones"
     },
+    "actions": {
+      "edit": "Editar",
+      "delete": "Eliminar",
+      "updateUser": "Actualizar usuario",
+      "createUser": "Crear usuario"
+    },
+    "roles": {
+      "admin": "Administrador",
+      "technician": "Técnico",
+      "operator": "Operador"
+    },
     "empty": {
       "search": "No se encontraron usuarios que coincidan con su búsqueda.",
       "default": "No hay usuarios disponibles."
     },
     "modal": {
       "edit": "Editar usuario",
-      "add": "Agregar nuevo usuario"
+      "add": "Agregar nuevo usuario",
+      "editTitle": "Editar usuario",
+      "addTitle": "Agregar nuevo usuario"
     },
     "form": {
+      "userId": "ID de usuario",
       "email": "Correo electrónico",
       "password": "Contraseña",
       "editPassword": "Dejar vacío para mantener la contraseña actual",
@@ -725,7 +754,8 @@
       "phone": "Teléfono",
       "department": "Departamento",
       "role": "Rol",
-      "status": "Estado"
+      "status": "Estado",
+      "clickAvatar": "Haz clic en el avatar para subir una foto"
     },
     "options": {
       "admin": "Administrador",
@@ -750,13 +780,32 @@
       "validEmail": "Por favor ingrese una dirección de correo válida",
       "passwordRequired": "La contraseña es obligatoria",
       "passwordMin": "La contraseña debe tener al menos 6 caracteres",
-      "fullNameRequired": "El nombre completo es obligatorio"
+      "fullNameRequired": "El nombre completo es obligatorio",
+      "photoUploaded": "Foto cargada con éxito",
+      "photoUploadFailed": "Error al cargar la foto"
     },
     "button": {
       "cancel": "Cancelar",
       "update": "Actualizar",
       "create": "Crear",
       "saving": "Guardando..."
+    },
+    "validation": {
+      "nameRequired": "El nombre es obligatorio",
+      "emailRequired": "El correo electrónico es obligatorio",
+      "passwordRequired": "La contraseña es obligatoria",
+      "weakPassword": "La contraseña debe tener al menos 8 caracteres e incluir mayúscula, minúscula, número y carácter especial.",
+      "invalidPhone": "Ingrese un número internacional válido (ej.: +21612345678)",
+      "phoneHint": "Use formato internacional, por ejemplo +21612345678",
+      "phoneExample": "+21612345678"
+    },
+    "passwordRules": {
+      "title": "La contraseña debe contener:",
+      "minLength": "Al menos 8 caracteres",
+      "uppercase": "Una letra mayúscula",
+      "lowercase": "Una letra minúscula",
+      "number": "Un número",
+      "special": "Un carácter especial"
     }
   },
   "sidebar": {

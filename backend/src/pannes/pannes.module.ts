@@ -5,7 +5,9 @@ import { PannesController } from './pannes.controller';
 import { PannesService } from './pannes.service';
 
 @Module({
-  imports: [MongooseModule.forFeature([{ name: Panne.name, schema: PanneSchema }])],
+  imports: [
+    MongooseModule.forFeature([{ name: Panne.name, schema: PanneSchema }]),
+  ],
   controllers: [PannesController],
   providers: [PannesService],
   exports: [PannesService],

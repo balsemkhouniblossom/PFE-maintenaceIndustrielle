@@ -96,16 +96,60 @@ function collectFieldPaths(
   });
 }
 
+function hasItemsField<T>(obj: unknown): obj is { items: T[] } {
+  return (
+    typeof obj === 'object' &&
+    obj !== null &&
+    'items' in obj &&
+    Array.isArray((obj as { items?: unknown }).items)
+  );
+}
+
+function hasDataField<T>(obj: unknown): obj is { data: T[] } {
+  return (
+    typeof obj === 'object' &&
+    obj !== null &&
+    'data' in obj &&
+    Array.isArray((obj as { data?: unknown }).data)
+  );
+}
+
 export function getSearchableFields<T>(
-  items: T[],
+  items: T[] | unknown,
   options?: { maxDepth?: number; sampleSize?: number; exclude?: string[] },
 ): string[] {
+  const safeItems: T[] =
+    Array.isArray(items)
+      ? items
+      : hasItemsField<T>(items)
+        ? items.items
+        : hasDataField<T>(items)
+          ? items.data
+          : [];
+  if (safeItems.length === 0) {
+    // Empty arrays are perfectly valid while data is loading.
+    if (!Array.isArray(items)) {
+      console.error('getSearchableFields invalid input shape:', {
+        type: typeof items,
+        isArray: Array.isArray(items),
+        keys:
+          items && typeof items === 'object'
+            ? Object.keys(items as Record<string, unknown>)
+            : null,
+        value: items,
+      });
+    }
+
+    return [];
+  }
+
   const maxDepth = options?.maxDepth ?? DEFAULT_MAX_DEPTH;
   const sampleSize = options?.sampleSize ?? DEFAULT_SAMPLE_SIZE;
   const exclude = new Set(options?.exclude ?? []);
 
   const collector = new Set<string>();
-  items.slice(0, sampleSize).forEach((item) => {
+
+  safeItems.slice(0, sampleSize).forEach((item) => {
     collectFieldPaths(item, '', 0, maxDepth, collector);
   });
 

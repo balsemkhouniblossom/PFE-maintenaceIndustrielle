@@ -15,26 +15,18 @@ import {
   CogIcon,
   ClipboardDocumentListIcon,
   BuildingStorefrontIcon,
-  ClockIcon,
   CheckCircleIcon,
-  MagnifyingGlassIcon,
   CommandLineIcon,
-  CpuChipIcon,
-  DocumentTextIcon,
-  ShieldCheckIcon,
-  CubeIcon,
-  ChartBarIcon,
-  ExclamationTriangleIcon,
-  CheckBadgeIcon
+  CubeIcon
 } from '@heroicons/react/24/outline';
 import { Link } from '@/i18n/navigation';
 import { apiService } from "@/services/api";
-
+import ProfileAvatar from "@/components/ProfileAvatar";
 interface DashboardData {
-  users: unknown[];
-  machines: unknown[];
+  users: User[];
+  machines: Machine[];
   machineTypes: unknown[];
-  workOrders: unknown[];
+  workOrders: WorkOrder[];
   catalogues: unknown[];
   moduleTypes: unknown[];
   capteurs: unknown[];
@@ -47,11 +39,30 @@ type MinimalUser = {
   photo?: string;
 };
 
+type Machine = {
+  _id?: string;
+  status?: 'ONLINE' | 'OFFLINE' | 'WARNING' | 'ERROR';
+};
+
+type WorkOrder = {
+  _id?: string;
+  title?: string;
+  description?: string;
+  status?: 'pending' | 'in_progress' | 'completed' | 'cancelled';
+};
+
+type User = {
+  _id?: string;
+  is_active?: boolean;
+  nom_complet?: string;
+  photo?: string;
+};
+
 export default function Dashboard({ locale: propLocale }: { locale?: string }) {
   const tAdmin = useTranslations("dashboard.admin");
-  const tHealth = useTranslations("health");
+  //const tHealth = useTranslations("health");
   const tCommon = useTranslations("common");
-const tUsers = useTranslations('users');
+  //const tUsers = useTranslations('users');
 
   const { user, isLoading: authLoading } = useAuth();
   const locale = propLocale || 'en';
@@ -65,6 +76,12 @@ const tUsers = useTranslations('users');
     capteurs: []
   });
 
+  const normalizeArray = (v: any) =>
+    Array.isArray(v) ? v : v?.items ?? [];
+
+  const machines = normalizeArray(dashboardData.machines) as Machine[];
+  const workOrders = normalizeArray(dashboardData.workOrders) as WorkOrder[];
+  const users = normalizeArray(dashboardData.users) as User[];
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState('overview');
   const { statistics } = useDashboardStatistics();
@@ -83,7 +100,7 @@ const tUsers = useTranslations('users');
           dotClass: 'warning',
           badgeClass: 'warning'
         };
-      // eslint-disable-next-line react-hooks/set-state-in-effect
+       
       case 'OFFLINE':
       case 'ERROR':
         return {
@@ -137,40 +154,29 @@ const tUsers = useTranslations('users');
 
 
 
-  const totalMachines = dashboardData.machines.length;
-
-  const onlineMachines = (dashboardData.machines as any[]).filter(
-    m => m.status === 'ONLINE'
-  ).length;
+  const totalMachines = machines?.length ?? 0;
+  const onlineMachines = machines.filter(m => m?.status === 'ONLINE').length;
 
   const machineAvailability =
     totalMachines > 0
-      ? ((onlineMachines / totalMachines) * 100).toFixed(1)
+      ? Number(((onlineMachines / totalMachines) * 100).toFixed(1))
       : 0;
 
-  const totalWorkOrders = dashboardData.workOrders.length;
-
-  const completedWorkOrders = (dashboardData.workOrders as any[]).filter(
-    wo => wo.status === 'completed'
-  ).length;
-
+  const totalWorkOrders = workOrders?.length ?? 0;
+  const completedWorkOrders = workOrders.filter(wo => (wo?.status ?? '') === 'completed').length;
   const completionRate =
     totalWorkOrders > 0
-      ? ((completedWorkOrders / totalWorkOrders) * 100).toFixed(1)
+      ? Number(((completedWorkOrders / totalWorkOrders) * 100).toFixed(1))
       : 0;
 
-  const pendingCount = (dashboardData.workOrders as any[]).filter(
-    wo => wo.status === 'pending'
-  ).length;
+  const pendingCount = workOrders.filter(wo => (wo?.status ?? '') === 'pending').length;
 
-  const inProgressCount = (dashboardData.workOrders as any[]).filter(
-    wo => wo.status === 'in_progress'
-  ).length;
+  const inProgressCount = workOrders.filter(wo => (wo?.status ?? '') === 'in_progress').length;
 
   const formatPercentChange = (value: number) =>
     tAdmin("fromLastMonth", { value: value >= 0 ? `+${value}` : `${value}` });
 
-  const role = user?.role ?? 'operator';
+
   const dashboardTitle = tAdmin('title');
 
   return (
@@ -202,13 +208,9 @@ const tUsers = useTranslations('users');
                 <div>
                   <div className="text-4xl font-bold mb-2">{statistics?.totalMachines || 0}</div>
                   <div className="text-blue-200 text-sm">
-                    {statistics ? (
-                      statistics.machinesPercentageChange >= 0 ? (
-                        formatPercentChange(statistics.machinesPercentageChange)
-                      ) : (
-                        formatPercentChange(statistics.machinesPercentageChange)
-                      )
-                    ) : tAdmin("fromLastMonth", { value: "+12" })}
+                    {statistics
+                      ? formatPercentChange(statistics.machinesPercentageChange)
+                      : tAdmin("fromLastMonth", { value: "+12" })}
                   </div>
                 </div>
                 <WrenchScrewdriverIcon className="w-16 h-16 text-blue-200 opacity-80" />
@@ -220,8 +222,7 @@ const tUsers = useTranslations('users');
                 <div className="flex items-center">
                   <div className="text-3xl font-bold text-slate-800">{statistics?.activeUsers || 0}</div>
                   <div className="mini-avatar-stack" style={{ gap: '0.25rem' }}>
-                    {dashboardData.users
-                      .filter((u) => (u as MinimalUser).is_active)
+                    {users.filter((u) => u?.is_active === true)
                       .slice(0, 3)
                       .map((u, index: number) => (
                         <div
@@ -229,29 +230,11 @@ const tUsers = useTranslations('users');
                           className="mini-avatar"
                           style={{ zIndex: 30 - index }}
                         >
-                          <div
-                            className="relative shrink-0 w-7 h-7 rounded-full border-2 border-white/90 overflow-hidden"
-                            style={{
-                              backgroundColor:
-                                index % 3 === 0
-                                  ? '#2563eb'
-                                  : index % 3 === 1
-                                    ? '#10b981'
-                                    : '#f59e0b',
-                              color:
-                                index % 3 === 0
-                                  ? '#1e3a8a'
-                                  : index % 3 === 1
-                                    ? '#065f46'
-                                    : '#7c2d12'
-                            }}
-                          >
-                            <div className="flex items-center justify-center w-full h-full font-medium">
-                              {(u as MinimalUser).nom_complet
-                                ? (u as MinimalUser).nom_complet!.charAt(0).toUpperCase()
-                                : 'U'}
-                            </div>
-                          </div>
+                          <ProfileAvatar
+                            name={(u as MinimalUser).nom_complet}
+                            photo={(u as MinimalUser).photo}
+                            size="sm"
+                          />
                         </div>
                       ))}
                   </div>
@@ -320,8 +303,7 @@ const tUsers = useTranslations('users');
               {tAdmin("workOrders.recent")}
             </div>
             <div className="space-y-3">
-              {(dashboardData.workOrders as any[])
-                .slice(0, 5)
+              {workOrders.slice(0, 5)
                 .map((wo) => (
                   <div
                     key={wo._id}
@@ -339,7 +321,7 @@ const tUsers = useTranslations('users');
 
                     <div
                       className={`status-badge ${getStatusBadge(
-                        wo.status
+                        wo.status ?? 'pending'
                       )}`}
                     >
                       {wo.status}
@@ -401,10 +383,10 @@ const tUsers = useTranslations('users');
           </div>
 
 
-<div
-  className="bento-item panel"
-  style={{ gridColumn: '1 / 3' }}
->         
+          <div
+            className="bento-item panel"
+            style={{ gridColumn: '1 / 3' }}
+          >
             <div className="card-title">
               {tAdmin("workOrders.distribution")}
             </div>
@@ -463,7 +445,7 @@ const tUsers = useTranslations('users');
           </div>
 
 
-         
+
           <div
             className="bento-item panel"
             style={{ gridColumn: '3 / 5' }}
@@ -490,7 +472,7 @@ const tUsers = useTranslations('users');
               </div>
 
               <div className="flex justify-between">
-               <span>{tAdmin("quickKpis.activeUsers")}</span>
+                <span>{tAdmin("quickKpis.activeUsers")}</span>
                 <span>{statistics?.activeUsers || 0}</span>
               </div>
 

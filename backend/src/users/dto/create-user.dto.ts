@@ -5,12 +5,11 @@ import {
   IsEnum,
   IsNotEmpty,
   IsOptional,
-  IsPhoneNumber,
   IsString,
   Matches,
-  MinLength,
 } from 'class-validator';
 import { Role } from '../../schemas/user.schema';
+import { IsInternationalPhone } from '../../common/validators/is-international-phone.validator';
 
 export class CreateUserDto {
   @IsString()
@@ -27,9 +26,9 @@ export class CreateUserDto {
 
   @IsString()
   @IsNotEmpty()
-  @MinLength(8)
-  @Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/, {
-    message: 'password must contain upper, lower, and numeric characters',
+  @Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/, {
+    message:
+      'password must be at least 8 characters and include uppercase, lowercase, number, and special character',
   })
   password: string;
 
@@ -50,7 +49,10 @@ export class CreateUserDto {
   created_at?: string;
 
   @IsOptional()
-  @IsPhoneNumber(undefined)
+  @IsInternationalPhone({
+    message:
+      'phone must be a valid international phone number (e.g. +21612345678)',
+  })
   phone?: string;
 
   @IsString()

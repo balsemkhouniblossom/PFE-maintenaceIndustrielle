@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import DashboardLayout from "@/components/DashboardLayout";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
@@ -92,9 +92,24 @@ function uniqueId(prefix: string): string {
   return `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 8).toUpperCase()}`;
 }
 
+function normalizeApiItems<T>(payload: unknown): T[] {
+  if (Array.isArray(payload)) {
+    return payload as T[];
+  }
+
+  if (payload && typeof payload === "object") {
+    const maybeItems = (payload as { items?: unknown }).items;
+    if (Array.isArray(maybeItems)) {
+      return maybeItems as T[];
+    }
+  }
+
+  return [];
+}
+
 type CorrectiveResult = "solved" | "notSolved" | "technicianRequired" | "custom";
 
-export default function OperatorCorrectivePage() {
+function OperatorCorrectivePageContent() {
   const t = useTranslations("dashboard.operator");
   const tCommon = useTranslations("common");
   const { user } = useAuth();
@@ -175,15 +190,15 @@ export default function OperatorCorrectivePage() {
           apiService.getInterventionReports(),
         ]);
 
-        setMachineTypes(machineTypeRes.data ?? []);
-        setMachines(machinesRes.data ?? []);
-        setPannes(pannesRes.data ?? []);
-        setPanneSolutions(panneSolutionsRes.data ?? []);
-        setDocuments(documentsRes.data ?? []);
-        setCatalogues(cataloguesRes.data ?? []);
-        setStocks(stocksRes.data ?? []);
-        setWorkOrders(workOrdersRes.data ?? []);
-        setInterventionReports(reportsRes.data ?? []);
+        setMachineTypes(normalizeApiItems<MachineType>(machineTypeRes.data));
+        setMachines(normalizeApiItems<Machine>(machinesRes.data));
+        setPannes(normalizeApiItems<Panne>(pannesRes.data));
+        setPanneSolutions(normalizeApiItems<PanneSolution>(panneSolutionsRes.data));
+        setDocuments(normalizeApiItems<DocumentEntity>(documentsRes.data));
+        setCatalogues(normalizeApiItems<Catalogue>(cataloguesRes.data));
+        setStocks(normalizeApiItems<Stock>(stocksRes.data));
+        setWorkOrders(normalizeApiItems<WorkOrder>(workOrdersRes.data));
+        setInterventionReports(normalizeApiItems<InterventionReport>(reportsRes.data));
       } catch (error) {
         console.error("Failed to load corrective workflow data", error);
       } finally {
@@ -693,5 +708,13 @@ export default function OperatorCorrectivePage() {
         </div>
       </DashboardLayout>
     </ProtectedRoute>
+  );
+}
+
+export default function OperatorCorrectivePage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-white" />}>
+      <OperatorCorrectivePageContent />
+    </Suspense>
   );
 }

@@ -41,6 +41,18 @@
     "registrationFailed": "Registrierung fehlgeschlagen. Bitte versuchen Sie es erneut.",
     "passwordsDoNotMatch": "Die Passwörter stimmen nicht überein.",
     "passwordMinLength": "Das Passwort muss mindestens 6 Zeichen lang sein.",
+    "passwordWeak": "Das Passwort muss mindestens 8 Zeichen lang sein und Großbuchstaben, Kleinbuchstaben, Zahl und Sonderzeichen enthalten.",
+    "invalidInternationalPhone": "Bitte geben Sie eine gültige internationale Telefonnummer ein (z. B. +21612345678)",
+    "phoneHint": "Internationales Format verwenden, z. B. +21612345678",
+    "phoneExample": "+21612345678",
+    "passwordRequirements": {
+      "title": "Das Passwort muss enthalten:",
+      "minLength": "Mindestens 8 Zeichen",
+      "uppercase": "Einen Großbuchstaben",
+      "lowercase": "Einen Kleinbuchstaben",
+      "number": "Eine Zahl",
+      "special": "Ein Sonderzeichen"
+    },
     "forgotPasswordTitle": "Passwort vergessen",
     "forgotPasswordDescription": "Geben Sie Ihre E-Mail ein, um Ihr Passwort zurückzusetzen.",
     "sendResetLink": "Link senden",
@@ -873,6 +885,23 @@
       "update": "Aktualisieren",
       "create": "Erstellen",
       "saving": "Speichern..."
+    },
+    "validation": {
+      "nameRequired": "Name ist erforderlich",
+      "emailRequired": "E-Mail ist erforderlich",
+      "passwordRequired": "Passwort ist erforderlich",
+      "weakPassword": "Das Passwort muss mindestens 8 Zeichen lang sein und Großbuchstaben, Kleinbuchstaben, Zahl und Sonderzeichen enthalten.",
+      "invalidPhone": "Bitte geben Sie eine gültige internationale Telefonnummer ein (z. B. +21612345678)",
+      "phoneHint": "Internationales Format verwenden, z. B. +21612345678",
+      "phoneExample": "+21612345678"
+    },
+    "passwordRules": {
+      "title": "Das Passwort muss enthalten:",
+      "minLength": "Mindestens 8 Zeichen",
+      "uppercase": "Einen Großbuchstaben",
+      "lowercase": "Einen Kleinbuchstaben",
+      "number": "Eine Zahl",
+      "special": "Ein Sonderzeichen"
     },
     "actions": {
       "edit": "Bearbeiten",

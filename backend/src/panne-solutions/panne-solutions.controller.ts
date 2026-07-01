@@ -1,7 +1,17 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { PanneSolutionsService } from './panne-solutions.service';
 import { CreatePanneSolutionDto } from './dto/create-panne-solution.dto';
 import { UpdatePanneSolutionDto } from './dto/update-panne-solution.dto';
+import { normalizePagination } from '../common/pagination';
 
 @Controller('panne-solutions')
 export class PanneSolutionsController {
@@ -13,8 +23,13 @@ export class PanneSolutionsController {
   }
 
   @Get()
-  findAll() {
-    return this.panneSolutionsService.findAll();
+  findAll(@Query('page') page?: string, @Query('limit') limit?: string) {
+    const pagination = normalizePagination(page, limit);
+    return this.panneSolutionsService.findAll(
+      pagination.page,
+      pagination.limit,
+      pagination.skip,
+    );
   }
 
   @Get(':id')
@@ -23,7 +38,10 @@ export class PanneSolutionsController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePanneSolutionDto: UpdatePanneSolutionDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updatePanneSolutionDto: UpdatePanneSolutionDto,
+  ) {
     return this.panneSolutionsService.update(id, updatePanneSolutionDto);
   }
 

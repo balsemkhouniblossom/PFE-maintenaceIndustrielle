@@ -1,9 +1,21 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { MaintenancePlansService } from './maintenance-plans.service';
+import { normalizePagination } from '../common/pagination';
 
 @Controller('maintenance-plans')
 export class MaintenancePlansController {
-  constructor(private readonly maintenancePlansService: MaintenancePlansService) {}
+  constructor(
+    private readonly maintenancePlansService: MaintenancePlansService,
+  ) {}
 
   @Post()
   create(@Body() payload: Record<string, unknown>) {
@@ -11,8 +23,13 @@ export class MaintenancePlansController {
   }
 
   @Get()
-  findAll() {
-    return this.maintenancePlansService.findAll();
+  findAll(@Query('page') page?: string, @Query('limit') limit?: string) {
+    const pagination = normalizePagination(page, limit);
+    return this.maintenancePlansService.findAll(
+      pagination.page,
+      pagination.limit,
+      pagination.skip,
+    );
   }
 
   @Get(':id')

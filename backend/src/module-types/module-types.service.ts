@@ -4,11 +4,13 @@ import { Model } from 'mongoose';
 import { ModuleType, ModuleTypeDocument } from '../schemas/module-type.schema';
 import { CreateModuleTypeDto } from './dto/create-module-type.dto';
 import { UpdateModuleTypeDto } from './dto/update-module-type.dto';
+import { PaginatedResponse, toPaginatedResponse } from '../common/pagination';
 
 @Injectable()
 export class ModuleTypesService {
   constructor(
-    @InjectModel(ModuleType.name) private moduleTypeModel: Model<ModuleTypeDocument>,
+    @InjectModel(ModuleType.name)
+    private moduleTypeModel: Model<ModuleTypeDocument>,
   ) {}
 
   async create(createModuleTypeDto: CreateModuleTypeDto): Promise<ModuleType> {
@@ -16,16 +18,30 @@ export class ModuleTypesService {
     return createdModuleType.save();
   }
 
-  async findAll(): Promise<ModuleType[]> {
-    return this.moduleTypeModel.find().exec();
+  async findAll(
+    page: number,
+    limit: number,
+    skip: number,
+  ): Promise<PaginatedResponse<ModuleType>> {
+    const [items, totalItems] = await Promise.all([
+      this.moduleTypeModel.find().skip(skip).limit(limit).exec(),
+      this.moduleTypeModel.countDocuments().exec(),
+    ]);
+
+    return toPaginatedResponse(items, totalItems, page, limit);
   }
 
   async findOne(id: string): Promise<any> {
     return this.moduleTypeModel.findById(id).exec();
   }
 
-  async update(id: string, updateModuleTypeDto: UpdateModuleTypeDto): Promise<any> {
-    return this.moduleTypeModel.findByIdAndUpdate(id, updateModuleTypeDto, { new: true }).exec();
+  async update(
+    id: string,
+    updateModuleTypeDto: UpdateModuleTypeDto,
+  ): Promise<any> {
+    return this.moduleTypeModel
+      .findByIdAndUpdate(id, updateModuleTypeDto, { new: true })
+      .exec();
   }
 
   async remove(id: string): Promise<any> {

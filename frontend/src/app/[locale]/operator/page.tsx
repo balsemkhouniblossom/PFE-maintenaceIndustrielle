@@ -31,6 +31,21 @@ interface OperatorStats {
     completed: number;
 }
 
+function normalizeApiItems<T>(payload: unknown): T[] {
+    if (Array.isArray(payload)) {
+        return payload as T[];
+    }
+
+    if (payload && typeof payload === "object") {
+        const maybeItems = (payload as { items?: unknown }).items;
+        if (Array.isArray(maybeItems)) {
+            return maybeItems as T[];
+        }
+    }
+
+    return [];
+}
+
 export default function OperatorDashboard() {
 
     const tOperator = useTranslations("dashboard.operator");
@@ -106,7 +121,7 @@ export default function OperatorDashboard() {
         try {
             const workOrdersResponse = await apiService.getWorkOrders();
 
-            const workOrders = workOrdersResponse.data;
+            const workOrders = normalizeApiItems<any>(workOrdersResponse.data);
 
             const waitingValidation = workOrders.filter(
                 (wo: any) => wo.status === "waiting_validation"
@@ -146,7 +161,7 @@ export default function OperatorDashboard() {
         try {
             const response = await apiService.getMachineTypes();
 
-            setCategories(response.data);
+            setCategories(normalizeApiItems<MachineCategory>(response.data));
 
             console.log("Loaded Categories:", response.data);
         } catch (err) {
@@ -172,7 +187,7 @@ export default function OperatorDashboard() {
             return;
         }
 
-        // eslint-disable-next-line react-hooks/set-state-in-effect
+         
         loadOperatorStats();
     }, [user, authLoading, router]);
 

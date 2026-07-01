@@ -1,7 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { MaintenancePlan, MaintenancePlanDocument } from '../schemas/maintenance-plan.schema';
+import {
+  MaintenancePlan,
+  MaintenancePlanDocument,
+} from '../schemas/maintenance-plan.schema';
+import { PaginatedResponse, toPaginatedResponse } from '../common/pagination';
 
 @Injectable()
 export class MaintenancePlansService {
@@ -14,8 +18,22 @@ export class MaintenancePlansService {
     return new this.maintenancePlanModel(payload).save();
   }
 
-  findAll() {
-    return this.maintenancePlanModel.find().populate('module_id').exec();
+  async findAll(
+    page: number,
+    limit: number,
+    skip: number,
+  ): Promise<PaginatedResponse<MaintenancePlan>> {
+    const [items, totalItems] = await Promise.all([
+      this.maintenancePlanModel
+        .find()
+        .skip(skip)
+        .limit(limit)
+        .populate('module_id')
+        .exec(),
+      this.maintenancePlanModel.countDocuments().exec(),
+    ]);
+
+    return toPaginatedResponse(items, totalItems, page, limit);
   }
 
   findOne(id: string) {
@@ -23,7 +41,9 @@ export class MaintenancePlansService {
   }
 
   update(id: string, payload: Record<string, unknown>) {
-    return this.maintenancePlanModel.findByIdAndUpdate(id, payload, { new: true }).exec();
+    return this.maintenancePlanModel
+      .findByIdAndUpdate(id, payload, { new: true })
+      .exec();
   }
 
   remove(id: string) {

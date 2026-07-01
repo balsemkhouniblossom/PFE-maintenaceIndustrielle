@@ -1,10 +1,11 @@
 import { existsSync, readFileSync } from 'fs';
-import { dirname, resolve } from 'path';
+import { resolve } from 'path';
 
-const currentDir = dirname(__filename);
-const envPath = resolve(currentDir, '..', '..', '.env');
+function loadEnvFile(envPath: string, overrideExisting = false): void {
+  if (!existsSync(envPath)) {
+    return;
+  }
 
-if (existsSync(envPath)) {
   const envFile = readFileSync(envPath, 'utf8');
 
   for (const line of envFile.split(/\r?\n/)) {
@@ -18,8 +19,12 @@ if (existsSync(envPath)) {
     const key = trimmed.slice(0, separatorIndex).trim();
     const value = trimmed.slice(separatorIndex + 1).trim();
 
-    if (key && process.env[key] === undefined) {
+    if (key && (overrideExisting || process.env[key] === undefined)) {
       process.env[key] = value;
     }
   }
 }
+
+const currentWorkingDirectory = process.cwd();
+loadEnvFile(resolve(currentWorkingDirectory, '.env'));
+loadEnvFile(resolve(currentWorkingDirectory, '..', '.env'), true);

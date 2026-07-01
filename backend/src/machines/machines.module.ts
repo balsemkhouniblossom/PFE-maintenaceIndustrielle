@@ -5,7 +5,9 @@ import { MachinesController } from './machines.controller';
 import { Machine, MachineSchema } from '../schemas/machine.schema';
 
 @Module({
-  imports: [MongooseModule.forFeature([{ name: Machine.name, schema: MachineSchema }])],
+  imports: [
+    MongooseModule.forFeature([{ name: Machine.name, schema: MachineSchema }]),
+  ],
   controllers: [MachinesController],
   providers: [MachinesService],
   exports: [MachinesService],

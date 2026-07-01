@@ -1,5 +1,5 @@
 import { ServeStaticModule } from '@nestjs/serve-static';
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { Logger, MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -12,17 +12,31 @@ import { Capteur, CapteurSchema } from './schemas/capteur.schema';
 import { Mesure, MesureSchema } from './schemas/mesure.schema';
 import { Catalogue, CatalogueSchema } from './schemas/catalogue.schema';
 import { Stock, StockSchema } from './schemas/stock.schema';
-import { ModulePieces, ModulePiecesSchema } from './schemas/module-pieces.schema';
-import { MaintenancePlan, MaintenancePlanSchema } from './schemas/maintenance-plan.schema';
+import {
+  ModulePieces,
+  ModulePiecesSchema,
+} from './schemas/module-pieces.schema';
+import {
+  MaintenancePlan,
+  MaintenancePlanSchema,
+} from './schemas/maintenance-plan.schema';
 import { WorkOrder, WorkOrderSchema } from './schemas/work-order.schema';
-import { InterventionReport, InterventionReportSchema } from './schemas/intervention-report.schema';
+import {
+  InterventionReport,
+  InterventionReportSchema,
+} from './schemas/intervention-report.schema';
 import { OTPieces, OTPiecesSchema } from './schemas/ot-pieces.schema';
 import { Lubrifiant, LubrifiantSchema } from './schemas/lubrifiant.schema';
-import { LubrificationLog, LubrificationLogSchema } from './schemas/lubrification-log.schema';
+import {
+  LubrificationLog,
+  LubrificationLogSchema,
+} from './schemas/lubrification-log.schema';
 import { Panne, PanneSchema } from './schemas/panne.schema';
-import { PanneSolution, PanneSolutionSchema } from './schemas/panne-solution.schema';
+import {
+  PanneSolution,
+  PanneSolutionSchema,
+} from './schemas/panne-solution.schema';
 import { KPI, KPISchema } from './schemas/kpi.schema';
-import { DocumentEntity, DocumentSchema } from './schemas/document.schema';
 import { UsersModule } from './users/users.module';
 import { MachinesModule } from './machines/machines.module';
 import { WorkOrdersModule } from './work-orders/work-orders.module';
@@ -46,14 +60,58 @@ import { LubrificationLogsModule } from './lubrification-logs/lubrification-logs
 import { OtPiecesModule } from './ot-pieces/ot-pieces.module';
 import { HealthModule } from './health/health.module';
 import { RequestLoggingMiddleware } from './common/middleware/request-logging.middleware';
-import { validateEnvironment } from './config/env.validation';
-
-const env = validateEnvironment();
+import { RequestContextMiddleware } from './common/middleware/request-context.middleware';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { EmailModule } from './email/email.module';
+import { RequestContextModule } from './common/request-context.module';
+import { NotificationsModule } from './notifications/notifications.module';
+const mongoLogger = new Logger('MongoDB');
 
 @Module({
   imports: [
-    CounterModule, 
-    MongooseModule.forRoot(env.nodeEnv === 'test' ? process.env.MONGODB_URI ?? 'mongodb://localhost:27017/GMAO_IPROTEX_TEST' : process.env.MONGODB_URI!, {}),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: [
+        `.env.${process.env.NODE_ENV ?? 'local'}`,
+        '.env.local',
+        '.env',
+      ],
+    }),
+    RequestContextModule,
+    CounterModule,
+    MongooseModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => {
+        const mongoUri =
+          configService.get<string>('MONGODB_URI') ??
+          'mongodb://localhost:27017/GMAO_IPROTEX_TEST';
+
+        return {
+          uri: mongoUri,
+          connectionFactory: (connection: any) => {
+            connection.on('connected', () => {
+              const host = connection.host || 'unknown-host';
+              const dbName = connection.name || 'unknown-db';
+              mongoLogger.log(`Connected to MongoDB host=${host} db=${dbName}`);
+            });
+
+            connection.on('disconnected', () => {
+              mongoLogger.warn('MongoDB connection disconnected');
+            });
+
+            connection.on('reconnected', () => {
+              mongoLogger.log('MongoDB connection reconnected');
+            });
+
+            connection.on('error', (error: Error) => {
+              mongoLogger.error(`MongoDB connection error: ${error.message}`);
+            });
+
+            return connection;
+          },
+        };
+      },
+    }),
 
     MongooseModule.forFeature([
       { name: User.name, schema: UserSchema },
@@ -84,6 +142,8 @@ const env = validateEnvironment();
     ModuleTypesModule,
     CapteursModule,
     AuthModule,
+    EmailModule,
+    NotificationsModule,
     DocumentsModule, // ✅ MUST be here
     InterventionReportsModule,
     PannesModule,
@@ -96,13 +156,14 @@ const env = validateEnvironment();
     LubrificationLogsModule,
     OtPiecesModule,
     HealthModule,
-
   ],
   controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(RequestLoggingMiddleware).forRoutes('*');
+    consumer
+      .apply(RequestContextMiddleware, RequestLoggingMiddleware)
+      .forRoutes('*');
   }
 }

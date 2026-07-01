@@ -6,4 +6,3 @@
   - [ ] Render a table (user_id, first_name, last_name, email, role)
   - [ ] Add empty state message
 - [ ] Run frontend lint/build (fix any TS/React errors)
-

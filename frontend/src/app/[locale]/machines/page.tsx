@@ -1,9 +1,10 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import DashboardLayout from '@/components/DashboardLayout';
 import DynamicSearchControls from '@/components/DynamicSearchControls';
 import { Modal } from '@/components/Modal';
+import Pagination from '@/components/Pagination';
 import { apiService } from '@/services/api';
 import { ALL_FIELDS_TOKEN, getSearchableFields, matchesDynamicSearch } from '@/services/dynamicSearch';
 import { PencilIcon, TrashIcon, PlusIcon, MagnifyingGlassIcon, ExclamationTriangleIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
@@ -36,6 +37,10 @@ export default function MachinesPage() {
   const router = useRouter();
   const [machines, setMachines] = useState<Machine[]>([]);
   const [machineTypes, setMachineTypes] = useState<MachineType[]>([]);
+  const [page, setPage] = useState(1);
+  const [limit] = useState(10);
+  const [totalItems, setTotalItems] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [editingMachine, setEditingMachine] = useState<Machine | null>(null);
@@ -46,7 +51,7 @@ export default function MachinesPage() {
   const [formData, setFormData] = useState({
     machine_id: '',
     serial_no: '',
-    type_id: '',
+    type_id: '' as string | number,
     status: 'operational',
     installation_date: '',
     poids_kg: '',
@@ -55,42 +60,46 @@ export default function MachinesPage() {
     location: '',
   });
 
-  async function loadData() {
+  const loadMachines = useCallback(async () => {
     try {
       const [machinesRes, typesRes] = await Promise.all([
-        apiService.getMachines(),
+        apiService.getMachines({ page, limit }),
         apiService.getMachineTypes(),
       ]);
-      console.log("machineTypes length:", typesRes.data.length);
-      console.log("Types Response:", typesRes.data);
-      console.log("RAW TYPES RESPONSE:", typesRes.data);
-      console.log("IS ARRAY:", Array.isArray(typesRes.data));
-      console.log("AVAILABLE TYPES:", machineTypes);
 
-      setMachines(
-        machinesRes.data.map((m: any) => ({
-          ...m,
-          type_id:
-            typeof m.type_id === 'object'
-              ? m.type_id?._id
-              : String(m.type_id)
-        }))
-      );
+      const items = Array.isArray(machinesRes.data?.items)
+        ? machinesRes.data.items
+        : [];
 
-      setMachineTypes(typesRes.data);
-      console.log("Machine Types Loaded:", typesRes.data);
-      console.log("MACHINE:", machines);
-      machines.forEach(m => {
-        console.log(m.type_id);
-      }); 
+      const normalized = items.map((m: any) => ({
+        ...m,
+        type_id:
+          typeof m.type_id === 'object'
+            ? m.type_id?._id
+            : String(m.type_id),
+      }));
+
+      setMachines(normalized);
+
+      const types = Array.isArray(typesRes.data)
+        ? typesRes.data
+        : Array.isArray(typesRes.data?.items)
+          ? typesRes.data.items
+          : Array.isArray(typesRes.data?.data)
+            ? typesRes.data.data
+            : [];
+
+      setMachineTypes(types);
+
+      setTotalItems(machinesRes.data?.totalItems ?? 0);
+      setTotalPages(machinesRes.data?.totalPages ?? 1);
     } catch (error) {
-      console.error('Error loading data:', error);
+      console.error('Error loading machines:', error);
       showNotification('error', tMachines('notifications.loadFailed'));
     } finally {
       setLoading(false);
     }
-  }
-
+  }, [page, limit, tMachines]);
   function showNotification(type: 'success' | 'error', message: string) {
     setNotification({ type, message });
     setTimeout(() => setNotification(null), 5000);
@@ -103,9 +112,8 @@ export default function MachinesPage() {
   }
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    loadData();
-  }, []);
+    loadMachines();
+  }, [loadMachines]);
 
   useEffect(() => {
     const handleMachinesChanged = () => {
@@ -121,24 +129,6 @@ export default function MachinesPage() {
     };
   }, []);
 
-  const loadMachines = async () => {
-    try {
-      const response = await apiService.getMachines();
-
-      const normalized = response.data.map((m: any) => ({
-        ...m,
-        type_id:
-          typeof m.type_id === 'object'
-            ? m.type_id?._id
-            : m.type_id
-      }));
-
-      setMachines(normalized);
-    } catch (error) {
-      console.error('Error loading machines:', error);
-      showNotification('error', tMachines('notifications.deleteFailed'));
-    }
-  };
 
   const machineTypeMap = useMemo(() => {
     const map: Record<string, MachineType> = {};
@@ -151,16 +141,23 @@ export default function MachinesPage() {
     return map;
   }, [machineTypes]);
 
-  const searchableMachines = useMemo(
-    () =>
-      machines.map((machine) => ({
-        ...machine,
-        machine_type_name: machineTypeMap[String(machine.type_id)]?.name || '',
-      })),
-    [machines, machineTypeMap],
-  );
+  const searchableMachines = useMemo(() => {
+    const safeMachines = Array.isArray(machines) ? machines : [];
 
-  const searchableFields = useMemo(() => getSearchableFields(searchableMachines), [searchableMachines]);
+    return safeMachines.map((machine) => ({
+      ...machine,
+      machine_type_name:
+        machineTypeMap[String(machine.type_id)]?.name || '',
+    }));
+  }, [machines, machineTypeMap]);
+
+  const searchableFields = useMemo(() => {
+    if (searchableMachines.length === 0) {
+      return [];
+    }
+
+    return getSearchableFields(searchableMachines);
+  }, [searchableMachines]);
 
   const filtered = useMemo(
     () => searchableMachines.filter((machine) => matchesDynamicSearch(machine, searchTerm, selectedSearchField)),
@@ -243,7 +240,6 @@ export default function MachinesPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateForm()) return;
-    console.log("SUBMIT TYPE_ID:", formData.type_id);
     setSubmitting(true);
     try {
       const data = {
@@ -312,7 +308,7 @@ export default function MachinesPage() {
               </div>
               <div className="flex items-center space-x-4">
                 <div className="text-right">
-                  <div className="text-3xl font-bold text-blue-600">{filtered.length}</div>
+                  <div className="text-3xl font-bold text-blue-600">{totalItems}</div>
                   <div className="text-sm text-slate-500">{tMachines('totalMachines')}</div>
                 </div>
                 <button
@@ -366,9 +362,7 @@ export default function MachinesPage() {
                   </tr>
                 ) : (
                   filtered.map((machine: Machine) => {
-                    console.log("Machine row:", machine);
                     const machineType = machineTypeMap[String(machine.type_id)];
-
                     return (
                       <tr key={machine._id}>
                         <td className="font-medium">{machine.machine_id}</td>
@@ -424,6 +418,15 @@ export default function MachinesPage() {
                 )}
               </tbody>
             </table>
+          </div>
+          <div className="mt-6">
+            <Pagination
+              page={page}
+              totalPages={totalPages}
+              totalItems={totalItems}
+              limit={limit}
+              onPageChange={setPage}
+            />
           </div>
         </div>
       </div>

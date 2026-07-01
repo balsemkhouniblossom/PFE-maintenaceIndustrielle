@@ -34,6 +34,21 @@ function refId(value: EntityRef | undefined): string {
   return typeof value === "string" ? value : value._id ?? "";
 }
 
+function normalizeApiItems<T>(payload: unknown): T[] {
+  if (Array.isArray(payload)) {
+    return payload as T[];
+  }
+
+  if (payload && typeof payload === "object") {
+    const maybeItems = (payload as { items?: unknown }).items;
+    if (Array.isArray(maybeItems)) {
+      return maybeItems as T[];
+    }
+  }
+
+  return [];
+}
+
 export default function OperatorManualsPage() {
   const t = useTranslations("dashboard.operator");
   const tCommon = useTranslations("common");
@@ -56,9 +71,9 @@ export default function OperatorManualsPage() {
           apiService.getDocuments(),
         ]);
 
-        setMachineTypes(machineTypesRes.data ?? []);
-        setMachines(machinesRes.data ?? []);
-        setDocuments(documentsRes.data ?? []);
+        setMachineTypes(normalizeApiItems<MachineType>(machineTypesRes.data));
+        setMachines(normalizeApiItems<Machine>(machinesRes.data));
+        setDocuments(normalizeApiItems<DocumentEntity>(documentsRes.data));
       } catch (error) {
         console.error("Failed to load manuals", error);
       } finally {

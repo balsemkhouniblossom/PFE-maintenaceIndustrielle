@@ -5,12 +5,12 @@ import { User, UserDocument } from '../schemas/user.schema';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import * as bcrypt from 'bcrypt';
+import { PaginatedResponse, toPaginatedResponse } from '../common/pagination';
+
 @Injectable()
 export class UsersService {
-  constructor(
-    @InjectModel(User.name) private userModel: Model<UserDocument>,
-  ) { }
-  async create(createUserDto: CreateUserDto): Promise<User> {
+  constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
+  async create(createUserDto: CreateUserDto): Promise<UserDocument> {
     const lastUser = await this.userModel
       .findOne({}, {}, { sort: { created_at: -1 } })
       .exec();
@@ -34,9 +34,10 @@ export class UsersService {
       nom_complet: createUserDto.nom_complet,
       email: createUserDto.email,
       role: createUserDto.role,
-      is_active: createUserDto.is_active,
-      department: (createUserDto as any).department,
-      phone: (createUserDto as any).phone,
+      is_active: createUserDto.is_active ?? true,
+      is_verified: false,
+      department: createUserDto.department,
+      phone: createUserDto.phone,
       photo: createUserDto.photo,
 
       // ✅ FIX HERE
@@ -45,14 +46,26 @@ export class UsersService {
 
     return createdUser.save();
   }
-  async findAll(): Promise<User[]> {
-    return this.userModel
-      .find()
-      .select('-password -refresh_token_hash')
-      .exec();
+
+  async findAll(
+    page: number,
+    limit: number,
+    skip: number,
+  ): Promise<PaginatedResponse<UserDocument>> {
+    const [items, totalItems] = await Promise.all([
+      this.userModel
+        .find()
+        .select('-password -refresh_token_hash')
+        .skip(skip)
+        .limit(limit)
+        .exec(),
+      this.userModel.countDocuments().exec(),
+    ]);
+
+    return toPaginatedResponse(items, totalItems, page, limit);
   }
 
-  async findOne(id: string): Promise<any> {
+  async findOne(id: string): Promise<UserDocument | null> {
     return this.userModel.findById(id).exec();
   }
 
@@ -69,12 +82,18 @@ export class UsersService {
       .exec();
   }
 
-  async update(id: string, updateUserDto: UpdateUserDto): Promise<any> {
-    const sanitizedUpdate: Record<string, any> = { ...updateUserDto };
+  async update(
+    id: string,
+    updateUserDto: UpdateUserDto,
+  ): Promise<UserDocument | null> {
+    const sanitizedUpdate: UpdateUserDto = { ...updateUserDto };
 
     if (typeof sanitizedUpdate.password === 'string') {
       if (sanitizedUpdate.password.trim()) {
-        sanitizedUpdate.password = await bcrypt.hash(sanitizedUpdate.password, 10);
+        sanitizedUpdate.password = await bcrypt.hash(
+          sanitizedUpdate.password,
+          10,
+        );
       } else {
         delete sanitizedUpdate.password;
       }
@@ -86,7 +105,85 @@ export class UsersService {
       .exec();
   }
 
-  async remove(id: string): Promise<any> {
+  async remove(id: string): Promise<UserDocument | null> {
     return this.userModel.findByIdAndDelete(id).exec();
+  }
+
+  async setRefreshTokenHash(
+    id: string,
+    refreshTokenHash: string | null,
+  ): Promise<UserDocument | null> {
+    return this.userModel
+      .findByIdAndUpdate(
+        id,
+        { refresh_token_hash: refreshTokenHash },
+        { new: true },
+      )
+      .select('-password -refresh_token_hash')
+      .exec();
+  }
+
+  async setPasswordResetToken(
+    id: string,
+    resetToken: string,
+    resetExpires: Date,
+  ): Promise<UserDocument | null> {
+    return this.userModel
+      .findByIdAndUpdate(
+        id,
+        {
+          reset_password_token: resetToken,
+          reset_password_expires: resetExpires,
+        },
+        { new: true },
+      )
+      .select('-password -refresh_token_hash')
+      .exec();
+  }
+
+  async updatePasswordAndClearReset(
+    id: string,
+    password: string,
+  ): Promise<UserDocument | null> {
+    return this.userModel
+      .findByIdAndUpdate(
+        id,
+        {
+          password,
+          reset_password_token: null,
+          reset_password_expires: null,
+        },
+        { new: true },
+      )
+      .select('-password -refresh_token_hash')
+      .exec();
+  }
+
+  async countAll(): Promise<number> {
+    return this.userModel.countDocuments().exec();
+  }
+
+  async getUsersTotal() {
+    try {
+      console.log(await this.userModel.findOne().lean()); // 👈 PUT IT HERE
+
+      const totalUsers = await this.userModel.countDocuments();
+
+      const activeUsers = await this.userModel.countDocuments({
+        is_active: true,
+      });
+
+      return {
+        totalUsers,
+        activeUsers,
+      };
+    } catch (error) {
+      console.error('getUsersTotal error:', error);
+      throw new Error('Failed to fetch users statistics');
+    }
+  }
+
+  async getActiveUsersCount(): Promise<number> {
+    return this.userModel.countDocuments({ is_active: true }).exec();
   }
 }

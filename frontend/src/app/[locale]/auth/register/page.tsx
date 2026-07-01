@@ -8,13 +8,23 @@ import { useTranslations } from 'next-intl';
 
 import { useAuth } from '@/contexts/AuthContext';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
+import InternationalPhoneInput from '@/components/InternationalPhoneInput';
+import {
+  buildInternationalPhone,
+  DEFAULT_PHONE_COUNTRY,
+  validateNationalPhone,
+} from '@/services/phoneNumber';
+import { validatePasswordPolicy } from '@/services/userValidation';
 
 export default function RegisterPage() {
   const departmentOptions = ['IT', 'Maintenance', 'Production', 'Administration'];
   const [formData, setFormData] = useState({
     nom_complet: '',
     email: '',
-    phone: '',
+    phone: {
+      country: DEFAULT_PHONE_COUNTRY,
+      nationalNumber: '',
+    },
     password: '',
     confirmPassword: '',
     role: 'operator',
@@ -43,17 +53,34 @@ export default function RegisterPage() {
       return;
     }
 
-    if (formData.password.length < 6) {
-      setError(t('passwordMinLength'));
+    if (!validatePasswordPolicy(formData.password)) {
+      setError(
+        t('passwordWeak', {
+          default:
+            'Password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number, and one special character.',
+        }),
+      );
       setLoading(false);
       return;
     }
+
+    if (!validateNationalPhone(formData.phone.country, formData.phone.nationalNumber)) {
+      setError(
+        t('invalidInternationalPhone', {
+          default: 'Please enter a valid international phone number (e.g. +21612345678)',
+        }),
+      );
+      setLoading(false);
+      return;
+    }
+
+    const phone = buildInternationalPhone(formData.phone.country, formData.phone.nationalNumber);
 
     try {
       await register({
         nom_complet: formData.nom_complet,
         email: formData.email,
-        phone: formData.phone,
+        phone: phone || undefined,
         password: formData.password,
         role: formData.role,
         department: formData.department
@@ -139,15 +166,15 @@ export default function RegisterPage() {
                 <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
                   {t('phone')}
                 </label>
-                <input
-                  id="phone"
+                <InternationalPhoneInput
                   name="phone"
-                  type="tel"
                   value={formData.phone}
-                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-white/50 backdrop-blur-sm hover:border-gray-300"
-                  placeholder={t('enterPhone')}
+                  onChange={(phone) => setFormData({ ...formData, phone })}
+                  placeholder={t('phoneHint', { default: 'Local number' })}
                 />
+                <p className="mt-1 text-xs text-gray-500">
+                  {t('phoneHint', { default: 'Use international format, e.g. +21612345678' })}
+                </p>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
@@ -216,6 +243,16 @@ export default function RegisterPage() {
                     )}
                   </button>
                 </div>
+                <p className="mt-2 text-xs text-gray-500">
+                  {t('passwordRequirements.title', { default: 'Password must contain:' })}
+                </p>
+                <ul className="mt-1 text-xs text-gray-500 list-disc list-inside">
+                  <li>{t('passwordRequirements.minLength', { default: 'At least 8 characters' })}</li>
+                  <li>{t('passwordRequirements.uppercase', { default: 'One uppercase letter' })}</li>
+                  <li>{t('passwordRequirements.lowercase', { default: 'One lowercase letter' })}</li>
+                  <li>{t('passwordRequirements.number', { default: 'One number' })}</li>
+                  <li>{t('passwordRequirements.special', { default: 'One special character' })}</li>
+                </ul>
               </div>
 
               <div>

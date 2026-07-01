@@ -17,6 +17,7 @@ import { Modal } from '@/components/Modal';
 import { apiService } from '@/services/api';
 import { useAuth } from '@/contexts/AuthContext';
 import { ALL_FIELDS_TOKEN, getSearchableFields, matchesDynamicSearch } from '@/services/dynamicSearch';
+import Pagination from '@/components/Pagination';
 
 interface PanneItem {
   _id: string;
@@ -63,6 +64,10 @@ export default function PanneSolutionsPage() {
   const [solutions, setSolutions] = useState<PanneSolution[]>([]);
   const [pannes, setPannes] = useState<PanneItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalItems, setTotalItems] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedSearchField, setSelectedSearchField] = useState(ALL_FIELDS_TOKEN);
   const [showModal, setShowModal] = useState(false);
@@ -85,12 +90,18 @@ export default function PanneSolutionsPage() {
   async function loadData() {
     try {
       const [solutionsRes, pannesRes] = await Promise.all([
-        apiService.getPanneSolutions(),
+        apiService.getPanneSolutions({ page, limit }),
         apiService.getPannes(),
       ]);
 
-      setSolutions(solutionsRes.data || []);
-      setPannes(pannesRes.data || []);
+      const data = solutionsRes.data;
+
+      setSolutions(data.items ?? []);
+      setPage(data.page ?? 1);
+      setLimit(data.limit ?? 10);
+      setTotalPages(data.totalPages ?? 1);
+      setTotalItems(data.totalItems ?? 0);
+      setPannes(pannesRes.data.items || []);
     } catch (error) {
       console.error('Error loading panne solutions:', error);
     } finally {
@@ -275,7 +286,7 @@ export default function PanneSolutionsPage() {
 
   useEffect(() => {
     loadData();
-  }, []);
+  }, [page, limit]);
 
   useEffect(() => {
     const handleChanged = () => {
@@ -305,11 +316,10 @@ export default function PanneSolutionsPage() {
     <DashboardLayout title={t('title')}>
       {notification && (
         <div
-          className={`fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg flex items-center space-x-2 ${
-            notification.type === 'success'
-              ? 'bg-green-100 text-green-800 border border-green-200'
-              : 'bg-red-100 text-red-800 border border-red-200'
-          }`}
+          className={`fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg flex items-center space-x-2 ${notification.type === 'success'
+            ? 'bg-green-100 text-green-800 border border-green-200'
+            : 'bg-red-100 text-red-800 border border-red-200'
+            }`}
         >
           {notification.type === 'success' ? (
             <CheckCircleIcon className="w-5 h-5" />
@@ -333,7 +343,7 @@ export default function PanneSolutionsPage() {
               </div>
               <div className="flex items-center space-x-4">
                 <div className="text-end">
-                  <div className="text-3xl font-bold text-blue-600">{solutions.length}</div>
+                  <div className="text-3xl font-bold text-blue-600">{totalItems}</div>
                   <div className="text-sm text-slate-500">{t('totalSolutions')}</div>
                 </div>
                 <button onClick={openCreateModal} className="btn-primary flex items-center space-x-2">
@@ -405,6 +415,13 @@ export default function PanneSolutionsPage() {
                 )}
               </tbody>
             </table>
+            <Pagination
+              page={page}
+              totalPages={totalPages}
+              totalItems={totalItems}
+              limit={limit}
+              onPageChange={(newPage) => setPage(newPage)}
+            />
           </div>
         </div>
       </div>
@@ -617,8 +634,8 @@ export default function PanneSolutionsPage() {
               {submitting
                 ? tCommon('saving')
                 : editingSolution
-                ? tCommon('actions.update')
-                : tCommon('actions.create')}
+                  ? tCommon('actions.update')
+                  : tCommon('actions.create')}
             </button>
           </div>
         </form>

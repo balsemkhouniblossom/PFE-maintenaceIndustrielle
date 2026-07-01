@@ -6,11 +6,20 @@ export class RequestLoggingMiddleware implements NestMiddleware {
   private readonly logger = new Logger('HTTP');
 
   use(req: Request, res: Response, next: NextFunction): void {
+    if (req.url.startsWith('/.well-known')) {
+      res.status(204).end();
+      return;
+    }
     const startedAt = Date.now();
 
     res.on('finish', () => {
       const durationMs = Date.now() - startedAt;
-      const level = res.statusCode >= 500 ? 'error' : res.statusCode >= 400 ? 'warn' : 'log';
+      const level =
+        res.statusCode >= 500
+          ? 'error'
+          : res.statusCode >= 400
+            ? 'warn'
+            : 'log';
       const message = `${req.method} ${req.originalUrl} ${res.statusCode} - ${durationMs}ms`;
 
       if (level === 'error') {

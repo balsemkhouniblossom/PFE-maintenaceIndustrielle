@@ -5,6 +5,7 @@ A comprehensive full-stack web application for Gestion de Maintenance Assistée 
 ## Features
 
 ### Core Functionality
+
 - **User Management**: Complete CRUD operations for system users with role-based access
 - **Machine Management**: Track and manage industrial machinery with detailed specifications
 - **Work Order Management**: Create, assign, and track maintenance work orders
@@ -14,6 +15,7 @@ A comprehensive full-stack web application for Gestion de Maintenance Assistée 
 - **Module Types**: Handle modular equipment components
 
 ### Dashboard Features
+
 - Real-time statistics and KPIs
 - Work order status tracking
 - System health monitoring
@@ -23,6 +25,7 @@ A comprehensive full-stack web application for Gestion de Maintenance Assistée 
 ## Technology Stack
 
 ### Frontend
+
 - **Next.js 16.2.4**: React framework with App Router
 - **TypeScript**: Type-safe development
 - **Tailwind CSS**: Utility-first CSS framework
@@ -32,12 +35,14 @@ A comprehensive full-stack web application for Gestion de Maintenance Assistée 
 - **Headless UI**: Accessible UI components
 
 ### Backend
+
 - **NestJS 11.x**: Node.js framework for scalable server-side applications
 - **MongoDB 8.0**: NoSQL database for flexible data storage
 - **Mongoose**: MongoDB object modeling
 - **TypeScript**: Type-safe backend development
 
 ### Development Tools
+
 - **Node.js 25.9.0**: JavaScript runtime
 - **npm**: Package management
 - **ESLint**: Code linting
@@ -156,6 +161,7 @@ The backend automatically connects to `mongodb://localhost:27017/GMAO_IPROTEX`
 ## API Endpoints
 
 ### Users
+
 - `GET /users` - Get all users
 - `POST /users` - Create new user
 - `GET /users/:id` - Get user by ID
@@ -163,6 +169,7 @@ The backend automatically connects to `mongodb://localhost:27017/GMAO_IPROTEX`
 - `DELETE /users/:id` - Delete user
 
 ### Machines
+
 - `GET /machines` - Get all machines
 - `POST /machines` - Create new machine
 - `GET /machines/:id` - Get machine by ID
@@ -170,6 +177,7 @@ The backend automatically connects to `mongodb://localhost:27017/GMAO_IPROTEX`
 - `DELETE /machines/:id` - Delete machine
 
 ### Work Orders
+
 - `GET /work-orders` - Get all work orders
 - `POST /work-orders` - Create new work order
 - `GET /work-orders/:id` - Get work order by ID
@@ -177,6 +185,7 @@ The backend automatically connects to `mongodb://localhost:27017/GMAO_IPROTEX`
 - `DELETE /work-orders/:id` - Delete work order
 
 ### Additional Endpoints
+
 - `/machine-types` - Machine type management
 - `/catalogues` - Parts catalogue management
 - `/habilitations` - User habilitations management
@@ -244,6 +253,7 @@ NEXT_PUBLIC_API_URL=http://localhost:3001
 ### Debug Mode
 
 Run with debug flags:
+
 ```bash
 # Backend
 npm run start:debug

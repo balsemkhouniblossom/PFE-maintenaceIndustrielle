@@ -5,7 +5,11 @@ import { ModuleTypesController } from './module-types.controller';
 import { ModuleType, ModuleTypeSchema } from '../schemas/module-type.schema';
 
 @Module({
-  imports: [MongooseModule.forFeature([{ name: ModuleType.name, schema: ModuleTypeSchema }])],
+  imports: [
+    MongooseModule.forFeature([
+      { name: ModuleType.name, schema: ModuleTypeSchema },
+    ]),
+  ],
   controllers: [ModuleTypesController],
   providers: [ModuleTypesService],
   exports: [ModuleTypesService],

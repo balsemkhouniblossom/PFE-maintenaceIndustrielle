@@ -51,6 +51,7 @@
     "sending": "Envoi..."
   },
   "common": {
+    "allFields": "Tous les champs",
     "loading": "Chargement...",
     "error": "Erreur",
     "success": "Succès",
@@ -77,7 +78,8 @@
     },
     "table": {
       "actions": "Actions",
-      "noData": "Aucune donnée disponible"
+      "noData": "Aucune donnée disponible",
+      "allFields": "Tous les champs"
     },
     "auth": {
       "logout": "Déconnexion"

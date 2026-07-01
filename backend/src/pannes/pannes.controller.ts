@@ -1,4 +1,15 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common';
+
+import { normalizePagination } from '../common/pagination';
 import { PannesService } from './pannes.service';
 import { CreatePanneDto } from './dto/create-panne.dto';
 import { UpdatePanneDto } from './dto/update-panne.dto';
@@ -13,8 +24,14 @@ export class PannesController {
   }
 
   @Get()
-  findAll() {
-    return this.pannesService.findAll();
+  findAll(@Query('page') page?: string, @Query('limit') limit?: string) {
+    const pagination = normalizePagination(page, limit);
+
+    return this.pannesService.findAll(
+      pagination.page,
+      pagination.limit,
+      pagination.skip,
+    );
   }
 
   @Get(':id')

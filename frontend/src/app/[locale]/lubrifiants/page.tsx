@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import DashboardLayout from "@/components/DashboardLayout";
 import DynamicSearchControls from "@/components/DynamicSearchControls";
+import Pagination from "@/components/Pagination";
 import { apiService } from "@/services/api";
 import { ALL_FIELDS_TOKEN, getSearchableFields, matchesDynamicSearch } from "@/services/dynamicSearch";
 import { useTranslations } from "next-intl";
@@ -21,26 +22,43 @@ export default function LubrifiantsPage() {
   const [items, setItems] = useState<Lubrifiant[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedSearchField, setSelectedSearchField] = useState(ALL_FIELDS_TOKEN);
-
+  const [page, setPage] = useState(1);
+  const [limit] = useState(10);
+  const [totalItems, setTotalItems] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
   useEffect(() => {
     async function load() {
       try {
-        const res = await apiService.getLubrifiants();
-        setItems(res.data ?? []);
+        setLoading(true);
+
+        const res = await apiService.getLubrifiants({
+          page,
+          limit,
+        });
+
+        console.log("LUBRIFIANTS RESPONSE:", res.data);
+
+        const data = res.data;
+
+        setItems(data.items ?? []);
+        setTotalItems(data.totalItems ?? 0);
+        setTotalPages(data.totalPages ?? 1);
       } finally {
         setLoading(false);
       }
     }
 
     void load();
-  }, []);
+  }, [page, limit]);
 
   const searchableFields = useMemo(() => getSearchableFields(items), [items]);
-  const filteredItems = useMemo(
-    () => items.filter((item) => matchesDynamicSearch(item, searchTerm, selectedSearchField)),
-    [items, searchTerm, selectedSearchField],
-  );
+  const filteredItems = useMemo(() => {
+    if (!Array.isArray(items)) return [];
 
+    return items.filter((item) =>
+      matchesDynamicSearch(item, searchTerm, selectedSearchField)
+    );
+  }, [items, searchTerm, selectedSearchField]);
   return (
     <DashboardLayout title="Lubrifiants">
       <div className="bento-grid">
@@ -90,7 +108,16 @@ export default function LubrifiantsPage() {
                 ))}
               </tbody>
             </table>
+
           )}
+          <Pagination
+            page={page}
+            totalPages={totalPages}
+            totalItems={totalItems}
+            limit={limit}
+            onPageChange={setPage}
+            className="mt-4"
+          />
         </div>
       </div>
     </DashboardLayout>

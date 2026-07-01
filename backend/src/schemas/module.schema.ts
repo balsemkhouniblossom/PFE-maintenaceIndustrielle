@@ -22,5 +22,4 @@ export class Module {
 }
 
 export const ModuleSchema = SchemaFactory.createForClass(Module);
-ModuleSchema.index({ module_id: 1 }, { unique: true });
 ModuleSchema.index({ machine_id: 1, mod_type_id: 1 });

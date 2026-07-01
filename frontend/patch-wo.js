@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-require-imports */
+ 
 const fs = require('fs');
 const files = ['en.json', 'fr.json', 'ar.json'];
 const baseDir = process.cwd();

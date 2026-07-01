@@ -8,6 +8,7 @@ import { useTranslations } from "next-intl";
 import { apiService } from "@/services/api";
 import { ALL_FIELDS_TOKEN, getSearchableFields, matchesDynamicSearch } from "@/services/dynamicSearch";
 import { CheckIcon, XMarkIcon, EyeIcon } from "@heroicons/react/24/outline";
+import Pagination from "@/components/Pagination";
 
 type EntityRef = string | { _id?: string };
 
@@ -80,6 +81,8 @@ export default function PreventiveTaskChecklistPage() {
   const [showModal, setShowModal] = useState(false);
   const [completionNotes, setCompletionNotes] = useState("");
   const [notification, setNotification] = useState<{ type: string; message: string } | null>(null);
+  const [page, setPage] = useState(1);
+  const [limit] = useState(10);
 
   // Load data on mount
   useEffect(() => {
@@ -87,14 +90,23 @@ export default function PreventiveTaskChecklistPage() {
       try {
         setLoading(true);
         const [plansRes, modulesRes, machinesRes] = await Promise.all([
-          apiService.getMaintenancePlans(),
-          apiService.getModules(),
-          apiService.getMachines(),
+          apiService.getMaintenancePlans({
+            page: 1,
+            limit: 1000,
+          }),
+          apiService.getModules({
+            page: 1,
+            limit: 1000,
+          }),
+          apiService.getMachines({
+            page: 1,
+            limit: 1000,
+          }),
         ]);
 
-        const plansData: MaintenancePlan[] = plansRes.data ?? [];
-        const modulesData: Module[] = modulesRes.data ?? [];
-        const machinesData: Machine[] = machinesRes.data ?? [];
+        const plansData: MaintenancePlan[] = plansRes.data.items ?? [];
+        const modulesData: Module[] = modulesRes.data.items ?? [];
+        const machinesData: Machine[] = machinesRes.data.items ?? [];
 
         setPlans(plansData);
         setModules(modulesData);
@@ -169,7 +181,9 @@ export default function PreventiveTaskChecklistPage() {
 
     void loadData();
   }, [t]);
-
+  useEffect(() => {
+    setPage(1);
+  }, [searchTerm, selectedSearchField, selectedFilter, tasks.length]);
   // Get module name
   const getModuleName = (moduleId: string): string => {
     const module = modules.find((m) => m._id === moduleId);
@@ -210,6 +224,20 @@ export default function PreventiveTaskChecklistPage() {
     });
   }, [searchableTasks, searchTerm, selectedSearchField, selectedFilter]);
 
+  const totalItems = filteredTasks.length;
+
+  const totalPages = useMemo(() => {
+    return Math.max(1, Math.ceil(totalItems / limit));
+  }, [totalItems, limit]);
+
+  const safePage = Math.min(page, totalPages);
+
+  const paginatedTasks = useMemo(() => {
+    const start = (safePage - 1) * limit;
+    const end = start + limit;
+    return filteredTasks.slice(start, end);
+  }, [filteredTasks, safePage, limit]);
+
   // Calculate statistics
   const stats = useMemo(() => ({
     total: tasks.length,
@@ -217,6 +245,9 @@ export default function PreventiveTaskChecklistPage() {
     pending: tasks.filter((t) => !t.completed).length,
   }), [tasks]);
 
+  useEffect(() => {
+    setPage(1);
+  }, [searchTerm, selectedSearchField, selectedFilter]);
   // Handle task completion toggle
   const toggleTaskCompletion = async (task: PreventiveTask) => {
     setSelectedTask(task);
@@ -284,7 +315,7 @@ export default function PreventiveTaskChecklistPage() {
   return (
     <ProtectedRoute allowedRoles={["admin", "technician"]}>
       <DashboardLayout title={t("title")}>
-        <div className="bento-grid">
+        <div className="bento-grid"/>
           {/* Header */}
           <div className="col-span-full panel">
             <h1 className="card-title mb-2">{t("heading")}</h1>
@@ -317,11 +348,10 @@ export default function PreventiveTaskChecklistPage() {
                     <button
                       key={filter}
                       onClick={() => setSelectedFilter(filter)}
-                      className={`px-3 py-1 rounded-lg text-sm transition-colors ${
-                        selectedFilter === filter
-                          ? "bg-slate-900 text-white"
-                          : "bg-slate-200 text-slate-900 hover:bg-slate-300"
-                      }`}
+                      className={`px-3 py-1 rounded-lg text-sm transition-colors ${selectedFilter === filter
+                        ? "bg-slate-900 text-white"
+                        : "bg-slate-200 text-slate-900 hover:bg-slate-300"
+                        }`}
                     >
                       {t(`filters.${filter}`)}
                     </button>
@@ -349,21 +379,20 @@ export default function PreventiveTaskChecklistPage() {
           {/* Notification */}
           {notification && (
             <div
-              className={`col-span-full panel ${
-                notification.type === "error"
-                  ? "bg-red-50 border-l-4 border-red-600"
-                  : notification.type === "success"
+              className={`col-span-full panel ${notification.type === "error"
+                ? "bg-red-50 border-l-4 border-red-600"
+                : notification.type === "success"
                   ? "bg-emerald-50 border-l-4 border-emerald-600"
                   : "bg-blue-50 border-l-4 border-blue-600"
-              }`}
+                }`}
             >
               <p
                 className={
                   notification.type === "error"
                     ? "text-red-800"
                     : notification.type === "success"
-                    ? "text-emerald-800"
-                    : "text-blue-800"
+                      ? "text-emerald-800"
+                      : "text-blue-800"
                 }
               >
                 {notification.message}
@@ -391,12 +420,11 @@ export default function PreventiveTaskChecklistPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredTasks.map((task) => (
+                  {paginatedTasks.map((task) => (
                     <tr
                       key={task.id}
-                      className={`border-b border-slate-100 ${
-                        task.completed ? "bg-emerald-50" : ""
-                      } hover:bg-slate-50 transition-colors`}
+                      className={`border-b border-slate-100 ${task.completed ? "bg-emerald-50" : ""
+                        } hover:bg-slate-50 transition-colors`}
                     >
                       <td className="py-3 px-4 font-mono text-xs">{task.plan_id}</td>
                       <td className="py-3 px-4">{getMachineName(task.moduleId)}</td>
@@ -405,11 +433,10 @@ export default function PreventiveTaskChecklistPage() {
                       <td className="py-3 px-4">{task.responsable || tCommon("notAvailable")}</td>
                       <td className="py-3 px-4 text-center">
                         <span
-                          className={`inline-block px-3 py-1 rounded-full text-xs font-medium ${
-                            task.completed
-                              ? "bg-emerald-200 text-emerald-800"
-                              : "bg-amber-200 text-amber-800"
-                          }`}
+                          className={`inline-block px-3 py-1 rounded-full text-xs font-medium ${task.completed
+                            ? "bg-emerald-200 text-emerald-800"
+                            : "bg-amber-200 text-amber-800"
+                            }`}
                         >
                           {task.completed ? t("status.completed") : t("status.pending")}
                         </span>
@@ -419,11 +446,10 @@ export default function PreventiveTaskChecklistPage() {
                           <button
                             onClick={() => toggleTaskCompletion(task)}
                             title={task.completed ? tCommon("edit") : t("actions.complete")}
-                            className={`p-2 rounded-lg transition-colors ${
-                              task.completed
-                                ? "bg-emerald-600 hover:bg-emerald-700 text-white"
-                                : "bg-amber-600 hover:bg-amber-700 text-white"
-                            }`}
+                            className={`p-2 rounded-lg transition-colors ${task.completed
+                              ? "bg-emerald-600 hover:bg-emerald-700 text-white"
+                              : "bg-amber-600 hover:bg-amber-700 text-white"
+                              }`}
                           >
                             {task.completed ? (
                               <CheckIcon className="h-5 w-5" />
@@ -448,75 +474,88 @@ export default function PreventiveTaskChecklistPage() {
                   ))}
                 </tbody>
               </table>
-            )}
-          </div>
-        </div>
 
-        {/* Task Details Modal */}
-        {showModal && selectedTask && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-lg shadow-xl max-w-md w-full">
-              <div className="bg-slate-50 border-b p-4 flex justify-between items-center">
-                <h2 className="font-bold text-lg">{t("modal.taskDetails")}</h2>
-                <button
-                  onClick={() => setShowModal(false)}
-                  aria-label={tCommon("close")}
-                  title={tCommon("close")}
-                  className="text-slate-500 hover:text-slate-700"
-                >
-                  <XMarkIcon className="h-6 w-6" />
-                </button>
+            )}
+            {filteredTasks.length > 0 && (
+              <div className="col-span-full mt-4">
+                <Pagination
+                  page={safePage}
+                  totalPages={totalPages}
+                  totalItems={filteredTasks.length}
+                  limit={limit}
+                  onPageChange={setPage}
+                  className="mt-2"
+                />
               </div>
-              <div className="p-4 space-y-3">
-                <div>
-                  <label className="text-sm font-medium text-slate-700">{t("table.planId")}</label>
-                  <p className="text-slate-900">{selectedTask.plan_id}</p>
-                </div>
-                <div>
-                  <label className="text-sm font-medium text-slate-700">{t("table.machine")}</label>
-                  <p className="text-slate-900">{getMachineName(selectedTask.moduleId)}</p>
-                </div>
-                <div>
-                  <label className="text-sm font-medium text-slate-700">{t("table.instruction")}</label>
-                  <p className="text-slate-900">{selectedTask.instruction}</p>
-                </div>
-                <div>
-                  <label className="text-sm font-medium text-slate-700">{t("form.notes")}</label>
-                  <textarea
-                    value={completionNotes}
-                    onChange={(e) => setCompletionNotes(e.target.value)}
-                    placeholder={t("placeholders.notes")}
-                    className="w-full border rounded-lg px-3 py-2 h-24"
-                  />
-                </div>
-                {selectedTask.completedAt && (
-                  <div>
-                    <label className="text-sm font-medium text-slate-700">Completed At</label>
-                    <p className="text-slate-900">
-                      {new Date(selectedTask.completedAt).toLocaleString()}
-                    </p>
-                  </div>
-                )}
-              </div>
-              <div className="bg-slate-50 border-t p-4 flex justify-end gap-3">
-                <button
-                  onClick={() => setShowModal(false)}
-                  className="px-4 py-2 rounded-lg bg-slate-200 text-slate-900 hover:bg-slate-300 transition-colors"
-                >
-                  {tCommon("actions.cancel")}
-                </button>
-                {!selectedTask.completed && (
+            )}
+
+          </div>
+
+          {/* Task Details Modal */}
+          {showModal && selectedTask && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+              <div className="bg-white rounded-lg shadow-xl max-w-md w-full">
+                <div className="bg-slate-50 border-b p-4 flex justify-between items-center">
+                  <h2 className="font-bold text-lg">{t("modal.taskDetails")}</h2>
                   <button
-                    onClick={markTaskComplete}
-                    className="px-4 py-2 rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 transition-colors"
+                    onClick={() => setShowModal(false)}
+                    aria-label={tCommon("close")}
+                    title={tCommon("close")}
+                    className="text-slate-500 hover:text-slate-700"
                   >
-                    {t("actions.complete")}
+                    <XMarkIcon className="h-6 w-6" />
                   </button>
-                )}
+                </div>
+                <div className="p-4 space-y-3">
+                  <div>
+                    <label className="text-sm font-medium text-slate-700">{t("table.planId")}</label>
+                    <p className="text-slate-900">{selectedTask.plan_id}</p>
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium text-slate-700">{t("table.machine")}</label>
+                    <p className="text-slate-900">{getMachineName(selectedTask.moduleId)}</p>
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium text-slate-700">{t("table.instruction")}</label>
+                    <p className="text-slate-900">{selectedTask.instruction}</p>
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium text-slate-700">{t("form.notes")}</label>
+                    <textarea
+                      value={completionNotes}
+                      onChange={(e) => setCompletionNotes(e.target.value)}
+                      placeholder={t("placeholders.notes")}
+                      className="w-full border rounded-lg px-3 py-2 h-24"
+                    />
+                  </div>
+                  {selectedTask.completedAt && (
+                    <div>
+                      <label className="text-sm font-medium text-slate-700">Completed At</label>
+                      <p className="text-slate-900">
+                        {new Date(selectedTask.completedAt).toLocaleString()}
+                      </p>
+                    </div>
+                  )}
+                </div>
+                <div className="bg-slate-50 border-t p-4 flex justify-end gap-3">
+                  <button
+                    onClick={() => setShowModal(false)}
+                    className="px-4 py-2 rounded-lg bg-slate-200 text-slate-900 hover:bg-slate-300 transition-colors"
+                  >
+                    {tCommon("actions.cancel")}
+                  </button>
+                  {!selectedTask.completed && (
+                    <button
+                      onClick={markTaskComplete}
+                      className="px-4 py-2 rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 transition-colors"
+                    >
+                      {t("actions.complete")}
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
       </DashboardLayout>
     </ProtectedRoute>
   );

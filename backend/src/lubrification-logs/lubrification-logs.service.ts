@@ -1,7 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { LubrificationLog, LubrificationLogDocument } from '../schemas/lubrification-log.schema';
+import {
+  LubrificationLog,
+  LubrificationLogDocument,
+} from '../schemas/lubrification-log.schema';
+import { PaginatedResponse, toPaginatedResponse } from '../common/pagination';
 
 @Injectable()
 export class LubrificationLogsService {
@@ -14,13 +18,24 @@ export class LubrificationLogsService {
     return new this.lubrificationLogModel(payload).save();
   }
 
-  findAll() {
-    return this.lubrificationLogModel
-      .find()
-      .populate('module_id')
-      .populate('lubrifiant_id')
-      .populate('technician_id')
-      .exec();
+  async findAll(
+    page: number,
+    limit: number,
+    skip: number,
+  ): Promise<PaginatedResponse<LubrificationLog>> {
+    const [items, totalItems] = await Promise.all([
+      this.lubrificationLogModel
+        .find()
+        .skip(skip)
+        .limit(limit)
+        .populate('module_id')
+        .populate('lubrifiant_id')
+        .populate('technician_id')
+        .exec(),
+      this.lubrificationLogModel.countDocuments().exec(),
+    ]);
+
+    return toPaginatedResponse(items, totalItems, page, limit);
   }
 
   findOne(id: string) {
@@ -33,7 +48,9 @@ export class LubrificationLogsService {
   }
 
   update(id: string, payload: Record<string, unknown>) {
-    return this.lubrificationLogModel.findByIdAndUpdate(id, payload, { new: true }).exec();
+    return this.lubrificationLogModel
+      .findByIdAndUpdate(id, payload, { new: true })
+      .exec();
   }
 
   remove(id: string) {

@@ -5,8 +5,10 @@ import { CapteursService } from './capteurs.service';
 import { Capteur, CapteurSchema } from '../schemas/capteur.schema';
 
 @Module({
-  imports: [MongooseModule.forFeature([{ name: Capteur.name, schema: CapteurSchema }])],
+  imports: [
+    MongooseModule.forFeature([{ name: Capteur.name, schema: CapteurSchema }]),
+  ],
   controllers: [CapteursController],
-  providers: [CapteursService]
+  providers: [CapteursService],
 })
 export class CapteursModule {}

@@ -1,5 +1,8 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
+import type { JwtSignOptions } from '@nestjs/jwt';
+import { MongooseModule } from '@nestjs/mongoose';
 import { PassportModule } from '@nestjs/passport';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
@@ -7,21 +10,57 @@ import { UsersModule } from '../users/users.module';
 import { LocalStrategy } from './local.strategy';
 import { JwtStrategy } from './jwt.strategy';
 import { EmailModule } from '../email/email.module';
+import { User, UserSchema } from '../schemas/user.schema';
+import { NotificationsModule } from '../notifications/notifications.module';
+import { FeatureFlagsConfigService } from '../config/feature-flags.config';
+import { EmailVerificationTokenService } from './email-verification-token.service';
+
+function resolveJwtSecret(configService: ConfigService): string {
+  const secret = configService.get<string>('JWT_SECRET')?.trim();
+  if (secret) {
+    return secret;
+  }
+
+  if ((process.env.NODE_ENV ?? 'development') === 'test') {
+    return 'test-jwt-secret';
+  }
+
+  throw new Error(
+    'Missing required environment variable: JWT_SECRET (required by JwtModule)',
+  );
+}
 
 @Module({
   imports: [
     UsersModule,
     EmailModule,
+    NotificationsModule,
+    ConfigModule,
+    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
     PassportModule,
-    JwtModule.register({
-      secret: process.env.JWT_SECRET,
-      signOptions: {
-        expiresIn: (process.env.JWT_EXPIRES_IN ?? process.env.JWT_ACCESS_EXPIRES_IN ?? '15m') as any,
-      },
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        secret: resolveJwtSecret(configService),
+        signOptions: {
+          expiresIn: (
+            configService.get<string>('JWT_EXPIRES_IN') ??
+            configService.get<string>('JWT_ACCESS_EXPIRES_IN') ??
+            '15m'
+          ) as JwtSignOptions['expiresIn'],
+        },
+      }),
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, LocalStrategy, JwtStrategy],
+  providers: [
+    AuthService,
+    LocalStrategy,
+    JwtStrategy,
+    FeatureFlagsConfigService,
+    EmailVerificationTokenService,
+  ],
   exports: [AuthService],
 })
 export class AuthModule {}

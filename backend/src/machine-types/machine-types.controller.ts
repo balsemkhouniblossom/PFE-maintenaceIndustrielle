@@ -1,8 +1,17 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Query,
+} from '@nestjs/common';
 import { MachineTypesService } from './machine-types.service';
 import { CreateMachineTypeDto } from './dto/create-machine-type.dto';
 import { UpdateMachineTypeDto } from './dto/update-machine-type.dto';
-
+import { normalizePagination } from '../common/pagination';
 @Controller('machine-types')
 export class MachineTypesController {
   constructor(private readonly machineTypesService: MachineTypesService) {}
@@ -13,8 +22,14 @@ export class MachineTypesController {
   }
 
   @Get()
-  findAll() {
-    return this.machineTypesService.findAll();
+  findAll(@Query('page') page?: string, @Query('limit') limit?: string) {
+    const pagination = normalizePagination(page, limit);
+
+    return this.machineTypesService.findAll(
+      pagination.page,
+      pagination.limit,
+      pagination.skip,
+    );
   }
 
   @Get(':id')
@@ -23,7 +38,10 @@ export class MachineTypesController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateMachineTypeDto: UpdateMachineTypeDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateMachineTypeDto: UpdateMachineTypeDto,
+  ) {
     return this.machineTypesService.update(id, updateMachineTypeDto);
   }
 

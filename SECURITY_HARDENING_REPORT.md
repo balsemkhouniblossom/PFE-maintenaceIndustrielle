@@ -15,19 +15,23 @@ GMAO has been hardened against OWASP Top 10 vulnerabilities and production secur
 ## Vulnerabilities Addressed
 
 ### A01:2021 - Broken Access Control
+
 **Status**: ✅ PARTIAL FIX
 
 **Issues Identified**:
+
 - No role-based route guards
 - Endpoints accessible to unauthorized users
 - No ownership validation on resource updates
 
 **Fixes Applied**:
+
 - ✅ Added `JwtAuthGuard` for protected routes
 - ✅ JWT tokens include user role, department
 - 🔄 TODO: Add `@Roles('admin', 'technician')` guards to controllers
 
 **Example Implementation (TODO)**:
+
 ```typescript
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Roles('admin', 'technician')
@@ -40,14 +44,17 @@ findOne(@Param('id') id: string) {
 ---
 
 ### A02:2021 - Cryptographic Failures
+
 **Status**: ✅ FIXED
 
 **Issues Identified**:
+
 - Hardcoded JWT secret fallbacks
 - Passwords stored as plain text (old code)
 - No HTTPS enforcement
 
 **Fixes Applied**:
+
 - ✅ Removed all JWT secret fallbacks
 - ✅ Passwords hashed with bcrypt (10 rounds, salt auto-generated)
 - ✅ Refresh tokens hashed before storage
@@ -56,6 +63,7 @@ findOne(@Param('id') id: string) {
 - ✅ HSTS header enabled (31536000 seconds)
 
 **Verified**:
+
 ```bash
 # Password hashing in users.service.ts
 const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
@@ -72,14 +80,17 @@ await this.usersService.update(userId, {
 ---
 
 ### A03:2021 - Injection (XSS/SQLi/NoSQL Injection)
+
 **Status**: ✅ FIXED
 
 **Issues Identified**:
+
 - User input not validated at API boundary
 - XSS vulnerability in forms
 - No NoSQL injection prevention
 
 **Fixes Applied**:
+
 - ✅ Strict DTO validation (class-validator decorators):
   - `@IsEmail()` - email format validation
   - `@IsString()` - string type enforcement
@@ -92,6 +103,7 @@ await this.usersService.update(userId, {
 - ✅ Frontend HTML escaping via Next.js (automatic in JSX)
 
 **Example**:
+
 ```typescript
 export class CreateUserDto {
   @IsEmail()
@@ -111,14 +123,17 @@ export class CreateUserDto {
 ---
 
 ### A04:2021 - Insecure Design
+
 **Status**: ✅ PARTIAL FIX
 
 **Issues Identified**:
+
 - No rate limiting on login/auth endpoints
 - No CAPTCHA on registration
 - Password reset tokens not time-limited properly
 
 **Fixes Applied**:
+
 - ✅ Password reset tokens expire after 1 hour
 - ✅ JWT tokens expire after 15 minutes (configurable)
 - ✅ Refresh tokens expire after 7 days
@@ -127,6 +142,7 @@ export class CreateUserDto {
 - 🔄 TODO: Add CAPTCHA on registration
 
 **JWT Expiry Config**:
+
 ```bash
 JWT_EXPIRES_IN=15m
 JWT_REFRESH_EXPIRES_IN=7d
@@ -136,15 +152,18 @@ JWT_REFRESH_EXPIRES_IN=7d
 ---
 
 ### A05:2021 - Broken Authentication
+
 **Status**: ✅ FIXED
 
 **Issues Identified**:
+
 - Weak password requirements
 - No logout mechanism
 - No token revocation
 - Session hijacking risk
 
 **Fixes Applied**:
+
 - ✅ Passwords: Min 8 chars, uppercase + lowercase + digit required
 - ✅ Logout endpoint: Clears refresh_token_hash from database
 - ✅ Refresh tokens: Stored as hashed values (bcrypt)
@@ -153,6 +172,7 @@ JWT_REFRESH_EXPIRES_IN=7d
 - ✅ Account lockout on failed login: Not yet (TODO)
 
 **Auth Flow**:
+
 ```
 1. Login (email + password) → validate password → generate tokens
 2. Store refresh_token_hash in user.refresh_token_hash
@@ -167,9 +187,11 @@ JWT_REFRESH_EXPIRES_IN=7d
 ---
 
 ### A06:2021 - Vulnerable and Outdated Components
+
 **Status**: ✅ FIXED
 
 **Fixes Applied**:
+
 - ✅ All dependencies installed with `npm ci` (locked versions)
 - ✅ No known vulnerabilities in npm audit (run post-deployment)
 - ✅ Node.js 22 LTS used (security patches included)
@@ -177,6 +199,7 @@ JWT_REFRESH_EXPIRES_IN=7d
 - 🔄 TODO: Set up Dependabot for automated updates
 
 **Verify**:
+
 ```bash
 npm audit
 npm outdated
@@ -186,14 +209,17 @@ npm update --save # after vetting
 ---
 
 ### A07:2021 - Authentication and Session Management
+
 **Status**: ✅ FIXED
 
 **Issues Identified**:
+
 - No session invalidation on logout
 - Tokens exposed in URL
 - No secure token storage
 
 **Fixes Applied**:
+
 - ✅ Tokens stored in localStorage (client-side, HttpOnly not possible in SPA)
 - ✅ Tokens removed on 401 (API interceptor)
 - ✅ Logout clears localStorage + database hash
@@ -205,14 +231,17 @@ npm update --save # after vetting
 ---
 
 ### A08:2021 - Software and Data Integrity Failures
+
 **Status**: ✅ PARTIAL FIX
 
 **Issues Identified**:
+
 - Unsigned dependencies
 - No integrity checks on deployments
 - No audit logging
 
 **Fixes Applied**:
+
 - ✅ Docker image uses specific base image versions (node:22-alpine)
 - ✅ Dockerfile runs as non-root user (nodejs:1001)
 - ✅ docker-compose uses `security_opt: no-new-privileges`
@@ -223,14 +252,17 @@ npm update --save # after vetting
 ---
 
 ### A09:2021 - Logging and Monitoring
+
 **Status**: ✅ PARTIAL FIX
 
 **Issues Identified**:
+
 - No centralized logging
 - Errors not tracked
 - No alerting mechanism
 
 **Fixes Applied**:
+
 - ✅ Request logging middleware (method, URL, status, duration, IP)
 - ✅ Error filter logs full stack traces + request context
 - ✅ Health endpoints for monitoring
@@ -241,6 +273,7 @@ npm update --save # after vetting
 - 🔄 TODO: Prometheus metrics
 
 **Log Example**:
+
 ```
 [HTTP] POST /auth/login 200 - 125ms
 [HTTP] GET /machines/123 403 - 45ms
@@ -253,13 +286,16 @@ npm update --save # after vetting
 ---
 
 ### A10:2021 - Server-Side Request Forgery (SSRF)
+
 **Status**: ✅ FIXED
 
 **Issues Identified**:
+
 - No validation of user-supplied URLs
 - Potential for internal network scanning
 
 **Fixes Applied**:
+
 - ✅ All user-submitted data validated as enum/string/number
 - ✅ No user-supplied URLs in code (redirects, etc.)
 - ✅ MongoDB URI only from environment (not user input)
@@ -270,17 +306,20 @@ npm update --save # after vetting
 ## Additional Security Controls
 
 ### Input Validation
+
 - ✅ DTO validation at controller boundary
 - ✅ Mongoose schema validation at database
 - ✅ Type checking via TypeScript strict mode
 - ✅ Test coverage for edge cases
 
 ### Output Encoding
+
 - ✅ Next.js auto-escapes JSX (no raw HTML)
 - ✅ API returns JSON (not HTML)
 - ✅ Headers set via Helmet (no XSS in responses)
 
 ### Network Security
+
 - ✅ CORS: Environment-driven origin list
 - ✅ CSP headers via Helmet
 - ✅ X-Frame-Options: deny (prevent clickjacking)
@@ -288,6 +327,7 @@ npm update --save # after vetting
 - ✅ TLS 1.2+ enforced in Nginx
 
 ### Data Protection
+
 - ✅ Passwords: bcrypt hashing
 - ✅ Tokens: JWT signed (HS256)
 - ✅ Refresh tokens: bcrypt hashed
@@ -295,6 +335,7 @@ npm update --save # after vetting
 - ✅ Uploads: File type validation (TODO: sanitize filenames)
 
 ### Access Control
+
 - ✅ JwtAuthGuard on protected endpoints
 - 🔄 TODO: RolesGuard for role-based access
 - 🔄 TODO: Resource ownership validation
@@ -304,6 +345,7 @@ npm update --save # after vetting
 ## Production Deployment Checklist
 
 ### Pre-Deployment
+
 - [ ] Generate strong secrets: `openssl rand -base64 32`
 - [ ] Configure environment variables (.env.production)
 - [ ] SSL certificates ready (Let's Encrypt)
@@ -312,6 +354,7 @@ npm update --save # after vetting
 - [ ] SMTP credentials ready
 
 ### Deployment
+
 - [ ] Build Docker images: `docker-compose build`
 - [ ] Test locally: `docker-compose up` (staging)
 - [ ] Verify health endpoint: `curl /health/api`
@@ -320,6 +363,7 @@ npm update --save # after vetting
 - [ ] Enable firewall rules
 
 ### Post-Deployment
+
 - [ ] Monitor logs for errors
 - [ ] Test auth flow (login, refresh, logout)
 - [ ] Verify encryption (HTTPS working)
@@ -331,6 +375,7 @@ npm update --save # after vetting
 ## Security Testing Recommendations
 
 ### Automated
+
 ```bash
 # Dependency scan
 npm audit
@@ -346,6 +391,7 @@ curl -k https://yourdomain.com/health/api
 ```
 
 ### Manual
+
 - [ ] Penetration testing (3rd party)
 - [ ] Security code review
 - [ ] Threat modeling session
@@ -356,17 +402,20 @@ curl -k https://yourdomain.com/health/api
 ## Ongoing Security Maintenance
 
 ### Monthly
+
 - Review security logs in Sentry
 - Update dependencies (`npm update`)
 - Run `npm audit` and fix issues
 
 ### Quarterly
+
 - Security training for team
 - Penetration testing (or automated scanning)
 - Disaster recovery drill
 - Access review (who has credentials)
 
 ### Annually
+
 - Full security audit
 - Third-party pen test
 - Compliance audit (GDPR, SOC2, etc.)
@@ -377,6 +426,7 @@ curl -k https://yourdomain.com/health/api
 ## Compliance & Standards
 
 ### OWASP Top 10 2021
+
 - [x] A01 - Broken Access Control (partial)
 - [x] A02 - Cryptographic Failures
 - [x] A03 - Injection
@@ -389,6 +439,7 @@ curl -k https://yourdomain.com/health/api
 - [x] A10 - SSRF
 
 ### GDPR (Data Privacy)
+
 - [ ] Data retention policy
 - [ ] User consent for cookies
 - [ ] Right to be forgotten
@@ -396,6 +447,7 @@ curl -k https://yourdomain.com/health/api
 - [ ] DPA with hosting provider
 
 ### SOC 2 (Service Organization Control)
+
 - [ ] Availability controls
 - [ ] Confidentiality controls
 - [ ] Integrity controls
@@ -407,6 +459,7 @@ curl -k https://yourdomain.com/health/api
 ## Incident Response
 
 ### Upon Breach Discovery
+
 1. Isolate affected systems
 2. Preserve evidence (logs, data)
 3. Notify stakeholders
@@ -419,6 +472,7 @@ curl -k https://yourdomain.com/health/api
 10. Update security measures
 
 ### Escalation Path
+
 - **P1 (Critical)**: CEO, CTO, Legal, Customers (< 1 hour)
 - **P2 (High)**: Dev Team, Security Lead (< 4 hours)
 - **P3 (Medium)**: Dev Team, Backlog (next sprint)
@@ -434,4 +488,4 @@ curl -k https://yourdomain.com/health/api
 
 ---
 
-*For questions or security concerns, contact security@yourdomain.com*
+*For questions or security concerns, contact <security@yourdomain.com>*

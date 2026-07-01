@@ -4,11 +4,13 @@ import { Model } from 'mongoose';
 import { Catalogue, CatalogueDocument } from '../schemas/catalogue.schema';
 import { CreateCatalogueDto } from './dto/create-catalogue.dto';
 import { UpdateCatalogueDto } from './dto/update-catalogue.dto';
+import { PaginatedResponse, toPaginatedResponse } from '../common/pagination';
 
 @Injectable()
 export class CataloguesService {
   constructor(
-    @InjectModel(Catalogue.name) private catalogueModel: Model<CatalogueDocument>,
+    @InjectModel(Catalogue.name)
+    private catalogueModel: Model<CatalogueDocument>,
   ) {}
 
   async create(createCatalogueDto: CreateCatalogueDto): Promise<Catalogue> {
@@ -16,16 +18,30 @@ export class CataloguesService {
     return createdCatalogue.save();
   }
 
-  async findAll(): Promise<Catalogue[]> {
-    return this.catalogueModel.find().exec();
+  async findAll(
+    page: number,
+    limit: number,
+    skip: number,
+  ): Promise<PaginatedResponse<Catalogue>> {
+    const [items, totalItems] = await Promise.all([
+      this.catalogueModel.find().skip(skip).limit(limit).exec(),
+      this.catalogueModel.countDocuments().exec(),
+    ]);
+
+    return toPaginatedResponse(items, totalItems, page, limit);
   }
 
   async findOne(id: string): Promise<any> {
     return this.catalogueModel.findById(id).exec();
   }
 
-  async update(id: string, updateCatalogueDto: UpdateCatalogueDto): Promise<any> {
-    return this.catalogueModel.findByIdAndUpdate(id, updateCatalogueDto, { new: true }).exec();
+  async update(
+    id: string,
+    updateCatalogueDto: UpdateCatalogueDto,
+  ): Promise<any> {
+    return this.catalogueModel
+      .findByIdAndUpdate(id, updateCatalogueDto, { new: true })
+      .exec();
   }
 
   async remove(id: string): Promise<any> {

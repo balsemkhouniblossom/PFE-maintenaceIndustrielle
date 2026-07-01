@@ -31,7 +31,7 @@ export default function StocksPage() {
     async function load() {
       try {
         const res = await apiService.getStocks();
-        setItems(res.data ?? []);
+        setItems(res.data?.items ?? []);
       } finally {
         setLoading(false);
       }

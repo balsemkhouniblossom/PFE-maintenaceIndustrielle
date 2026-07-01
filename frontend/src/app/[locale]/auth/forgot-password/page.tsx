@@ -25,7 +25,11 @@ export default function ForgotPasswordPage() {
     setMessage('');
 
     try {
-      const response = await api.post('/auth/forgot-password', { email });
+      const response = await api.post('/auth/forgot-password', {
+        email,
+        locale,
+        frontendOrigin: window.location.origin,
+      });
       setMessage(response.data.message || 'If the email exists, reset instructions were sent.');
     } catch (err: unknown) {
       setError('Unable to process request. Please try again.');

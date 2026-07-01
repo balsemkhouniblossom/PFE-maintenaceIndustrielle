@@ -24,4 +24,5 @@ export class LubrificationLog {
   technician_id: Types.ObjectId;
 }
 
-export const LubrificationLogSchema = SchemaFactory.createForClass(LubrificationLog);
+export const LubrificationLogSchema =
+  SchemaFactory.createForClass(LubrificationLog);

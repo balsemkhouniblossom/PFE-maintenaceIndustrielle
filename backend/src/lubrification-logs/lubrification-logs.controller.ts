@@ -1,9 +1,21 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { LubrificationLogsService } from './lubrification-logs.service';
+import { normalizePagination } from '../common/pagination';
 
 @Controller('lubrification-logs')
 export class LubrificationLogsController {
-  constructor(private readonly lubrificationLogsService: LubrificationLogsService) {}
+  constructor(
+    private readonly lubrificationLogsService: LubrificationLogsService,
+  ) {}
 
   @Post()
   create(@Body() payload: Record<string, unknown>) {
@@ -11,8 +23,13 @@ export class LubrificationLogsController {
   }
 
   @Get()
-  findAll() {
-    return this.lubrificationLogsService.findAll();
+  findAll(@Query('page') page?: string, @Query('limit') limit?: string) {
+    const pagination = normalizePagination(page, limit);
+    return this.lubrificationLogsService.findAll(
+      pagination.page,
+      pagination.limit,
+      pagination.skip,
+    );
   }
 
   @Get(':id')

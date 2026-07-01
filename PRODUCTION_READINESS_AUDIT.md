@@ -8,7 +8,10 @@
 
 ## Executive Summary
 
-The GMAO application has been comprehensively audited and hardened for production deployment. Critical security, monitoring, testing, and operational gaps have been addressed while preserving 100% backward compatibility with existing business functionality, routes, and database entities.
+The GMAO application has been comprehensively audited and hardened for
+production deployment. Critical security, monitoring, testing, and operational
+gaps have been addressed while preserving 100% backward compatibility with
+existing business functionality, routes, and database entities.
 
 ### Completion Status: PHASE 4/5 Complete ✅
 
@@ -27,6 +30,7 @@ The GMAO application has been comprehensively audited and hardened for productio
 ## Phase 1: Complete Project Audit - FINDINGS
 
 ### Frontend Architecture
+
 - **Framework**: Next.js 16.2.9 (App Router) + TypeScript
 - **State Management**: React Context (Auth), localStorage
 - **UI Framework**: Tailwind CSS v4 + Headless UI components
@@ -34,6 +38,7 @@ The GMAO application has been comprehensively audited and hardened for productio
 - **Routing**: Dynamic locale-based with `[locale]/` pattern
 
 **Issues Found:**
+
 - ❌ No unit/integration/e2e tests
 - ❌ No error boundary or global error handling
 - ❌ No performance monitoring (Sentry, web vitals)
@@ -43,12 +48,14 @@ The GMAO application has been comprehensively audited and hardened for productio
 **Status**: ✅ Partially Fixed
 
 ### Backend Architecture
+
 - **Framework**: NestJS 11.x + TypeScript
 - **Database**: MongoDB (Mongoose) via Atlas
 - **Auth**: JWT + Passport (Local + JWT strategies)
 - **Modules**: 15+ CRUD modules (users, machines, work-orders, etc.)
 
 **Issues Found:**
+
 - ❌ Hardcoded JWT secret fallbacks
 - ❌ Missing Helmet, rate limiting, compression
 - ❌ No centralized exception handling
@@ -61,6 +68,7 @@ The GMAO application has been comprehensively audited and hardened for productio
 **Status**: ✅ Fixed
 
 ### Database
+
 - **Status**: MongoDB Atlas
 - **Entities**: 20+ collections (User, Machine, WorkOrder, InterventionReport, etc.)
 - **Indexes**: ❌ Missing optimal indexes for query performance
@@ -68,6 +76,7 @@ The GMAO application has been comprehensively audited and hardened for productio
 **Status**: ✅ Fixed (indexes added to 7 core collections)
 
 ### Security
+
 - **Findings**:
   - ❌ No XSS/CSRF protection at API layer
   - ❌ No rate limiting
@@ -80,6 +89,7 @@ The GMAO application has been comprehensively audited and hardened for productio
 **Status**: ✅ Fixed
 
 ### Deployment
+
 - **Docker**: ✅ Dockerfile.backend exists
 - **Docker Compose**: ✅ Multi-service orchestration with MongoDB + Redis + Nginx
 - **CI/CD**: ❌ No GitHub Actions workflows
@@ -88,6 +98,7 @@ The GMAO application has been comprehensively audited and hardened for productio
 **Status**: ✅ Partially Fixed (Workflows added)
 
 ### Testing
+
 - **Unit Tests**: 3 basic specs (AppController, Capteurs)
 - **Integration Tests**: ❌ Missing
 - **E2E Tests**: 1 stub (app.e2e-spec.ts)
@@ -97,18 +108,21 @@ The GMAO application has been comprehensively audited and hardened for productio
 **Status**: ⏳ In Progress
 
 ### Monitoring & Observability
+
 - **Logging**: ❌ Only console.log scattered
 - **Error Tracking**: ❌ No Sentry integration
 - **Health Checks**: ❌ Missing endpoints
 - **Metrics**: ❌ No Prometheus/Grafana
 
-**Status**: ✅ Partially Fixed (Health module + logging middleware added, Sentry scaffolding)
+**Status**: ✅ Partially Fixed (Health module + logging middleware added,
+Sentry scaffolding)
 
 ---
 
 ## Phase 2: Code Quality Improvements - COMPLETED
 
 ### Frontend Improvements
+
 - ✅ Enforced strict TypeScript (existing)
 - ✅ Improved AuthContext error handling
 - ✅ Added CORS-aware API interceptors
@@ -116,6 +130,7 @@ The GMAO application has been comprehensively audited and hardened for productio
 - 🔄 ESLint config upgrade needed (ESLint 8 → 9)
 
 ### Backend Improvements
+
 - ✅ Strict DTO validation with class-validator:
   - Password: `@MinLength(8)`, uppercase/number requirements
   - Email: `@IsEmail()`
@@ -127,6 +142,7 @@ The GMAO application has been comprehensively audited and hardened for productio
 - ✅ Code comments removed from load-env, debug logs eliminated
 
 ### Database Improvements
+
 - ✅ Added indexes to 7 key collections:
   - `users`: email, user_id, role+is_active
   - `work_orders`: ot_id, machine_id+status, technician_id+status, date_created+status
@@ -141,21 +157,25 @@ The GMAO application has been comprehensively audited and hardened for productio
 ## Phase 3: Environment Management - COMPLETED
 
 ### Environment Validation
+
 - ✅ Created `backend/src/config/env.validation.ts`
 - ✅ Runtime mode detection (development/test/production)
 - ✅ Required variable checks:
-  - Production/Development: `MONGODB_URI`, `JWT_SECRET`, `JWT_EXPIRES_IN`, `JWT_REFRESH_SECRET`, `JWT_REFRESH_EXPIRES_IN`
+  - Production/Development: `MONGODB_URI`, `JWT_SECRET`,
+    `JWT_EXPIRES_IN`, `JWT_REFRESH_SECRET`, `JWT_REFRESH_EXPIRES_IN`
   - Test: Lenient (uses in-memory defaults)
 - ✅ Application fails fast if required variables missing
 - ✅ Port validation (1-65535 range)
 - ✅ CORS origins parsed from comma-separated string
 
 ### Environment Files
+
 - ✅ `.env.example` (dev template)
 - ✅ `.env.production` (production template with Sentry, SMTP, S3 stubs)
 - ✅ Backend startup logs current mode, port, validation results
 
 ### Frontend Environment
+
 - 🔄 Add `frontend/.env.example`
 - 🔄 Add `NEXT_PUBLIC_API_URL` validation
 
@@ -164,6 +184,7 @@ The GMAO application has been comprehensively audited and hardened for productio
 ## Phase 4: Security Hardening - COMPLETED
 
 ### Backend Security
+
 - ✅ **Helmet**: XSS, clickjacking, MIME sniffing, CSP headers
 - ✅ **HPP**: HTTP Parameter Pollution protection
 - ✅ **Compression**: gzip response compression
@@ -171,7 +192,7 @@ The GMAO application has been comprehensively audited and hardened for productio
 - ✅ **ValidationPipe**: Global, strict (whitelist, forbidNonWhitelisted, transform)
 - ✅ **AllExceptionsFilter**: Centralized error responses (no stack traces in prod)
 - ✅ **JWT Secrets**: Removed fallback values, requires env variables
-- ✅ **Refresh Token Flow**: 
+- ✅ **Refresh Token Flow**:
   - Tokens hashed in database
   - Logout endpoint to revoke tokens
   - Refresh endpoint to rotate access tokens
@@ -180,12 +201,14 @@ The GMAO application has been comprehensively audited and hardened for productio
 - ✅ **Graceful Shutdown**: Process signals (SIGINT, SIGTERM) logged
 
 ### Frontend Security
+
 - ✅ API Interceptor: Removes token on 401 (except auth endpoints)
 - ✅ LocalAuthGuard + JwtAuthGuard in auth flow
 - 🔄 CSRF token caching needed (per existing memory notes)
 - 🔄 Helmet integration for Next.js headers
 
 ### Database Security
+
 - ✅ Mongoose validation at model level
 - ✅ User passwords hashed with bcrypt (10 rounds)
 - ✅ Refresh tokens hashed before storage
@@ -196,7 +219,8 @@ The GMAO application has been comprehensively audited and hardened for productio
 ## Phase 5: Database Optimization - COMPLETED
 
 ### Indexes Added
-```
+
+```text
 users: 
   - email (unique)
   - user_id (unique)
@@ -233,6 +257,7 @@ modules:
 ```
 
 ### Query Performance
+
 - ✅ Eliminated N+1 patterns via populates (maintenance-plans, stocks, kpis, etc.)
 - ✅ Cursor-based pagination optional (implemented in services)
 - 🔄 Query analysis & slow query detection (next phase)
@@ -242,11 +267,13 @@ modules:
 ## Phase 6: Logging System - FOUNDATION COMPLETE
 
 ### Implemented
+
 - ✅ **RequestLoggingMiddleware**: Logs HTTP requests (method, URL, status, duration)
 - ✅ **AllExceptionsFilter**: Logs errors with stack traces
 - ✅ **Bootstrap Logger**: Logs startup, shutdown, port, mode
 
 ### Recommended
+
 - 🔄 **Winston Integration**: Centralized, structured JSON logging
 - 🔄 **Log Levels**: debug, info, warn, error with severity classification
 - 🔄 **Log Rotation**: Daily/size-based rotation
@@ -257,18 +284,21 @@ modules:
 ## Phase 7: Monitoring & Observability - SCAFFOLDING COMPLETE
 
 ### Health Endpoints
+
 - ✅ `GET /health` - Full health report (API + DB)
 - ✅ `GET /health/api` - API status only
 - ✅ `GET /health/db` - Database connectivity + response time
 - Used by Docker Compose healthchecks and Nginx
 
 ### Error Tracking (Sentry)
+
 - ✅ Dependencies installed (`@sentry/node`, `@sentry/nextjs`)
 - 🔄 Backend: Initialize in main.ts with error handler
 - 🔄 Frontend: Initialize in layout.tsx with error logging
 - 🔄 Environment variable: `SENTRY_DSN` + `SENTRY_ENVIRONMENT`
 
 ### Metrics
+
 - 🔄 Prometheus client for metrics collection
 - 🔄 Grafana dashboards for visualization
 
@@ -277,6 +307,7 @@ modules:
 ## Phase 8: Testing Strategy - IN PROGRESS
 
 ### Backend Tests (Current)
+
 - ✅ AppController (pass)
 - ✅ CapteursController (fixed DI, pass)
 - ✅ CapteursService (fixed DI, pass)
@@ -286,18 +317,21 @@ modules:
 - **Coverage**: `npm run test -- --coverage` (generates `coverage/` report)
 
 ### Backend Tests (Next)
+
 - 🔄 Auth service: login, refresh, logout flows
 - 🔄 Users service: CRUD + password hashing
 - 🔄 Each module: minimal service test
 - **Target**: 80%+ coverage
 
 ### Frontend Tests
+
 - 🔄 Component tests: DataTable, Modal, DashboardLayout (React Testing Library)
 - 🔄 Page tests: login, dashboard, CRUD pages
 - 🔄 E2E tests: critical workflows (Playwright)
 - **Target**: 70%+ critical path coverage
 
 ### Test Database
+
 - ✅ Docker Compose includes test MongoDB instance
 - ✅ env validation: test mode uses separate DB (`GMAO_IPROTEX_TEST`)
 
@@ -306,18 +340,21 @@ modules:
 ## Phase 9-15: Remaining Items
 
 ### Phase 9: Accessibility (WCAG 2.1)
+
 - 🔄 ARIA labels on form inputs
 - 🔄 Keyboard navigation tests
 - 🔄 Color contrast verification (axe DevTools)
 - 🔄 Screen reader testing
 
 ### Phase 10: Performance Optimization
+
 - 🔄 Frontend Lighthouse audit (target: 90+)
 - 🔄 Backend response compression (✅ added)
 - 🔄 Image optimization (Next.js Image component)
 - 🔄 Code splitting & lazy loading
 
 ### Phase 11: CI/CD Pipeline
+
 - ✅ GitHub Actions workflows created:
   - `ci-pr.yml`: Lint, build, test on PR
   - `cd-deploy.yml`: Deploy to production on main merge
@@ -325,6 +362,7 @@ modules:
 - 🔄 Release automation (semantic versioning)
 
 ### Phase 12: Deployment
+
 - ✅ Docker & Docker Compose ready
 - 🔄 Vercel (frontend): Requires org ID, project ID, token
 - 🔄 Render/Railway (backend): Requires account setup
@@ -332,12 +370,14 @@ modules:
 - 🔄 SSL certificates: Let's Encrypt setup in Nginx
 
 ### Phase 13: Backup & Recovery
+
 - ✅ DEPLOYMENT_GUIDE.md includes backup scripts
 - 🔄 Daily backup automation (cron jobs)
 - 🔄 Restore procedure documentation
 - 🔄 Disaster recovery runbook
 
 ### Phase 14: Documentation
+
 - ✅ Architecture documented in README
 - ✅ Deployment guide complete
 - 🔄 API documentation (Swagger/OpenAPI)
@@ -345,6 +385,7 @@ modules:
 - 🔄 Database schema diagram
 
 ### Phase 15: Final Validation
+
 - ✅ Backend build green
 - ✅ Backend tests passing
 - 🔄 Frontend build validation
@@ -358,6 +399,7 @@ modules:
 ## Critical Changes Summary
 
 ### Files Added (18 new)
+
 1. `backend/src/config/env.validation.ts` - Environment validation
 2. `backend/src/common/filters/all-exceptions.filter.ts` - Global error handling
 3. `backend/src/common/middleware/request-logging.middleware.ts` - HTTP logging
@@ -373,6 +415,7 @@ modules:
 13-18. Frontend test configs (pending)
 
 ### Files Modified (15 updated)
+
 1. `backend/src/main.ts` - Added helmet, hpp, compression, env validation, logging
 2. `backend/src/app.module.ts` - Added health module, middleware, request logging
 3. `backend/src/auth/auth.module.ts` - Hardened JWT config
@@ -383,23 +426,27 @@ modules:
 8. `backend/src/users/dto/create-user.dto.ts` - Strict validation
 9. `backend/src/schemas/user.schema.ts` - Added refresh_token_hash, indexes
 10-15. Core schema files - Added performance indexes (work-order, machine, etc.)
-16. `backend/src/capteurs/capteurs.controller.spec.ts` - Fixed DI
-17. `backend/src/capteurs/capteurs.service.spec.ts` - Fixed DI
+10. `backend/src/capteurs/capteurs.controller.spec.ts` - Fixed DI
+11. `backend/src/capteurs/capteurs.service.spec.ts` - Fixed DI
 
 ### Routes & Modules Preserved ✅
+
 - All 15+ existing modules remain untouched
 - All 100+ existing routes preserved
 - Zero breaking changes to API contracts
 - Database entities fully compatible
 
 ### Dependencies Added
+
 **Backend**:
+
 - helmet, hpp, compression (security)
 - @nestjs/throttler (rate limiting - optional)
 - @nestjs/swagger (API docs - optional)
 - @sentry/node (monitoring)
 
 **Frontend**:
+
 - @sentry/nextjs (monitoring)
 - @testing-library/react, @testing-library/jest-dom (component tests)
 - jest, jest-environment-jsdom, ts-jest (test runner)
@@ -437,6 +484,7 @@ AWS_BUCKET_NAME=gmao-uploads
 ## Build & Test Commands
 
 ### Backend
+
 ```bash
 cd backend
 
@@ -466,6 +514,7 @@ npm run start:prod
 ```
 
 ### Frontend
+
 ```bash
 cd frontend
 
@@ -496,6 +545,7 @@ npm run test:e2e
 ## Deployment Steps (Production)
 
 ### Prerequisites
+
 1. ✅ Docker & Docker Compose installed
 2. ✅ Node.js 22+ installed
 3. ✅ MongoDB Atlas cluster created
@@ -505,6 +555,7 @@ npm run test:e2e
 7. ✅ Domain + DNS configured
 
 ### Steps
+
 1. Clone repository
 2. Copy `.env.production` → `.env` and fill in values
 3. Generate secrets: `openssl rand -base64 32`
@@ -519,6 +570,7 @@ npm run test:e2e
 ## Production Readiness Checklist
 
 ### Security ✅
+
 - [x] Helmet enabled
 - [x] HPP protection
 - [x] CORS configured from env
@@ -531,6 +583,7 @@ npm run test:e2e
 - [ ] Rate limiting (TODO)
 
 ### Observability ✅
+
 - [x] Request logging
 - [x] Error logging
 - [x] Health endpoints
@@ -540,6 +593,7 @@ npm run test:e2e
 - [ ] Performance metrics (TODO)
 
 ### Testing ✅
+
 - [x] Backend unit tests (5 specs passing)
 - [ ] Backend integration tests (TODO)
 - [ ] Backend e2e tests (TODO)
@@ -548,6 +602,7 @@ npm run test:e2e
 - [ ] 80% coverage target (TODO)
 
 ### Database ✅
+
 - [x] Indexes optimized
 - [x] Schemas validated
 - [x] Mongoose connected
@@ -555,6 +610,7 @@ npm run test:e2e
 - [ ] Point-in-time recovery (TODO)
 
 ### Deployment ✅
+
 - [x] Docker image production-ready
 - [x] Docker Compose multi-service
 - [x] GitHub Actions CI/CD workflows
@@ -563,6 +619,7 @@ npm run test:e2e
 - [ ] Zero-downtime deployment (TODO)
 
 ### Documentation ✅
+
 - [x] README updated
 - [x] DEPLOYMENT_GUIDE complete
 - [ ] API documentation (Swagger) (TODO)
@@ -574,6 +631,7 @@ npm run test:e2e
 ## Known Limitations & Next Steps
 
 ### Immediate (Phase 8-9)
+
 1. Complete frontend testing setup (React Testing Library + Playwright)
 2. Add RBAC guards to protect routes by role
 3. Implement audit logging with retention policies
@@ -581,6 +639,7 @@ npm run test:e2e
 5. Create database backup automation
 
 ### Short-term (Phase 10-12)
+
 1. Integrate Sentry error tracking (frontend + backend)
 2. Set up Swagger API documentation
 3. Performance optimization (Lighthouse 90+)
@@ -588,6 +647,7 @@ npm run test:e2e
 5. Production deployment (Vercel + Render/Railway)
 
 ### Medium-term (Phase 13-15)
+
 1. Implement semantic versioning & releases
 2. Set up monitoring dashboard (Grafana)
 3. Create disaster recovery runbooks
@@ -599,11 +659,13 @@ npm run test:e2e
 ## Sign-Off
 
 **Audit Date**: June 22, 2026  
-**Completed By**: Senior Software Architect, Senior DevOps Engineer, Senior QA Engineer  
+**Completed By**: Senior Software Architect, Senior DevOps Engineer,
+Senior QA Engineer  
 **Status**: PRODUCTION-READY for Phases 1-7  
 **Next Review**: After Phase 8-9 testing completion  
 
-**Recommendation**: Deploy to staging environment with health checks enabled. Run smoke tests. Proceed to production after 1-week staging validation period.
+**Recommendation**: Deploy to staging environment with health checks enabled.
+Run smoke tests. Proceed to production after 1-week staging validation period.
 
 ---
 

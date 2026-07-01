@@ -41,6 +41,18 @@
     "registrationFailed": "فشل التسجيل. يرجى المحاولة مجدداً.",
     "passwordsDoNotMatch": "كلمتا المرور غير متطابقتين.",
     "passwordMinLength": "يجب أن تتكون كلمة المرور من 6 أحرف على الأقل.",
+    "passwordWeak": "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل وتحتوي على حرف كبير وحرف صغير ورقم ورمز خاص.",
+    "invalidInternationalPhone": "يرجى إدخال رقم هاتف دولي صالح (مثال: +21612345678)",
+    "phoneHint": "استخدم الصيغة الدولية، مثال: +21612345678",
+    "phoneExample": "+21612345678",
+    "passwordRequirements": {
+      "title": "يجب أن تحتوي كلمة المرور على:",
+      "minLength": "8 أحرف على الأقل",
+      "uppercase": "حرف كبير واحد",
+      "lowercase": "حرف صغير واحد",
+      "number": "رقم واحد",
+      "special": "رمز خاص واحد"
+    },
     "forgotPasswordTitle": "نسيت كلمة المرور",
     "forgotPasswordDescription": "أدخل بريدك الإلكتروني لإعادة تعيين كلمة المرور.",
     "sendResetLink": "إرسال الرابط",
@@ -51,6 +63,7 @@
     "sending": "جارٍ الإرسال..."
   },
   "common": {
+    "allFields": "كل الحقول",
     "actions": {
       "cancel": "إلغاء",
       "saving": "جارٍ الحفظ...",
@@ -661,6 +674,7 @@
     "pageTitle": "إدارة المستخدمين",
     "heading": "إدارة المستخدمين",
     "totalUsers": "إجمالي المستخدمين",
+    "placeholder": "نص مؤقت",
     "addUser": "إضافة مستخدم",
     "allUsers": "جميع المستخدمين",
     "searchPlaceholder": "البحث عن مستخدمين...",
@@ -670,10 +684,6 @@
       "delete": "حذف",
       "createUser": "إنشاء مستخدم",
       "updateUser": "تحديث المستخدم"
-    },
-    "validation": {
-      "nameRequired": "الاسم مطلوب",
-      "emailRequired": "البريد الإلكتروني مطلوب"
     },
     "table": {
       "photo": "الصورة",
@@ -751,6 +761,23 @@
       "update": "تحديث",
       "create": "إنشاء",
       "saving": "جاري الحفظ..."
+    },
+    "validation": {
+      "nameRequired": "الاسم مطلوب",
+      "emailRequired": "البريد الإلكتروني مطلوب",
+      "passwordRequired": "كلمة المرور مطلوبة",
+      "weakPassword": "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل وتحتوي على حرف كبير وحرف صغير ورقم ورمز خاص.",
+      "invalidPhone": "يرجى إدخال رقم هاتف دولي صالح (مثال: +21612345678)",
+      "phoneHint": "استخدم الصيغة الدولية، مثال: +21612345678",
+      "phoneExample": "+21612345678"
+    },
+    "passwordRules": {
+      "title": "يجب أن تحتوي كلمة المرور على:",
+      "minLength": "8 أحرف على الأقل",
+      "uppercase": "حرف كبير واحد",
+      "lowercase": "حرف صغير واحد",
+      "number": "رقم واحد",
+      "special": "رمز خاص واحد"
     }
   },
   "catalogues": {

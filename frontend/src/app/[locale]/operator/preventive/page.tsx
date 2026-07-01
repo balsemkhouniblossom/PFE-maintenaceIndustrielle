@@ -88,6 +88,21 @@ function uniqueId(prefix: string): string {
   return `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 8).toUpperCase()}`;
 }
 
+function normalizeApiItems<T>(payload: unknown): T[] {
+  if (Array.isArray(payload)) {
+    return payload as T[];
+  }
+
+  if (payload && typeof payload === "object") {
+    const maybeItems = (payload as { items?: unknown }).items;
+    if (Array.isArray(maybeItems)) {
+      return maybeItems as T[];
+    }
+  }
+
+  return [];
+}
+
 export default function OperatorPreventivePage() {
   const t = useTranslations("dashboard.operator");
   const tCommon = useTranslations("common");
@@ -182,13 +197,13 @@ export default function OperatorPreventivePage() {
           apiService.getKpis(),
         ]);
 
-        setMachineTypes(machineTypeRes.data ?? []);
-        setMachines(machinesRes.data ?? []);
-        setModules(modulesRes.data ?? []);
-        setPlans(plansRes.data ?? []);
-        setDocuments(documentsRes.data ?? []);
-        setLubrifiants(lubrifiantsRes.data ?? []);
-        setKpis(kpiRes.data ?? []);
+        setMachineTypes(normalizeApiItems<MachineType>(machineTypeRes.data));
+        setMachines(normalizeApiItems<Machine>(machinesRes.data));
+        setModules(normalizeApiItems<ModuleEntity>(modulesRes.data));
+        setPlans(normalizeApiItems<MaintenancePlan>(plansRes.data));
+        setDocuments(normalizeApiItems<DocumentEntity>(documentsRes.data));
+        setLubrifiants(normalizeApiItems<Lubrifiant>(lubrifiantsRes.data));
+        setKpis(normalizeApiItems<Kpi>(kpiRes.data));
       } catch (error) {
         console.error("Failed to load preventive workflow data", error);
       } finally {

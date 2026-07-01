@@ -1,4 +1,15 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Query,
+} from '@nestjs/common';
+
+import { normalizePagination } from '../common/pagination';
 import { ModuleTypesService } from './module-types.service';
 import { CreateModuleTypeDto } from './dto/create-module-type.dto';
 import { UpdateModuleTypeDto } from './dto/update-module-type.dto';
@@ -13,8 +24,14 @@ export class ModuleTypesController {
   }
 
   @Get()
-  findAll() {
-    return this.moduleTypesService.findAll();
+  findAll(@Query('page') page?: string, @Query('limit') limit?: string) {
+    const pagination = normalizePagination(page, limit);
+
+    return this.moduleTypesService.findAll(
+      pagination.page,
+      pagination.limit,
+      pagination.skip,
+    );
   }
 
   @Get(':id')
@@ -23,7 +40,10 @@ export class ModuleTypesController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateModuleTypeDto: UpdateModuleTypeDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateModuleTypeDto: UpdateModuleTypeDto,
+  ) {
     return this.moduleTypesService.update(id, updateModuleTypeDto);
   }
 

@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-require-imports */
+ 
 const fs = require('fs');
 const path = require('path');
 function read(p){ return JSON.parse(fs.readFileSync(p,'utf8')); }

@@ -37,7 +37,7 @@ export class User {
     default: Role.OPERATOR,
   })
   role: Role;
-  
+
   @Prop({ default: true })
   is_active: boolean;
 
@@ -55,9 +55,10 @@ export class User {
 
   @Prop()
   photo?: string;
+
+  @Prop({ default: false })
+  is_verified: boolean;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
-UserSchema.index({ email: 1 }, { unique: true });
-UserSchema.index({ user_id: 1 }, { unique: true });
 UserSchema.index({ role: 1, is_active: 1 });

@@ -1,8 +1,11 @@
+import { describe, expect, it, jest } from '@jest/globals';
 import { HealthService } from './health.service';
+import { Connection } from 'mongoose';
 
 describe('HealthService', () => {
   it('returns API health payload', () => {
-    const service = new HealthService({} as any);
+    const mockConnection = {} as Connection;
+    const service = new HealthService(mockConnection);
 
     const result = service.getApiHealth();
 
@@ -12,8 +15,13 @@ describe('HealthService', () => {
   });
 
   it('returns aggregated health payload', async () => {
-    const ping = jest.fn().mockResolvedValue(undefined);
-    const service = new HealthService({ db: { admin: () => ({ ping }) } } as any);
+    const ping = jest.fn<() => Promise<void>>().mockResolvedValue(undefined);
+    const mockConnection = {
+      db: {
+        admin: () => ({ ping }),
+      },
+    } as unknown as Connection;
+    const service = new HealthService(mockConnection);
 
     const result = await service.getHealth();
 

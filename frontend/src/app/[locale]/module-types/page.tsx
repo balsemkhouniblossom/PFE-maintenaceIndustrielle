@@ -6,8 +6,8 @@ import DynamicSearchControls from '@/components/DynamicSearchControls';
 import { Modal } from '@/components/Modal';
 import { apiService } from '@/services/api';
 import { ALL_FIELDS_TOKEN, getSearchableFields, matchesDynamicSearch } from '@/services/dynamicSearch';
-import { PencilIcon, TrashIcon, PlusIcon, MagnifyingGlassIcon, ExclamationTriangleIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
-
+import { PencilIcon, TrashIcon, PlusIcon, ExclamationTriangleIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
+import Pagination from '@/components/Pagination';
 interface ModuleType {
   _id: string;
   module_type_id?: string;
@@ -25,6 +25,10 @@ export default function ModuleTypesPage() {
   const [editingModuleType, setEditingModuleType] = useState<ModuleType | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [page, setPage] = useState(1);
+  const [limit] = useState(10);
+  const [totalItems, setTotalItems] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
   const [selectedSearchField, setSelectedSearchField] = useState(ALL_FIELDS_TOKEN);
   const [notification, setNotification] = useState<{ type: 'success' | 'error', message: string } | null>(null);
   const [formData, setFormData] = useState({
@@ -38,11 +42,20 @@ export default function ModuleTypesPage() {
 
   useEffect(() => {
     loadModuleTypes();
-  }, []);
+  }, [page]);
+  useEffect(() => {
+    setPage(1);
+  }, [searchTerm, selectedSearchField]);
   async function loadModuleTypes() {
     try {
-      const response = await apiService.getModuleTypes();
-      setModuleTypes(response.data);
+      const response = await apiService.getModuleTypes({
+        page,
+        limit,
+      });
+      console.log(response.data);
+      setModuleTypes(response.data.items || []);
+      setTotalItems(response.data.totalItems || 0);
+      setTotalPages(response.data.totalPages || 1);
     } catch (error) {
       console.error('Error loading module types:', error);
     } finally {
@@ -161,9 +174,8 @@ export default function ModuleTypesPage() {
     <DashboardLayout title="MODULE TYPES MANAGEMENT">
       {/* Notification */}
       {notification && (
-        <div className={`fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg flex items-center space-x-2 ${
-          notification.type === 'success' ? 'bg-green-100 text-green-800 border border-green-200' : 'bg-red-100 text-red-800 border border-red-200'
-        }`}>
+        <div className={`fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg flex items-center space-x-2 ${notification.type === 'success' ? 'bg-green-100 text-green-800 border border-green-200' : 'bg-red-100 text-red-800 border border-red-200'
+          }`}>
           {notification.type === 'success' ? (
             <CheckCircleIcon className="w-5 h-5" />
           ) : (
@@ -190,7 +202,7 @@ export default function ModuleTypesPage() {
               </div>
               <div className="flex items-center space-x-4">
                 <div className="text-right">
-                  <div className="text-3xl font-bold text-blue-600">{moduleTypes.length}</div>
+                  <div className="text-3xl font-bold text-blue-600">{totalItems}</div>
                   <div className="text-sm text-slate-500">Total Module Types</div>
                 </div>
                 <button
@@ -274,6 +286,13 @@ export default function ModuleTypesPage() {
                 )}
               </tbody>
             </table>
+            <Pagination
+              page={page}
+              totalPages={totalPages}
+              totalItems={totalItems}
+              limit={limit}
+              onPageChange={setPage}
+            />
           </div>
         </div>
       </div>

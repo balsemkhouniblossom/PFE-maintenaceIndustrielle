@@ -1,10 +1,10 @@
+require('dotenv').config();
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
 async function hashPasswords() {
   try {
-    await mongoose.connect('mongodb://localhost:27017/GMAO_IPROTEX');
-
+    await mongoose.connect(process.env.MONGODB_URI);
     const UserSchema = new mongoose.Schema({
       user_id: String,
       nom_complet: String,

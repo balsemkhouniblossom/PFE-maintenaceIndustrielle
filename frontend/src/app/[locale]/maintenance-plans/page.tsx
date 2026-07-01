@@ -1,5 +1,5 @@
 'use client';
-
+import Pagination from '@/components/Pagination';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import DashboardLayout from '@/components/DashboardLayout';
@@ -10,7 +10,6 @@ import { ALL_FIELDS_TOKEN, getSearchableFields, matchesDynamicSearch } from '@/s
 import {
   CheckCircleIcon,
   ExclamationTriangleIcon,
-  MagnifyingGlassIcon,
   PencilIcon,
   PlusIcon,
   TrashIcon,
@@ -50,6 +49,10 @@ export default function MaintenancePlansPage() {
 
   const [plans, setPlans] = useState<MaintenancePlan[]>([]);
   const [modules, setModules] = useState<ModuleEntity[]>([]);
+  const [page, setPage] = useState(1);
+  const [limit] = useState(10);
+  const [totalItems, setTotalItems] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -68,27 +71,37 @@ export default function MaintenancePlansPage() {
     documentation: '',
     instruction: '',
   });
-
-  useEffect(() => {
-    void loadData();
-  }, []);
-
-  async function loadData() {
+  const loadData = async () => {
     try {
       setLoading(true);
+
       const [plansResponse, modulesResponse] = await Promise.all([
-        apiService.getMaintenancePlans(),
+        apiService.getMaintenancePlans({ page, limit }),
         apiService.getModules(),
       ]);
-      setPlans(plansResponse.data ?? []);
-      setModules(modulesResponse.data ?? []);
+
+      setPlans(plansResponse.data.items ?? []);
+      setTotalItems(plansResponse.data.totalItems ?? 0);
+      setTotalPages(plansResponse.data.totalPages ?? 1);
+
+      const modulesData = Array.isArray(modulesResponse.data)
+        ? modulesResponse.data
+        : modulesResponse.data?.items ??
+        modulesResponse.data?.data ??
+        modulesResponse.data?.modules ??
+        [];
+
+      setModules(modulesData);
     } catch (error) {
       console.error('Error loading maintenance plans:', error);
       showNotification('error', t('notifications.loadFailed'));
     } finally {
       setLoading(false);
     }
-  }
+  };
+  useEffect(() => {
+    loadData();
+  }, [page]);
 
   function showNotification(type: 'success' | 'error', message: string) {
     setNotification({ type, message });
@@ -217,10 +230,13 @@ export default function MaintenancePlansPage() {
 
   const searchableFields = useMemo(() => getSearchableFields(searchablePlans), [searchablePlans]);
 
-  const filteredPlans = useMemo(
-    () => searchablePlans.filter((plan) => matchesDynamicSearch(plan, searchTerm, selectedSearchField)),
-    [searchablePlans, searchTerm, selectedSearchField],
-  );
+  const filteredPlans = useMemo(() => {
+    const filtered = searchablePlans.filter((plan) =>
+      matchesDynamicSearch(plan, searchTerm, selectedSearchField)
+    );
+
+    return filtered;
+  }, [searchablePlans, searchTerm, selectedSearchField]);
 
   if (loading) {
     return (
@@ -236,11 +252,10 @@ export default function MaintenancePlansPage() {
     <DashboardLayout title={t('title')}>
       {notification && (
         <div
-          className={`fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg flex items-center gap-2 ${
-            notification.type === 'success'
-              ? 'bg-green-100 text-green-800 border border-green-200'
-              : 'bg-red-100 text-red-800 border border-red-200'
-          }`}
+          className={`fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg flex items-center gap-2 ${notification.type === 'success'
+            ? 'bg-green-100 text-green-800 border border-green-200'
+            : 'bg-red-100 text-red-800 border border-red-200'
+            }`}
         >
           {notification.type === 'success' ? <CheckCircleIcon className="w-5 h-5" /> : <ExclamationTriangleIcon className="w-5 h-5" />}
           <span>{notification.message}</span>
@@ -260,7 +275,9 @@ export default function MaintenancePlansPage() {
               </div>
               <div className="flex items-center gap-4">
                 <div className="text-right">
-                  <div className="text-3xl font-bold text-blue-600">{plans.length}</div>
+                  <div className="text-3xl font-bold text-blue-600">
+                    {totalItems}
+                  </div>
                   <div className="text-sm text-slate-500">{t('totalPlans')}</div>
                 </div>
                 <button onClick={handleCreate} className="btn-primary flex items-center gap-2">
@@ -335,7 +352,17 @@ export default function MaintenancePlansPage() {
                 )}
               </tbody>
             </table>
+            <div className="col-span-full">
+              <Pagination
+                page={page}
+                totalPages={totalPages}
+                totalItems={totalItems}
+                limit={limit}
+                onPageChange={setPage}
+              />
+            </div>
           </div>
+
         </div>
       </div>
 
@@ -363,7 +390,7 @@ export default function MaintenancePlansPage() {
               required
             >
               <option value="">{t('placeholders.module')}</option>
-              {modules.map((module) => (
+              {(Array.isArray(modules) ? modules : []).map((module) => (
                 <option key={module._id} value={module._id}>
                   {module.module_id || module._id}
                 </option>
