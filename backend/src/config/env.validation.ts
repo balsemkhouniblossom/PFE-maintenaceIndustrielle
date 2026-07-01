@@ -144,13 +144,9 @@ export function validateEnvironment(): EnvValidationResult {
   const port = parsePort(process.env.PORT);
   const corsOrigins = parseCorsOrigins(process.env.CORS_ORIGINS);
   const rawFrontendBaseUrl =
-    process.env.FRONTEND_BASE_URL?.trim() || process.env.APP_URL?.trim();
-
-  if (nodeEnv === 'production' && !rawFrontendBaseUrl) {
-    throw new Error(
-      'Missing required environment variable: FRONTEND_BASE_URL (or APP_URL)',
-    );
-  }
+    process.env.FRONTEND_BASE_URL?.trim() ||
+    process.env.APP_URL?.trim() ||
+    process.env.RENDER_EXTERNAL_URL?.trim();
 
   const frontendBaseUrl = rawFrontendBaseUrl
     ? parseUrl(rawFrontendBaseUrl, 'FRONTEND_BASE_URL')
