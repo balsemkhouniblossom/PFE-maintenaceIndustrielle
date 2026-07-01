@@ -129,7 +129,16 @@ export function validateEnvironment(): EnvValidationResult {
       );
     }
 
-    requireEnv('EMAIL_VERIFICATION_SECRET');
+    const hasEmailVerificationSecret = Boolean(
+      process.env.EMAIL_VERIFICATION_SECRET?.trim(),
+    );
+    const hasJwtSecret = Boolean(process.env.JWT_SECRET?.trim());
+
+    if (!hasEmailVerificationSecret && !hasJwtSecret) {
+      throw new Error(
+        'Missing required environment variable: EMAIL_VERIFICATION_SECRET (or JWT_SECRET)',
+      );
+    }
   }
 
   const port = parsePort(process.env.PORT);

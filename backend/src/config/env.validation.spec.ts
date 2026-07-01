@@ -51,6 +51,21 @@ describe('validateEnvironment', () => {
     );
   });
 
+  it('allows production when EMAIL_VERIFICATION_SECRET is missing but JWT_SECRET exists', () => {
+    process.env.NODE_ENV = 'production';
+    process.env.MONGODB_URI = 'mongodb://localhost:27017/gmao';
+    process.env.JWT_SECRET = 'a'.repeat(32);
+    process.env.JWT_REFRESH_SECRET = 'b'.repeat(32);
+    process.env.JWT_EXPIRES_IN = '15m';
+    process.env.JWT_REFRESH_EXPIRES_IN = '7d';
+    process.env.FRONTEND_BASE_URL = 'https://app.example.com';
+    delete process.env.EMAIL_VERIFICATION_SECRET;
+
+    const env = validateEnvironment();
+
+    expect(env.emailVerificationSecret).toBe(process.env.JWT_SECRET);
+  });
+
   it('does not require strict env variables during tests', () => {
     process.env.NODE_ENV = 'test';
     delete process.env.MONGODB_URI;
