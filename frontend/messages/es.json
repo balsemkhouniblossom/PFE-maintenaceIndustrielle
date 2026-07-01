@@ -1226,23 +1226,75 @@
     }
   },
   "preventiveTaskChecklist": {
-    "title": "Lista de verificaci?n de tareas preventivas",
+    "title": "Lista de verificacion de tareas preventivas",
     "heading": "Tareas de mantenimiento preventivo",
+    "description": "Lista coordinada de tareas de mantenimiento preventivo a partir de planes de mantenimiento",
     "totalTasks": "Total de tareas",
+    "completedTasks": "Tareas completadas",
+    "pendingTasks": "Tareas pendientes",
+    "taskStatus": "Estado de tarea",
     "table": {
       "planId": "ID de plan",
-      "machine": "M?quina",
-      "module": "M?dulo"
+      "machine": "Maquina",
+      "module": "Modulo",
+      "maintenanceType": "Tipo de mantenimiento",
+      "frequency": "Frecuencia",
+      "instruction": "Instruccion",
+      "responsable": "Responsable",
+      "status": "Estado"
     },
     "empty": {
-      "default": "No hay tareas de mantenimiento preventivo disponibles"
+      "default": "No hay tareas de mantenimiento preventivo disponibles",
+      "search": "Ninguna tarea preventiva coincide con tu busqueda"
+    },
+    "modal": {
+      "taskDetails": "Detalles de la tarea",
+      "markComplete": "Marcar como completada",
+      "addTask": "Agregar tarea",
+      "editTask": "Editar tarea",
+      "completedAt": "Completada en"
+    },
+    "form": {
+      "selectMachine": "Seleccionar maquina",
+      "selectModule": "Seleccionar modulo",
+      "taskName": "Nombre de la tarea",
+      "instruction": "Instruccion",
+      "notes": "Notas"
+    },
+    "placeholders": {
+      "selectMachine": "Elegir una maquina...",
+      "selectModule": "Elegir un modulo...",
+      "taskName": "Ingresa el nombre de la tarea",
+      "notes": "Agregar notas..."
     },
     "actions": {
-      "complete": "Marcar como completo",
-      "edit": "Editar"
+      "complete": "Marcar como completada",
+      "edit": "Editar",
+      "delete": "Eliminar",
+      "view": "Ver detalles",
+      "filter": "Filtrar tareas",
+      "addTask": "Agregar tarea"
+    },
+    "status": {
+      "pending": "Pendiente",
+      "completed": "Completada",
+      "overdue": "Atrasada"
     },
     "notifications": {
-      "loadFailed": "Error al cargar"
+      "loadFailed": "Error al cargar tareas preventivas",
+      "taskMarkedComplete": "Tarea marcada como completada",
+      "taskCreated": "Tarea creada correctamente",
+      "taskUpdated": "Tarea actualizada correctamente",
+      "taskDeleted": "Tarea eliminada correctamente",
+      "noTasksAvailable": "No hay tareas de mantenimiento preventivo disponibles. Crea planes de mantenimiento primero.",
+      "confirmMarkComplete": "¿Seguro que deseas marcar esta tarea como completada?",
+      "saveFailed": "Por favor ingresa una instruccion."
+    },
+    "filters": {
+      "all": "Todas las tareas",
+      "pending": "Solo pendientes",
+      "completed": "Solo completadas",
+      "overdue": "Tareas atrasadas"
     }
   }
 }

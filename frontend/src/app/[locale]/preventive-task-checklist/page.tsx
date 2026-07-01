@@ -3,11 +3,12 @@
 import { useEffect, useState, useMemo } from "react";
 import DashboardLayout from "@/components/DashboardLayout";
 import DynamicSearchControls from "@/components/DynamicSearchControls";
+import { Modal } from "@/components/Modal";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import { useTranslations } from "next-intl";
 import { apiService } from "@/services/api";
 import { ALL_FIELDS_TOKEN, getSearchableFields, matchesDynamicSearch } from "@/services/dynamicSearch";
-import { CheckIcon, XMarkIcon, EyeIcon } from "@heroicons/react/24/outline";
+import { CheckIcon, EyeIcon, CheckCircleIcon, ExclamationTriangleIcon, PencilIcon, PlusIcon } from "@heroicons/react/24/outline";
 import Pagination from "@/components/Pagination";
 
 type EntityRef = string | { _id?: string };
@@ -45,7 +46,6 @@ interface PreventiveTask {
   planId: string;
   plan_id: string;
   moduleId: string;
-  machineId: string;
   instruction: string;
   responsable?: string;
   completed: boolean;
@@ -53,12 +53,20 @@ interface PreventiveTask {
   notes?: string;
 }
 
-interface PreventiveTaskFilter {
-  all: "all";
-  pending: "pending";
-  completed: "completed";
-  overdue: "overdue";
+interface PreventiveTaskForm {
+  plan_id: string;
+  moduleId: string;
+  instruction: string;
+  responsable: string;
+  completed: boolean;
+  notes: string;
 }
+
+type PreventiveTaskFilter = "all" | "pending" | "completed";
+type NotificationType = "success" | "error" | "info";
+
+const TASK_STATE_STORAGE_KEY = "preventive_tasks";
+const CUSTOM_TASK_STORAGE_KEY = "preventive_tasks_custom";
 
 function refId(value: EntityRef | undefined): string {
   if (!value) return "";
@@ -70,17 +78,27 @@ export default function PreventiveTaskChecklistPage() {
   const tCommon = useTranslations("common");
 
   const [loading, setLoading] = useState(true);
-  const [plans, setPlans] = useState<MaintenancePlan[]>([]);
   const [modules, setModules] = useState<Module[]>([]);
   const [machines, setMachines] = useState<Machine[]>([]);
   const [tasks, setTasks] = useState<PreventiveTask[]>([]);
-  const [selectedFilter, setSelectedFilter] = useState<keyof PreventiveTaskFilter>("all");
+  const [selectedFilter, setSelectedFilter] = useState<PreventiveTaskFilter>("all");
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedSearchField, setSelectedSearchField] = useState(ALL_FIELDS_TOKEN);
   const [selectedTask, setSelectedTask] = useState<PreventiveTask | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [completionNotes, setCompletionNotes] = useState("");
-  const [notification, setNotification] = useState<{ type: string; message: string } | null>(null);
+  const [notification, setNotification] = useState<{ type: NotificationType; message: string } | null>(null);
+  const [isFormModalOpen, setIsFormModalOpen] = useState(false);
+  const [editingTask, setEditingTask] = useState<PreventiveTask | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+  const [formData, setFormData] = useState<PreventiveTaskForm>({
+    plan_id: "",
+    moduleId: "",
+    instruction: "",
+    responsable: "",
+    completed: false,
+    notes: "",
+  });
   const [page, setPage] = useState(1);
   const [limit] = useState(10);
 
@@ -108,7 +126,6 @@ export default function PreventiveTaskChecklistPage() {
         const modulesData: Module[] = modulesRes.data.items ?? [];
         const machinesData: Machine[] = machinesRes.data.items ?? [];
 
-        setPlans(plansData);
         setModules(modulesData);
         setMachines(machinesData);
 
@@ -133,7 +150,6 @@ export default function PreventiveTaskChecklistPage() {
                 planId: plan._id,
                 plan_id: plan.plan_id,
                 moduleId: refId(plan.module_id),
-                machineId: "", // Will be populated from module
                 instruction,
                 responsable: plan.responsable,
                 completed: false,
@@ -142,11 +158,11 @@ export default function PreventiveTaskChecklistPage() {
           }
         });
 
-        // Try to load tasks from localStorage (persisted completion status)
-        const savedTasks = localStorage.getItem("preventive_tasks");
+        // Try to load task status from localStorage
+        const savedTasks = localStorage.getItem(TASK_STATE_STORAGE_KEY);
         if (savedTasks) {
           try {
-            const savedState = JSON.parse(savedTasks);
+            const savedState = JSON.parse(savedTasks) as PreventiveTask[];
             generatedTasks.forEach((task) => {
               const saved = savedState.find((s: PreventiveTask) => s.id === task.id);
               if (saved) {
@@ -160,7 +176,21 @@ export default function PreventiveTaskChecklistPage() {
           }
         }
 
-        setTasks(generatedTasks);
+        // Load custom tasks created manually from the UI form
+        const customTasksRaw = localStorage.getItem(CUSTOM_TASK_STORAGE_KEY);
+        let customTasks: PreventiveTask[] = [];
+        if (customTasksRaw) {
+          try {
+            const parsed = JSON.parse(customTasksRaw) as PreventiveTask[];
+            customTasks = Array.isArray(parsed)
+              ? parsed.filter((task) => task?.id?.startsWith("manual-"))
+              : [];
+          } catch {
+            customTasks = [];
+          }
+        }
+
+        setTasks([...generatedTasks, ...customTasks]);
 
         if (generatedTasks.length === 0) {
           setNotification({
@@ -184,6 +214,7 @@ export default function PreventiveTaskChecklistPage() {
   useEffect(() => {
     setPage(1);
   }, [searchTerm, selectedSearchField, selectedFilter, tasks.length]);
+
   // Get module name
   const getModuleName = (moduleId: string): string => {
     const module = modules.find((m) => m._id === moduleId);
@@ -200,12 +231,19 @@ export default function PreventiveTaskChecklistPage() {
 
   const searchableTasks = useMemo(
     () =>
-      tasks.map((task) => ({
-        ...task,
-        machine_label: getMachineName(task.moduleId),
-        module_label: getModuleName(task.moduleId),
-      })),
-    [tasks, modules, machines],
+      tasks.map((task) => {
+        const module = modules.find((m) => m._id === task.moduleId);
+        const machine = module
+          ? machines.find((m) => m._id === refId(module.machine_id))
+          : undefined;
+
+        return {
+          ...task,
+          machine_label: machine?.machine_id ?? tCommon("notAvailable"),
+          module_label: module?.module_id ?? tCommon("notAvailable"),
+        };
+      }),
+    [tasks, modules, machines, tCommon],
   );
 
   const searchableFields = useMemo(() => getSearchableFields(searchableTasks), [searchableTasks]);
@@ -245,30 +283,145 @@ export default function PreventiveTaskChecklistPage() {
     pending: tasks.filter((t) => !t.completed).length,
   }), [tasks]);
 
-  useEffect(() => {
-    setPage(1);
-  }, [searchTerm, selectedSearchField, selectedFilter]);
+  const completionRate = useMemo(() => {
+    if (stats.total === 0) return 0;
+    return Math.round((stats.completed / stats.total) * 100);
+  }, [stats.completed, stats.total]);
+
+  const closeModal = () => {
+    setShowModal(false);
+    setSelectedTask(null);
+    setCompletionNotes("");
+  };
+
+  const resetForm = () => {
+    setEditingTask(null);
+    setFormData({
+      plan_id: "",
+      moduleId: "",
+      instruction: "",
+      responsable: "",
+      completed: false,
+      notes: "",
+    });
+  };
+
+  const persistTasks = (nextTasks: PreventiveTask[]) => {
+    const statusPayload = nextTasks.map((task) => ({
+      id: task.id,
+      completed: task.completed,
+      completedAt: task.completedAt,
+      notes: task.notes,
+    }));
+    localStorage.setItem(TASK_STATE_STORAGE_KEY, JSON.stringify(statusPayload));
+
+    const customTasks = nextTasks.filter((task) => task.id.startsWith("manual-"));
+    localStorage.setItem(CUSTOM_TASK_STORAGE_KEY, JSON.stringify(customTasks));
+  };
+
+  const openAddForm = () => {
+    resetForm();
+    setIsFormModalOpen(true);
+  };
+
+  const openEditForm = (task: PreventiveTask) => {
+    setEditingTask(task);
+    setFormData({
+      plan_id: task.plan_id,
+      moduleId: task.moduleId,
+      instruction: task.instruction,
+      responsable: task.responsable ?? "",
+      completed: task.completed,
+      notes: task.notes ?? "",
+    });
+    setIsFormModalOpen(true);
+  };
+
+  const handleFormSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+
+    if (!formData.instruction.trim()) {
+      setNotification({
+        type: "error",
+        message: t("notifications.saveFailed"),
+      });
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      const timestamp = new Date().toISOString();
+
+      const nextTask: PreventiveTask = editingTask
+        ? {
+            ...editingTask,
+            plan_id: formData.plan_id.trim(),
+            moduleId: formData.moduleId,
+            instruction: formData.instruction.trim(),
+            responsable: formData.responsable.trim() || undefined,
+            completed: formData.completed,
+            completedAt: formData.completed
+              ? editingTask.completedAt ?? timestamp
+              : undefined,
+            notes: formData.notes.trim() || undefined,
+          }
+        : {
+            id: `manual-${Date.now()}`,
+            planId: "",
+            plan_id: formData.plan_id.trim() || `MANUAL-${Date.now().toString().slice(-6)}`,
+            moduleId: formData.moduleId,
+            instruction: formData.instruction.trim(),
+            responsable: formData.responsable.trim() || undefined,
+            completed: formData.completed,
+            completedAt: formData.completed ? timestamp : undefined,
+            notes: formData.notes.trim() || undefined,
+          };
+
+      const updatedTasks = editingTask
+        ? tasks.map((task) => (task.id === editingTask.id ? nextTask : task))
+        : [nextTask, ...tasks];
+
+      setTasks(updatedTasks);
+      persistTasks(updatedTasks);
+      setNotification({
+        type: "success",
+        message: editingTask
+          ? t("notifications.taskUpdated")
+          : t("notifications.taskCreated"),
+      });
+      setIsFormModalOpen(false);
+      resetForm();
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   // Handle task completion toggle
-  const toggleTaskCompletion = async (task: PreventiveTask) => {
-    setSelectedTask(task);
+  const toggleTaskCompletion = (task: PreventiveTask) => {
     if (task.completed) {
-      // If already completed, just toggle it back
       const updatedTasks = tasks.map((t) =>
         t.id === task.id
           ? { ...t, completed: false, completedAt: undefined, notes: undefined }
-          : t
+          : t,
       );
       setTasks(updatedTasks);
-      localStorage.setItem("preventive_tasks", JSON.stringify(updatedTasks));
+      persistTasks(updatedTasks);
       setNotification({
         type: "success",
         message: t("notifications.taskUpdated"),
       });
-    } else {
-      // Show modal for completion with notes
-      setShowModal(true);
+      return;
     }
-    setSelectedTask(null);
+
+    setSelectedTask(task);
+    setCompletionNotes(task.notes ?? "");
+    setShowModal(true);
+  };
+
+  const openTaskDetails = (task: PreventiveTask) => {
+    setSelectedTask(task);
+    setCompletionNotes(task.notes ?? "");
+    setShowModal(true);
   };
 
   // Handle marking task as complete with notes
@@ -283,18 +436,16 @@ export default function PreventiveTaskChecklistPage() {
           completedAt: new Date().toISOString(),
           notes: completionNotes,
         }
-        : t
+        : t,
     );
 
     setTasks(updatedTasks);
-    localStorage.setItem("preventive_tasks", JSON.stringify(updatedTasks));
+    persistTasks(updatedTasks);
     setNotification({
       type: "success",
       message: t("notifications.taskMarkedComplete"),
     });
-    setShowModal(false);
-    setCompletionNotes("");
-    setSelectedTask(null);
+    closeModal();
   };
 
   if (loading) {
@@ -315,169 +466,188 @@ export default function PreventiveTaskChecklistPage() {
   return (
     <ProtectedRoute allowedRoles={["admin", "technician"]}>
       <DashboardLayout title={t("title")}>
-        <div className="bento-grid"/>
+        {notification && (
+          <div
+            className={`fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg flex items-center space-x-2 ${
+              notification.type === "success"
+                ? "bg-green-100 text-green-800 border border-green-200"
+                : notification.type === "error"
+                  ? "bg-red-100 text-red-800 border border-red-200"
+                  : "bg-blue-100 text-blue-800 border border-blue-200"
+            }`}
+          >
+            {notification.type === "success" ? (
+              <CheckCircleIcon className="w-5 h-5" />
+            ) : (
+              <ExclamationTriangleIcon className="w-5 h-5" />
+            )}
+            <span>{notification.message}</span>
+            <button
+              onClick={() => setNotification(null)}
+              className="ml-2 text-gray-500 hover:text-gray-700"
+            >
+              x
+            </button>
+          </div>
+        )}
+
+        <div className="bento-grid">
           {/* Header */}
-          <div className="col-span-full panel">
-            <h1 className="card-title mb-2">{t("heading")}</h1>
-            <p className="text-sm text-slate-600 mb-4">{t("description")}</p>
+          <div className="col-span-full bento-item">
+            <div className="panel">
+              <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                <div>
+                  <h1 className="card-title mb-2">{t("heading")}</h1>
+                  <p className="text-sm text-slate-600">{t("description")}</p>
+                </div>
+                <div className="text-end">
+                  <div className="text-3xl font-bold text-blue-600">{stats.total}</div>
+                  <div className="text-sm text-slate-500">{t("totalTasks")}</div>
+                </div>
+                <button
+                  onClick={openAddForm}
+                  className="btn-primary flex items-center space-x-2"
+                >
+                  <PlusIcon className="w-4 h-4" />
+                  <span>{t("actions.addTask")}</span>
+                </button>
+              </div>
+            </div>
           </div>
 
           {/* Statistics */}
-          <div className="col-span-full grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="panel">
+          <div className="col-span-full grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="panel bento-item">
               <div className="text-sm text-slate-600">{t("totalTasks")}</div>
               <div className="text-3xl font-bold text-slate-900">{stats.total}</div>
             </div>
-            <div className="panel">
+            <div className="panel bento-item">
               <div className="text-sm text-slate-600">{t("completedTasks")}</div>
               <div className="text-3xl font-bold text-emerald-600">{stats.completed}</div>
             </div>
-            <div className="panel">
+            <div className="panel bento-item">
               <div className="text-sm text-slate-600">{t("pendingTasks")}</div>
               <div className="text-3xl font-bold text-amber-600">{stats.pending}</div>
+            </div>
+            <div className="panel bento-item">
+              <div className="text-sm text-slate-600">{t("table.status")}</div>
+              <div className="text-3xl font-bold text-blue-600">{completionRate}%</div>
             </div>
           </div>
 
           {/* Filters and Search */}
-          <div className="col-span-full panel">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-              <div>
-                <label className="block text-sm font-medium mb-2">{t("actions.filter")}</label>
-                <div className="flex gap-2 flex-wrap">
-                  {(["all", "pending", "completed", "overdue"] as const).map((filter) => (
-                    <button
-                      key={filter}
-                      onClick={() => setSelectedFilter(filter)}
-                      className={`px-3 py-1 rounded-lg text-sm transition-colors ${selectedFilter === filter
-                        ? "bg-slate-900 text-white"
-                        : "bg-slate-200 text-slate-900 hover:bg-slate-300"
+          <div className="col-span-full bento-item">
+            <div className="panel">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div>
+                  <label className="block text-sm font-medium mb-2">{t("actions.filter")}</label>
+                  <div className="flex gap-2 flex-wrap">
+                    {(["all", "pending", "completed"] as const).map((filter) => (
+                      <button
+                        key={filter}
+                        onClick={() => setSelectedFilter(filter)}
+                        className={`px-3 py-1 rounded-lg text-sm transition-colors ${
+                          selectedFilter === filter
+                            ? "bg-slate-900 text-white"
+                            : "bg-slate-200 text-slate-900 hover:bg-slate-300"
                         }`}
-                    >
-                      {t(`filters.${filter}`)}
-                    </button>
-                  ))}
+                      >
+                        {t(`filters.${filter}`)}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              </div>
               <div>
-                <label className="block text-sm font-medium mb-2">{tCommon("actions.search")}</label>
-                <DynamicSearchControls
-                  className=""
-                  selectClassName="w-full border rounded-lg px-3 py-2"
-                  inputClassName="w-full border rounded-lg px-3 py-2 pl-10"
-                  selectedField={selectedSearchField}
-                  onSelectedFieldChange={setSelectedSearchField}
-                  searchableFields={searchableFields}
-                  allFieldsLabel={tCommon("table.allFields", { default: "All fields" })}
-                  searchTerm={searchTerm}
-                  onSearchTermChange={setSearchTerm}
-                  searchPlaceholder={t("placeholders.taskName")}
-                />
+                  <label className="block text-sm font-medium mb-2">{tCommon("actions.search")}</label>
+                  <DynamicSearchControls
+                    selectedField={selectedSearchField}
+                    onSelectedFieldChange={setSelectedSearchField}
+                    searchableFields={searchableFields}
+                    allFieldsLabel={tCommon("table.allFields", { default: "All fields" })}
+                    searchTerm={searchTerm}
+                    onSearchTermChange={setSearchTerm}
+                    searchPlaceholder={t("placeholders.taskName")}
+                  />
+                </div>
               </div>
             </div>
           </div>
 
-          {/* Notification */}
-          {notification && (
-            <div
-              className={`col-span-full panel ${notification.type === "error"
-                ? "bg-red-50 border-l-4 border-red-600"
-                : notification.type === "success"
-                  ? "bg-emerald-50 border-l-4 border-emerald-600"
-                  : "bg-blue-50 border-l-4 border-blue-600"
-                }`}
-            >
-              <p
-                className={
-                  notification.type === "error"
-                    ? "text-red-800"
-                    : notification.type === "success"
-                      ? "text-emerald-800"
-                      : "text-blue-800"
-                }
-              >
-                {notification.message}
-              </p>
-            </div>
-          )}
-
           {/* Tasks Table */}
-          <div className="col-span-full panel overflow-x-auto">
-            {filteredTasks.length === 0 ? (
-              <div className="text-center py-8">
-                <p className="text-slate-500">{t("empty.default")}</p>
-              </div>
-            ) : (
-              <table className="w-full text-sm">
+          <div className="col-span-full bento-item panel">
+            <div className="card-title mb-4">{t("heading")}</div>
+            <div className="overflow-x-auto">
+              <table className="table">
                 <thead>
-                  <tr className="border-b-2 border-slate-200">
-                    <th className="text-left py-3 px-4 font-semibold">{t("table.planId")}</th>
-                    <th className="text-left py-3 px-4 font-semibold">{t("table.machine")}</th>
-                    <th className="text-left py-3 px-4 font-semibold">{t("table.module")}</th>
-                    <th className="text-left py-3 px-4 font-semibold">{t("table.instruction")}</th>
-                    <th className="text-left py-3 px-4 font-semibold">{t("table.responsable")}</th>
-                    <th className="text-center py-3 px-4 font-semibold">{t("table.status")}</th>
-                    <th className="text-center py-3 px-4 font-semibold">{tCommon("actions.actions")}</th>
+                  <tr>
+                    <th>{t("table.planId")}</th>
+                    <th>{t("table.machine")}</th>
+                    <th>{t("table.module")}</th>
+                    <th>{t("table.instruction")}</th>
+                    <th>{t("table.responsable")}</th>
+                    <th>{t("table.status")}</th>
+                    <th className="text-end">{tCommon("table.actions")}</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {paginatedTasks.map((task) => (
-                    <tr
-                      key={task.id}
-                      className={`border-b border-slate-100 ${task.completed ? "bg-emerald-50" : ""
-                        } hover:bg-slate-50 transition-colors`}
-                    >
-                      <td className="py-3 px-4 font-mono text-xs">{task.plan_id}</td>
-                      <td className="py-3 px-4">{getMachineName(task.moduleId)}</td>
-                      <td className="py-3 px-4">{getModuleName(task.moduleId)}</td>
-                      <td className="py-3 px-4">{task.instruction}</td>
-                      <td className="py-3 px-4">{task.responsable || tCommon("notAvailable")}</td>
-                      <td className="py-3 px-4 text-center">
-                        <span
-                          className={`inline-block px-3 py-1 rounded-full text-xs font-medium ${task.completed
-                            ? "bg-emerald-200 text-emerald-800"
-                            : "bg-amber-200 text-amber-800"
-                            }`}
-                        >
-                          {task.completed ? t("status.completed") : t("status.pending")}
-                        </span>
-                      </td>
-                      <td className="py-3 px-4 text-center">
-                        <div className="flex justify-center gap-2">
-                          <button
-                            onClick={() => toggleTaskCompletion(task)}
-                            title={task.completed ? tCommon("edit") : t("actions.complete")}
-                            className={`p-2 rounded-lg transition-colors ${task.completed
-                              ? "bg-emerald-600 hover:bg-emerald-700 text-white"
-                              : "bg-amber-600 hover:bg-amber-700 text-white"
-                              }`}
-                          >
-                            {task.completed ? (
-                              <CheckIcon className="h-5 w-5" />
-                            ) : (
-                              <CheckIcon className="h-5 w-5" />
-                            )}
-                          </button>
-                          <button
-                            onClick={() => {
-                              setSelectedTask(task);
-                              setCompletionNotes(task.notes || "");
-                              setShowModal(true);
-                            }}
-                            title={t("actions.view")}
-                            className="p-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white transition-colors"
-                          >
-                            <EyeIcon className="h-5 w-5" />
-                          </button>
-                        </div>
+                  {paginatedTasks.length === 0 ? (
+                    <tr>
+                      <td colSpan={7} className="text-center py-8 text-gray-500">
+                        {t("empty.default")}
                       </td>
                     </tr>
-                  ))}
+                  ) : (
+                    paginatedTasks.map((task) => (
+                      <tr key={task.id} className={task.completed ? "bg-emerald-50" : ""}>
+                        <td className="font-mono text-xs">{task.plan_id}</td>
+                        <td>{getMachineName(task.moduleId)}</td>
+                        <td>{getModuleName(task.moduleId)}</td>
+                        <td>{task.instruction}</td>
+                        <td>{task.responsable || tCommon("notAvailable")}</td>
+                        <td>
+                          <span
+                            className={`inline-block px-3 py-1 rounded-full text-xs font-medium ${
+                              task.completed
+                                ? "bg-emerald-100 text-emerald-800"
+                                : "bg-amber-100 text-amber-800"
+                            }`}
+                          >
+                            {task.completed ? t("status.completed") : t("status.pending")}
+                          </span>
+                        </td>
+                        <td>
+                          <div className="flex justify-end gap-2">
+                            <button
+                              onClick={() => toggleTaskCompletion(task)}
+                              title={task.completed ? t("status.completed") : t("actions.complete")}
+                              className="btn-secondary p-2"
+                            >
+                              <CheckIcon className="w-4 h-4" />
+                            </button>
+                            <button
+                              onClick={() => openEditForm(task)}
+                              title={tCommon("edit")}
+                              className="btn-secondary p-2"
+                            >
+                              <PencilIcon className="w-4 h-4" />
+                            </button>
+                            <button
+                              onClick={() => openTaskDetails(task)}
+                              title={t("actions.view")}
+                              className="btn-secondary p-2"
+                            >
+                              <EyeIcon className="w-4 h-4" />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
 
-            )}
-            {filteredTasks.length > 0 && (
-              <div className="col-span-full mt-4">
+              {filteredTasks.length > 0 && (
+                <div className="mt-4">
                 <Pagination
                   page={safePage}
                   totalPages={totalPages}
@@ -486,76 +656,208 @@ export default function PreventiveTaskChecklistPage() {
                   onPageChange={setPage}
                   className="mt-2"
                 />
-              </div>
-            )}
-
-          </div>
-
-          {/* Task Details Modal */}
-          {showModal && selectedTask && (
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-              <div className="bg-white rounded-lg shadow-xl max-w-md w-full">
-                <div className="bg-slate-50 border-b p-4 flex justify-between items-center">
-                  <h2 className="font-bold text-lg">{t("modal.taskDetails")}</h2>
-                  <button
-                    onClick={() => setShowModal(false)}
-                    aria-label={tCommon("close")}
-                    title={tCommon("close")}
-                    className="text-slate-500 hover:text-slate-700"
-                  >
-                    <XMarkIcon className="h-6 w-6" />
-                  </button>
                 </div>
-                <div className="p-4 space-y-3">
-                  <div>
-                    <label className="text-sm font-medium text-slate-700">{t("table.planId")}</label>
-                    <p className="text-slate-900">{selectedTask.plan_id}</p>
-                  </div>
-                  <div>
-                    <label className="text-sm font-medium text-slate-700">{t("table.machine")}</label>
-                    <p className="text-slate-900">{getMachineName(selectedTask.moduleId)}</p>
-                  </div>
-                  <div>
-                    <label className="text-sm font-medium text-slate-700">{t("table.instruction")}</label>
-                    <p className="text-slate-900">{selectedTask.instruction}</p>
-                  </div>
-                  <div>
-                    <label className="text-sm font-medium text-slate-700">{t("form.notes")}</label>
-                    <textarea
-                      value={completionNotes}
-                      onChange={(e) => setCompletionNotes(e.target.value)}
-                      placeholder={t("placeholders.notes")}
-                      className="w-full border rounded-lg px-3 py-2 h-24"
-                    />
-                  </div>
-                  {selectedTask.completedAt && (
-                    <div>
-                      <label className="text-sm font-medium text-slate-700">Completed At</label>
-                      <p className="text-slate-900">
-                        {new Date(selectedTask.completedAt).toLocaleString()}
-                      </p>
-                    </div>
-                  )}
-                </div>
-                <div className="bg-slate-50 border-t p-4 flex justify-end gap-3">
-                  <button
-                    onClick={() => setShowModal(false)}
-                    className="px-4 py-2 rounded-lg bg-slate-200 text-slate-900 hover:bg-slate-300 transition-colors"
-                  >
-                    {tCommon("actions.cancel")}
-                  </button>
-                  {!selectedTask.completed && (
-                    <button
-                      onClick={markTaskComplete}
-                      className="px-4 py-2 rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 transition-colors"
-                    >
-                      {t("actions.complete")}
-                    </button>
-                  )}
-                </div>
+              )}
               </div>
             </div>
+        </div>
+
+        <Modal
+          isOpen={isFormModalOpen}
+          onClose={() => {
+            setIsFormModalOpen(false);
+            resetForm();
+          }}
+          title={
+            editingTask
+              ? t("modal.editTask")
+              : t("modal.addTask")
+          }
+          size="lg"
+        >
+          <form onSubmit={handleFormSubmit} className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium mb-1">{t("table.planId")}</label>
+                <input
+                  type="text"
+                  value={formData.plan_id}
+                  onChange={(e) => setFormData({ ...formData, plan_id: e.target.value })}
+                  className="input-field"
+                  placeholder={t("table.planId")}
+                  title={t("table.planId")}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">{t("table.module")}</label>
+                <select
+                  value={formData.moduleId}
+                  onChange={(e) => setFormData({ ...formData, moduleId: e.target.value })}
+                  className="input-field"
+                  title={t("table.module")}
+                >
+                  <option value="">{tCommon("notAvailable")}</option>
+                  {modules.map((module) => (
+                    <option key={module._id} value={module._id}>
+                      {module.module_id || module._id}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium mb-1">{t("table.responsable")}</label>
+                <input
+                  type="text"
+                  value={formData.responsable}
+                  onChange={(e) => setFormData({ ...formData, responsable: e.target.value })}
+                  className="input-field"
+                  placeholder={t("table.responsable")}
+                  title={t("table.responsable")}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">{t("table.status")}</label>
+                <select
+                  value={formData.completed ? "completed" : "pending"}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      completed: e.target.value === "completed",
+                    })
+                  }
+                  className="input-field"
+                  title={t("table.status")}
+                >
+                  <option value="pending">{t("status.pending")}</option>
+                  <option value="completed">{t("status.completed")}</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium mb-1">{t("table.instruction")}</label>
+              <textarea
+                value={formData.instruction}
+                onChange={(e) => setFormData({ ...formData, instruction: e.target.value })}
+                className="input-field min-h-28"
+                placeholder={t("placeholders.taskName")}
+                title={t("table.instruction")}
+                required
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium mb-1">{t("form.notes")}</label>
+              <textarea
+                value={formData.notes}
+                onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+                className="input-field min-h-24"
+                placeholder={t("placeholders.notes")}
+                title={t("form.notes")}
+              />
+            </div>
+
+            <div className="flex justify-end space-x-3 pt-4">
+              <button
+                type="button"
+                onClick={() => {
+                  setIsFormModalOpen(false);
+                  resetForm();
+                }}
+                className="btn-secondary"
+              >
+                {tCommon("actions.cancel")}
+              </button>
+              <button type="submit" className="btn-primary" disabled={submitting}>
+                {submitting
+                  ? tCommon("actions.saving")
+                  : editingTask
+                    ? tCommon("edit")
+                    : tCommon("actions.create", { default: "Create" })}
+              </button>
+            </div>
+          </form>
+        </Modal>
+
+        {/* Task Details Modal */}
+        <Modal
+          isOpen={showModal && Boolean(selectedTask)}
+          onClose={closeModal}
+          title={t("modal.taskDetails")}
+          size="lg"
+        >
+          {selectedTask && (
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                if (!selectedTask.completed) {
+                  markTaskComplete();
+                }
+              }}
+              className="space-y-4"
+            >
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium mb-1">{t("table.planId")}</label>
+                  <input type="text" value={selectedTask.plan_id} className="input-field" readOnly />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">{t("table.machine")}</label>
+                  <input type="text" value={getMachineName(selectedTask.moduleId)} className="input-field" readOnly />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">{t("table.module")}</label>
+                  <input type="text" value={getModuleName(selectedTask.moduleId)} className="input-field" readOnly />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">{t("table.responsable")}</label>
+                  <input type="text" value={selectedTask.responsable ?? ""} className="input-field" readOnly />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-1">{t("table.instruction")}</label>
+                <textarea value={selectedTask.instruction} className="input-field min-h-24" readOnly />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-1">{t("form.notes")}</label>
+                <textarea
+                  value={completionNotes}
+                  onChange={(e) => setCompletionNotes(e.target.value)}
+                  placeholder={t("placeholders.notes")}
+                  className="input-field min-h-24"
+                />
+              </div>
+
+              {selectedTask.completedAt && (
+                <div>
+                  <label className="block text-sm font-medium mb-1">{t("modal.completedAt")}</label>
+                  <input
+                    type="text"
+                    value={new Date(selectedTask.completedAt).toLocaleString()}
+                    className="input-field"
+                    readOnly
+                  />
+                </div>
+              )}
+
+              <div className="flex justify-end space-x-3 pt-4">
+                <button type="button" onClick={closeModal} className="btn-secondary">
+                  {tCommon("actions.cancel")}
+                </button>
+                {!selectedTask.completed && (
+                  <button type="submit" className="btn-primary">
+                    {t("actions.complete")}
+                  </button>
+                )}
+              </div>
+            </form>
           )}
+        </Modal>
       </DashboardLayout>
     </ProtectedRoute>
   );

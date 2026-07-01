@@ -1524,7 +1524,10 @@
     },
     "modal": {
       "taskDetails": "Task Details",
-      "markComplete": "Mark as Complete"
+      "markComplete": "Mark as Complete",
+      "addTask": "Add Task",
+      "editTask": "Edit Task",
+      "completedAt": "Completed At"
     },
     "form": {
       "selectMachine": "Select Machine",
@@ -1544,7 +1547,8 @@
       "edit": "Edit",
       "delete": "Delete",
       "view": "View Details",
-      "filter": "Filter Tasks"
+      "filter": "Filter Tasks",
+      "addTask": "Add Task"
     },
     "status": {
       "pending": "Pending",
@@ -1554,10 +1558,12 @@
     "notifications": {
       "loadFailed": "Failed to load preventive tasks",
       "taskMarkedComplete": "Task marked as complete",
+      "taskCreated": "Task created successfully",
       "taskUpdated": "Task updated successfully",
       "taskDeleted": "Task deleted successfully",
       "noTasksAvailable": "No preventive maintenance tasks available. Please create maintenance plans first.",
-      "confirmMarkComplete": "Are you sure you want to mark this task as complete?"
+      "confirmMarkComplete": "Are you sure you want to mark this task as complete?",
+      "saveFailed": "Please provide an instruction."
     },
     "filters": {
       "all": "All Tasks",

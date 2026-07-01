@@ -1421,7 +1421,10 @@
     },
     "modal": {
       "taskDetails": "Details de la tache",
-      "markComplete": "Marquer comme complete"
+      "markComplete": "Marquer comme complete",
+      "addTask": "Ajouter une tache",
+      "editTask": "Modifier la tache",
+      "completedAt": "Completee le"
     },
     "form": {
       "selectMachine": "Selectionner une machine",
@@ -1441,7 +1444,8 @@
       "edit": "Modifier",
       "delete": "Supprimer",
       "view": "Voir les details",
-      "filter": "Filtrer les taches"
+      "filter": "Filtrer les taches",
+      "addTask": "Ajouter une tache"
     },
     "status": {
       "pending": "En attente",
@@ -1451,10 +1455,12 @@
     "notifications": {
       "loadFailed": "Echec du chargement des taches preventives",
       "taskMarkedComplete": "Tache marquee comme complete",
+      "taskCreated": "Tache creee avec succes",
       "taskUpdated": "Tache mise a jour avec succes",
       "taskDeleted": "Tache supprimee avec succes",
       "noTasksAvailable": "Aucune tache de maintenance preventive disponible. Veuillez d'abord creer des plans de maintenance.",
-      "confirmMarkComplete": "Etes-vous sur de vouloir marquer cette tache comme complete ?"
+      "confirmMarkComplete": "Etes-vous sur de vouloir marquer cette tache comme complete ?",
+      "saveFailed": "Veuillez fournir une instruction."
     },
     "filters": {
       "all": "Toutes les taches",

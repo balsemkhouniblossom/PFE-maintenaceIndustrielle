@@ -1208,23 +1208,75 @@
     }
   },
   "preventiveTaskChecklist": {
-    "title": "Elenco di controllo attivit? preventive",
-    "heading": "Attivit? di manutenzione preventiva",
-    "totalTasks": "Numero totale attivit?",
+    "title": "Checklist attivita preventive",
+    "heading": "Attivita di manutenzione preventiva",
+    "description": "Checklist coordinata delle attivita di manutenzione preventiva dai piani di manutenzione",
+    "totalTasks": "Totale attivita",
+    "completedTasks": "Attivita completate",
+    "pendingTasks": "Attivita in attesa",
+    "taskStatus": "Stato attivita",
     "table": {
       "planId": "ID piano",
       "machine": "Macchina",
-      "module": "Modulo"
+      "module": "Modulo",
+      "maintenanceType": "Tipo di manutenzione",
+      "frequency": "Frequenza",
+      "instruction": "Istruzione",
+      "responsable": "Responsabile",
+      "status": "Stato"
     },
     "empty": {
-      "default": "Nessuna attivit? di manutenzione preventiva disponibile"
+      "default": "Nessuna attivita di manutenzione preventiva disponibile",
+      "search": "Nessuna attivita preventiva corrisponde alla ricerca"
+    },
+    "modal": {
+      "taskDetails": "Dettagli attivita",
+      "markComplete": "Segna come completata",
+      "addTask": "Aggiungi attivita",
+      "editTask": "Modifica attivita",
+      "completedAt": "Completata il"
+    },
+    "form": {
+      "selectMachine": "Seleziona macchina",
+      "selectModule": "Seleziona modulo",
+      "taskName": "Nome attivita",
+      "instruction": "Istruzione",
+      "notes": "Note"
+    },
+    "placeholders": {
+      "selectMachine": "Scegli una macchina...",
+      "selectModule": "Scegli un modulo...",
+      "taskName": "Inserisci nome attivita",
+      "notes": "Aggiungi note..."
     },
     "actions": {
-      "complete": "Segna come completo",
-      "edit": "Modifica"
+      "complete": "Segna come completata",
+      "edit": "Modifica",
+      "delete": "Elimina",
+      "view": "Visualizza dettagli",
+      "filter": "Filtra attivita",
+      "addTask": "Aggiungi attivita"
+    },
+    "status": {
+      "pending": "In attesa",
+      "completed": "Completata",
+      "overdue": "In ritardo"
     },
     "notifications": {
-      "loadFailed": "Errore nel caricamento"
+      "loadFailed": "Errore nel caricamento delle attivita preventive",
+      "taskMarkedComplete": "Attivita segnata come completata",
+      "taskCreated": "Attivita creata con successo",
+      "taskUpdated": "Attivita aggiornata con successo",
+      "taskDeleted": "Attivita eliminata con successo",
+      "noTasksAvailable": "Nessuna attivita di manutenzione preventiva disponibile. Crea prima i piani di manutenzione.",
+      "confirmMarkComplete": "Sei sicuro di voler segnare questa attivita come completata?",
+      "saveFailed": "Inserisci un'istruzione."
+    },
+    "filters": {
+      "all": "Tutte le attivita",
+      "pending": "Solo in attesa",
+      "completed": "Solo completate",
+      "overdue": "Attivita in ritardo"
     }
   }
 }

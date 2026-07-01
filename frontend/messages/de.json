@@ -1527,7 +1527,10 @@
     },
     "modal": {
       "taskDetails": "Aufgabendetails",
-      "markComplete": "Als abgeschlossen markieren"
+      "markComplete": "Als abgeschlossen markieren",
+      "addTask": "Aufgabe hinzufugen",
+      "editTask": "Aufgabe bearbeiten",
+      "completedAt": "Abgeschlossen am"
     },
     "form": {
       "selectMachine": "Maschine auswählen",
@@ -1547,7 +1550,8 @@
       "edit": "Bearbeiten",
       "delete": "Löschen",
       "view": "Details anzeigen",
-      "filter": "Aufgaben filtern"
+      "filter": "Aufgaben filtern",
+      "addTask": "Aufgabe hinzufugen"
     },
     "status": {
       "pending": "Ausstehend",
@@ -1557,10 +1561,12 @@
     "notifications": {
       "loadFailed": "Fehler beim Laden der präventiven Aufgaben",
       "taskMarkedComplete": "Aufgabe als abgeschlossen markiert",
+      "taskCreated": "Aufgabe erfolgreich erstellt",
       "taskUpdated": "Aufgabe erfolgreich aktualisiert",
       "taskDeleted": "Aufgabe erfolgreich gelöscht",
       "noTasksAvailable": "Keine vorbeugenden Wartungsaufgaben verfügbar. Bitte erstellen Sie zuerst Wartungspläne.",
-      "confirmMarkComplete": "Sind Sie sicher, dass Sie diese Aufgabe als abgeschlossen markieren möchten?"
+      "confirmMarkComplete": "Sind Sie sicher, dass Sie diese Aufgabe als abgeschlossen markieren möchten?",
+      "saveFailed": "Bitte geben Sie eine Anweisung ein."
     },
     "filters": {
       "all": "Alle Aufgaben",
